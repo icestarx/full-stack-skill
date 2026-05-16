@@ -1,0 +1,195 @@
+#!/usr/bin/env bash
+# Full-Stack Skill — Dependency Check & Setup
+# Detects installed dependencies and guides installation of missing ones.
+set -euo pipefail
+
+SKILL_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+SKILLS_DIR="$HOME/.claude/skills"
+AGENTS_DIR="$HOME/.claude/agents"
+HAS_COLOR=1
+
+# Color helpers
+red()    { [ "$HAS_COLOR" = 1 ] && printf '\033[31m%s\033[0m' "$1" || printf '%s' "$1"; }
+green()  { [ "$HAS_COLOR" = 1 ] && printf '\033[32m%s\033[0m' "$1" || printf '%s' "$1"; }
+yellow() { [ "$HAS_COLOR" = 1 ] && printf '\033[33m%s\033[0m' "$1" || printf '%s' "$1"; }
+blue()   { [ "$HAS_COLOR" = 1 ] && printf '\033[34m%s\033[0m' "$1" || printf '%s' "$1"; }
+bold()   { [ "$HAS_COLOR" = 1 ] && printf '\033[1m%s\033[0m' "$1" || printf '%s' "$1"; }
+
+check_mark() { green "✅"; }
+cross_mark() { red "❌"; }
+warn_mark()  { yellow "⚠️"; }
+
+echo ""
+echo "$(bold '=== Full-Stack Skill — Dependency Check ===')"
+echo ""
+
+# ── Layer 1: Skills ──────────────────────────────────────────────
+
+echo "$(bold 'Layer 1: Skills')"
+echo "─────────────────────────────────────"
+
+# Check gstack
+GSTACK_DIR="$SKILLS_DIR/gstack"
+GSTACK_OK=0
+if [ -d "$GSTACK_DIR" ]; then
+    GSTACK_COUNT=$(find "$GSTACK_DIR" -maxdepth 2 -name 'SKILL.md' 2>/dev/null | wc -l)
+    if [ "$GSTACK_COUNT" -gt 5 ]; then
+        echo "  gstack:        $(check_mark) installed ($GSTACK_COUNT skills)"
+        # Check key sub-skills
+        for skill in office-hours design-consultation design-review design-html \
+            plan-ceo-review plan-eng-review plan-design-review \
+            setup-deploy qa qa-only ship land-and-deploy review cso canary retro document-release; do
+            if [ -f "$GSTACK_DIR/$skill/SKILL.md" ]; then
+                : # silently OK
+            else
+                echo "                 $(warn_mark) missing sub-skill: $skill"
+            fi
+        done
+        GSTACK_OK=1
+    else
+        echo "  gstack:        $(warn_mark) found but incomplete ($GSTACK_COUNT skills)"
+    fi
+else
+    echo "  gstack:        $(cross_mark) not installed"
+    echo "                 Install: clone gstack to $SKILLS_DIR/gstack and run $SKILLS_DIR/gstack/setup"
+fi
+
+# Check superpowers
+SUPERPOWERS_COUNT=0
+for sp in brainstorming writing-plans subagent-driven-development \
+    test-driven-development requesting-code-review receiving-code-review \
+    verification-before-completion; do
+    if [ -d "$SKILLS_DIR/superpowers" ] && [ -f "$SKILLS_DIR/superpowers/$sp/SKILL.md" ] 2>/dev/null; then
+        SUPERPOWERS_COUNT=$((SUPERPOWERS_COUNT + 1))
+    fi
+done
+
+if [ "$SUPERPOWERS_COUNT" -gt 0 ]; then
+    echo "  superpowers:   $(check_mark) installed ($SUPERPOWERS_COUNT skills detected)"
+else
+    echo "  superpowers:   $(cross_mark) not installed"
+    echo "                 Skills with 'superpowers:' prefix found in your skill list may indicate partial install."
+fi
+
+# Check OpenSpec
+OPENSPEC_COUNT=0
+for os_skill in openspec-propose openspec-apply-change openspec-explore openspec-archive-change; do
+    if [ -d "$SKILLS_DIR/$os_skill" ] && [ -f "$SKILLS_DIR/$os_skill/SKILL.md" ] 2>/dev/null; then
+        OPENSPEC_COUNT=$((OPENSPEC_COUNT + 1))
+    fi
+done
+if [ "$OPENSPEC_COUNT" -gt 0 ]; then
+    echo "  openspec:      $(check_mark) installed ($OPENSPEC_COUNT skills)"
+else
+    echo "  openspec:      $(warn_mark) not installed (optional — for API contract management)"
+fi
+
+echo ""
+
+# ── Layer 2: Agents ──────────────────────────────────────────────
+
+echo "$(bold 'Layer 2: Agents')"
+echo "─────────────────────────────────────"
+
+AGENTS=(
+    "architect"
+    "code-reviewer"
+    "security-reviewer"
+    "database-reviewer"
+    "e2e-runner"
+    "a11y-architect"
+    "performance-optimizer"
+    "tdd-guide"
+    "build-error-resolver"
+    "doc-updater"
+    "refactor-cleaner"
+)
+
+AGENTS_OK=0
+AGENTS_MISSING=0
+AGENTS_TOTAL=${#AGENTS[@]}
+
+for agent in "${AGENTS[@]}"; do
+    found=0
+    # Check both .md and directory patterns
+    if [ -f "$AGENTS_DIR/$agent.md" ] || [ -f "$AGENTS_DIR/$agent" ] || \
+       [ -d "$AGENTS_DIR/$agent" ]; then
+        found=1
+    fi
+    if [ "$found" = 1 ]; then
+        AGENTS_OK=$((AGENTS_OK + 1))
+    else
+        AGENTS_MISSING=$((AGENTS_MISSING + 1))
+        printf "  %-28s %s\n" "$agent:" "$(cross_mark) not installed"
+    fi
+done
+
+if [ "$AGENTS_MISSING" = 0 ]; then
+    echo "  $(check_mark) All $AGENTS_TOTAL/$AGENTS_TOTAL core agents installed"
+else
+    echo ""
+    echo "  $AGENTS_OK/$AGENTS_TOTAL core agents installed, $AGENTS_MISSING missing"
+    echo "  $(yellow 'See DEPENDENCIES.md for agent descriptions and install sources.')"
+fi
+
+echo ""
+
+# Language-specific agents (informational)
+echo "$(bold 'Language-Specific Agents (as needed):')"
+LANG_AGENTS=(
+    "typescript-reviewer" "python-reviewer" "go-reviewer" "rust-reviewer"
+    "swift-reviewer" "java-reviewer" "csharp-reviewer" "kotlin-reviewer"
+    "flutter-reviewer" "fastapi-reviewer" "django-reviewer" "cpp-reviewer" "fsharp-reviewer"
+)
+LANG_OK=0
+for agent in "${LANG_AGENTS[@]}"; do
+    found=0
+    [ -f "$AGENTS_DIR/$agent.md" ] || [ -f "$AGENTS_DIR/$agent" ] || [ -d "$AGENTS_DIR/$agent" ] && found=1
+    [ "$found" = 1 ] && LANG_OK=$((LANG_OK + 1))
+done
+echo "  $LANG_OK/${#LANG_AGENTS[@]} language-specific reviewers installed"
+echo ""
+
+# ── Layer 3: MCP Tools ───────────────────────────────────────────
+
+echo "$(bold 'Layer 3: MCP Tools')"
+echo "─────────────────────────────────────"
+echo "  MCP tools (chrome-devtools, context7, playwright) are configured"
+echo "  in $(yellow '~/.claude/mcp.json') or your platform's MCP settings."
+echo "  Verify with: $(bold 'claude mcp list')"
+echo ""
+
+# ── Summary ──────────────────────────────────────────────────────
+
+echo "$(bold '=== Summary ===')"
+echo ""
+
+MISSING_ANY=0
+
+if [ "$GSTACK_OK" = 0 ]; then
+    echo "  $(cross_mark) gstack — $(yellow 'CRITICAL: 16+ pipeline steps depend on gstack skills')"
+    echo "     Install: clone gstack and run its setup script"
+    MISSING_ANY=1
+fi
+
+if [ "$SUPERPOWERS_COUNT" = 0 ]; then
+    echo "  $(cross_mark) superpowers — $(yellow 'CRITICAL: Steps 1, 6, 9, 10 depend on superpowers')"
+    MISSING_ANY=1
+fi
+
+if [ "$AGENTS_MISSING" -gt 0 ]; then
+    echo "  $(warn_mark) $AGENTS_MISSING agents missing — some steps may need manual execution"
+    MISSING_ANY=1
+fi
+
+if [ "$MISSING_ANY" = 0 ]; then
+    echo "  $(check_mark) $(green 'All critical dependencies installed!')"
+    echo ""
+    echo "  The full-stack pipeline is ready to use."
+else
+    echo ""
+    echo "  $(yellow 'Install the missing dependencies above, then re-run this script.')"
+    echo "  Full dependency documentation: $SKILL_DIR/DEPENDENCIES.md"
+fi
+
+echo ""
