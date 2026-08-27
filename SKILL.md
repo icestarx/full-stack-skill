@@ -1,24 +1,32 @@
 ---
 name: full-stack-skill
 description: >
-  Full-stack development lifecycle — product, design, frontend, backend, mobile,
-  desktop, architecture, and DevOps. Use when the user asks to build a feature,
-  product, app, or system end-to-end ("build me X", "create an app that...",
-  "I need a system for..."), when they describe a problem without specifying
-  which layer to work on, when they ask about architecture or technology choices,
-  when cross-platform decisions are involved, when they need production deployment,
-  or any time the scope goes beyond a single-file edit. This skill orchestrates
-  a 15-step pipeline from requirements through shipped software, delegating to
-  domain-specific skills and agents at each step. If there is even a chance the
-  task touches more than one layer, invoke this skill first.
+  Plan, implement, verify, and ship multi-layer software changes spanning frontend,
+  backend, APIs, databases, infrastructure, or deployment. Use for end-to-end
+  features, applications, services, architecture choices, or substantial changes
+  that require coordination across two or more layers. Do not use for isolated
+  explanations, reviews, diagnostics, or clearly scoped single-file edits.
 ---
 
 # Full-Stack Development
 
-You are a senior full-stack engineer who ships complete products. You orchestrate
-a 15-step development pipeline across 10 phases, producing 10 mandatory documents.
-You delegate to specialized skills and agents at each step — you are the conductor,
-not the entire orchestra.
+You are a senior full-stack engineer who ships complete products. Orchestrate the
+15-step lifecycle across 10 phases and preserve its quality gates. Use specialized
+providers when they add value, but keep the lifecycle executable on any capable
+coding-agent host.
+
+## Runtime Portability
+
+Before invoking another skill, agent, MCP tool, or host command, read
+`references/platform-adapters.md`. Resolve work by capability ID, discover an
+available provider, and use the portable fallback when no specialist exists.
+
+- Never assume gstack, Superpowers, OpenSpec, a named agent, or a slash command is installed.
+- Never block only because a preferred provider is absent.
+- Keep provider syntax out of generated project documentation.
+- Preserve user authorization, sandbox, approval, and external-action boundaries.
+- In Codex, use repository `AGENTS.md` for durable project rules and native
+  subagents only for bounded work that benefits from independent context.
 
 ## Pipeline Overview
 
@@ -77,9 +85,9 @@ dedicated security reviews, performance load testing, and UAT at each step.
 **Goal**: Confirm we're solving the right problem before any code is written.
 
 **How**:
-1. Invoke `/office-hours` (gstack) — six-prompt framework to penetrate surface-level needs
-2. Invoke `superpowers:brainstorming` — structured spec document output
-3. Calibrate scope with `/plan-ceo-review` (gstack) — expand/keep/reduce
+1. Run `product.discovery` to clarify the problem, users, alternatives, scope, and success criteria
+2. Produce a structured specification from the confirmed findings
+3. Run `product.scope-review` to recommend expand/keep/reduce with rationale
 
 **Output**: `references/templates/requirements.md`
 **Gate**: Team can state "who we're solving for, what problem" in one sentence. All P0 features have acceptance criteria.
@@ -93,9 +101,9 @@ dedicated security reviews, performance load testing, and UAT at each step.
 **Goal**: Produce an executable design system — not just mockups, but a spec developers can implement.
 
 **How**:
-1. Invoke `/design-consultation` (gstack) — full design system: IA → interaction → color/type/spacing/motion
-2. Invoke `/plan-design-review` (gstack) — interaction scoring, state coverage check
-3. Generate production HTML/CSS with `/design-html` (gstack) when needed
+1. Run `design.system` for IA, interaction, color, typography, spacing, and motion
+2. Run `design.review` for interaction and state-coverage checks
+3. Run `design.prototype` when a reviewable mockup or runnable prototype is needed
 
 **Output**: `references/templates/ui-design.md`
 **Gate**: All page states have designs, design system documented, 6 interaction states covered.
@@ -105,8 +113,8 @@ dedicated security reviews, performance load testing, and UAT at each step.
 **Goal**: Get stakeholder sign-off on the design before investing engineering resources.
 
 **How**:
-1. Present clickable prototype (Claude artifacts)
-2. Invoke `/design-review` (gstack) — visual QA and design walkthrough
+1. Present a clickable prototype using the best available design or browser tooling
+2. Run `design.review` for visual QA and a design walkthrough
 3. Collect feedback, iterate, get sign-off
 
 **Gate**: Product/business/tech leads confirm "this is what we want to build."
@@ -122,8 +130,8 @@ dedicated security reviews, performance load testing, and UAT at each step.
 **Goal**: Tech stack selection and architecture design. Two independent but aligned docs.
 
 **How**:
-1. Invoke `/plan-eng-review` (gstack) — architecture review (layering, data flow, boundaries, testing)
-2. Invoke **architect agent** — tech selection, ADRs
+1. Run `architecture.review` for layering, data flow, boundaries, testing, tech selection, and ADRs
+2. Use an independent architecture reviewer when the decision is high risk or hard to reverse
 3. Read `references/tech-selection.md` for technology decision guidance
 4. Read `references/capability-domains.md` for domain-specific best practices
 
@@ -137,8 +145,8 @@ dedicated security reviews, performance load testing, and UAT at each step.
 **Goal**: Decompose the system into independent, parallelizable modules organized by business domain.
 
 **How**:
-1. Invoke **architect agent** — domain-driven design, boundary identification, dependency analysis
-2. Optionally invoke `/openspec:propose` — organize spec deltas by module
+1. Run `architecture.review` for domain boundaries and dependency analysis
+2. Optionally run `spec.change` to organize versioned deltas by module
 
 **Gate**: Every module has clear responsibility and boundaries. No circular dependencies.
 
@@ -151,8 +159,8 @@ dedicated security reviews, performance load testing, and UAT at each step.
 **Goal**: Create an executable, trackable plan with fine-grained tasks.
 
 **How**:
-1. Invoke `superpowers:writing-plans` — ultra-fine-grained task breakdown (2-5 min per task)
-2. Alternative: `/openspec:propose` for medium-uncertainty projects
+1. Run `planning.decompose` to produce small, dependency-ordered, verifiable tasks
+2. Use `spec.change` when the work benefits from a versioned proposal and delta
 
 **Output**: `references/templates/development-plan.md`
 **Gate**: Each task ≤ 1 day. Dependencies clear. No circular dependencies.
@@ -166,8 +174,8 @@ dedicated security reviews, performance load testing, and UAT at each step.
 **Goal**: Before coding, produce detailed database design and API contracts for each module.
 
 **How**:
-1. **Database**: Invoke **architect agent** (entity modeling) + **database-reviewer agent** (index/query safety review)
-2. **API**: Invoke `/openspec:propose` — spec delta mechanism ideal for API contract management
+1. **Database**: combine `architecture.review` entity modeling with `database.review`
+2. **API**: use `spec.change` when versioned API contract deltas add value
 
 **Output**: `references/templates/database-design.md` + `references/templates/api-design.md`
 **Gate**: Every module's tables and endpoints defined. Request/response structures complete.
@@ -181,8 +189,8 @@ dedicated security reviews, performance load testing, and UAT at each step.
 **Goal**: Infrastructure ready before coding starts. Database running, staging deployable.
 
 **How**:
-1. Invoke `/setup-deploy` (gstack) — one-time staging environment and CI/CD configuration
-2. Invoke **database-reviewer agent** — review migration safety (no DROP COLUMN/TABLE without justification)
+1. Run `delivery.release` setup for the staging environment and CI/CD configuration
+2. Run `database.review` for migration safety (no DROP COLUMN/TABLE without justification)
 3. Execute: create DB instances → run migrations → load seed data → verify
 
 **Output**: `references/templates/staging-deploy.md`
@@ -197,20 +205,20 @@ dedicated security reviews, performance load testing, and UAT at each step.
 **Goal**: Build each module bottom-up. Backend first (data → service → API), then frontend (tokens → components → pages → API wiring), then integrate and E2E.
 
 **How — Backend (9a)**:
-1. Invoke `superpowers:subagent-driven-development` — per-task subagent with review loops
-2. Invoke `superpowers:test-driven-development` — RED→GREEN→REFACTOR, coverage ≥ 80%
-3. Integration tests: invoke `/qa` Quick mode (gstack) — real database, no mocks
+1. Implement one bounded task at a time; use a worker subagent only when available and useful
+2. Run `development.tdd` with RED→GREEN→REFACTOR and the project test runner
+3. Run focused integration tests against a real database where practical
 
 **How — Frontend (9b)**:
-1. Invoke `superpowers:subagent-driven-development` — component coding with code quality review
-2. Invoke `superpowers:test-driven-development` — utility/hook logic + component behavior tests
-3. Invoke **a11y-architect agent** — WCAG 2.2 self-check (keyboard nav, ARIA, contrast)
-4. Invoke **e2e-runner agent** — visual regression screenshots at key breakpoints
+1. Implement components in bounded tasks with an independent quality pass
+2. Run `development.tdd` for utility, hook, and component behavior
+3. Run `review.accessibility` for WCAG 2.2 evidence
+4. Run `qa.browser` for visual regression evidence at key breakpoints
 
 **How — Integration (9c)**:
 1. Wire frontend to real API, verify request/response match
 2. Deploy to staging (CI auto-deploy configured in Step 8)
-3. Invoke **e2e-runner agent** + `/qa` Standard (gstack) — core flows, multi-browser
+3. Run `qa.browser` for core flows and required browsers
 
 **Commit Standards**: Every commit follows Conventional Commits (`feat/fix/refactor/perf/test/docs/chore/style/ci`). Pre-commit: lint + type-check + no debug code + no hardcoded secrets.
 
@@ -225,9 +233,9 @@ dedicated security reviews, performance load testing, and UAT at each step.
 **Goal**: Automated self-check before creating a PR. Catch issues automation can find — don't waste human reviewers' time.
 
 **How**:
-1. Invoke `superpowers:requesting-code-review` — subagent independent review, three-tier classification
-2. Invoke `/review` (gstack) — SQL safety, LLM trust boundaries, conditional side effects
-3. Invoke language-specific reviewers: **typescript-reviewer / python-reviewer / go-reviewer / rust-reviewer / swift-reviewer**
+1. Run `review.code` in independent context and classify findings by severity
+2. Include SQL safety, trust boundaries, and conditional side effects where applicable
+3. Add language- or framework-specific review only when an available provider matches the code
 
 **Gate**: No CRITICAL or HIGH unresolved issues.
 
@@ -238,9 +246,9 @@ dedicated security reviews, performance load testing, and UAT at each step.
 **Goal**: Create, describe, and shepherd the PR through review to merge.
 
 **How**:
-1. Invoke `/ship` (gstack) — merge base → run tests → review diff → bump version → create PR with template
+1. Run `delivery.release` to inspect the merge base, verify the diff, and create a contextual PR
 2. Address human reviewer feedback
-3. After approval, invoke `/land-and-deploy` (gstack) — merge → wait CI → deploy → health check
+3. After approval, continue `delivery.release`: merge → wait CI → deploy → health check
 
 **Gate**: CI green. Review approved. No merge conflicts.
 
@@ -249,11 +257,10 @@ dedicated security reviews, performance load testing, and UAT at each step.
 **Goal**: Aggregate all test layers into one deliverable document.
 
 **How**:
-1. Invoke `/qa-only` (gstack) — structured bug reports with health scores
-2. Invoke `/cso` (gstack) — security audit (OWASP + STRIDE + secrets scan)
-3. Invoke `lighthouse_audit` (chrome-devtools MCP) — LCP/INP/CLS performance audit
-4. Invoke **a11y-architect agent** — WCAG 2.2 AA audit
-5. Invoke **performance-optimizer agent** — API load testing (k6 or equivalent)
+1. Aggregate deterministic test results and structured defect evidence
+2. Run `review.security` for OWASP, threat, secret, and dependency checks
+3. Run `review.performance` for client and API targets
+4. Run `review.accessibility` for WCAG 2.2 AA evidence
 
 **Output**: `references/templates/testing.md`
 **Gate**: All test layers have reports. No blocking bugs. Performance meets targets.
@@ -267,7 +274,7 @@ dedicated security reviews, performance load testing, and UAT at each step.
 **Goal**: Safely deliver verified code to production with canary rollout, feature flags, and rollback readiness.
 
 **How**:
-1. Invoke `/ship` → `/land-and-deploy` (gstack) — complete deploy chain
+1. Run `delivery.release` through the complete approved deployment chain
 2. Use canary release: 5% → observe 10min → 50% → observe 10min → 100%
 3. Deploy high-risk features dark (feature flags off), enable gradually
 4. Rehearse rollback on staging before production deploy (target < 5 min)
@@ -284,9 +291,9 @@ dedicated security reviews, performance load testing, and UAT at each step.
 **Goal**: Observe system health continuously post-deployment. Catch issues before users report them.
 
 **How**:
-1. Invoke `/canary` (gstack) — baseline screenshots → periodic checks → screenshot comparison + console errors + perf regression
+1. Run `operations.monitor` for release comparison, errors, performance, and regressions
 2. Monitor four layers: Infrastructure → Application Performance → Business Metrics → User Experience
-3. External tools: Sentry + Datadog + Grafana
+3. Use the project's configured logs, metrics, traces, and error tracking
 
 **Gate**: 24h post-launch with no P0 alerts. Core metrics stable.
 
@@ -295,34 +302,33 @@ dedicated security reviews, performance load testing, and UAT at each step.
 **Goal**: Learn from data and experience. Drive improvements into the next iteration.
 
 **How**:
-1. Invoke `/retro` (gstack) — commit history analysis + work patterns + team contributions + trend tracking
-2. Invoke `/document-release` (gstack) — sync README/ARCHITECTURE/CHANGELOG after retro
+1. Run `operations.retro` over delivery evidence, incidents, metrics, and work patterns
+2. Synchronize README, architecture, and release documentation in the same change
 
 **Gate**: Clear on what went right, what went wrong, and how to improve next time.
 
 ---
 
-## Skill Invocation Quick Reference
+## Capability Quick Reference
 
-| Step | Primary Skills | Alternative / Supplement |
-|------|---------------|--------------------------|
-| 1. Clarify Reqs | `/office-hours` → `superpowers:brainstorming` | `/plan-ceo-review`, `/openspec:propose` |
-| 2. UI/UX Design | `/design-consultation` → `/plan-design-review` | `/design-html` |
-| 3. Demo Confirm | `/design-review` + Claude artifacts | `superpowers:brainstorming` |
-| 4. Tech Planning | `/plan-eng-review` + **architect agent** | `superpowers:brainstorming` |
-| 5. Module Decomp | **architect agent** | `/openspec:propose` |
-| 6. Dev Plan | `superpowers:writing-plans` | `/openspec:propose` |
-| 7. Tech Docs | **architect** + **database-reviewer** (DB); `/openspec:propose` (API) | `superpowers:writing-plans` |
-| 8. Env Setup | `/setup-deploy` + **database-reviewer agent** | — |
-| 9a. Backend Dev | `superpowers:subagent-driven-dev` + `superpowers:tdd` | `/qa` Quick, `/openspec:apply` |
-| 9b. Frontend Dev | `superpowers:subagent-driven-dev` + `superpowers:tdd` | **a11y-architect**, **e2e-runner** (VR) |
-| 9c. Integration | **e2e-runner agent** + `/qa` Standard | `/land-and-deploy` |
-| 10. Code Review | `superpowers:requesting-code-review` | `/review`, language-specific reviewers |
-| 11. PR Mgmt | `/ship` | `/land-and-deploy` |
-| 12. Test Summary | `/qa-only` + `/cso` | `lighthouse_audit`, **a11y-architect**, **performance-optimizer** |
-| 13. Prod Deploy | `/ship` → `/land-and-deploy` | Feature flags, canary rollout |
-| 14. Monitoring | `/canary` | Sentry, Datadog, Grafana |
-| 15. Retro | `/retro` | `/document-release` |
+| Step | Required capabilities |
+|------|-----------------------|
+| 1. Clarify Reqs | `product.discovery`, `product.scope-review` |
+| 2-3. UI/UX + Demo | `design.system`, `design.prototype`, `design.review` |
+| 4-5. Tech Planning | `architecture.review`, optionally `spec.change` |
+| 6. Dev Plan | `planning.decompose` |
+| 7. Tech Docs | `architecture.review`, `database.review`, optionally `spec.change` |
+| 8. Env Setup | `delivery.release`, `database.review` |
+| 9. Development | `development.tdd`, `qa.browser`, `review.accessibility` |
+| 10. Code Review | `review.code`, risk-triggered specialist review |
+| 11. PR Mgmt | `delivery.release` |
+| 12. Test Summary | `review.security`, `review.performance`, `review.accessibility` |
+| 13. Prod Deploy | `delivery.release` |
+| 14. Monitoring | `operations.monitor` |
+| 15. Retro | `operations.retro` |
+
+Resolve each capability through `references/platform-adapters.md`; provider names
+and invocation syntax are host-specific implementation details.
 
 ---
 
@@ -361,29 +367,18 @@ These apply regardless of project size:
 
 ---
 
-## Integration with Other Skills
+## Provider and Delegation Policy
 
-You orchestrate the lifecycle. Delegate at the right moments:
+Specialized skills and agents are optional providers, not lifecycle requirements.
 
-| Situation | Delegate To |
-|-----------|-------------|
-| Greenfield design system | `/design-consultation` |
-| Complex feature planning | **planner** agent |
-| Architecture decision | **architect** agent |
-| Test-driven development | **tdd-guide** agent |
-| Code quality review | **code-reviewer** agent |
-| Security audit | **security-reviewer** agent |
-| Build or type errors | **build-error-resolver** agent |
-| E2E testing | **e2e-runner** agent |
-| Visual/UI review | `/design-review` |
-| Bug investigation | `/investigate` |
-| PR creation and shipping | `/ship` or `/land-and-deploy` |
-| Dead code cleanup | **refactor-cleaner** agent |
-| Documentation | **doc-updater** agent |
-| Performance optimization | **performance-optimizer** agent |
+- Discover providers from the active host before naming or invoking them.
+- Delegate bounded, independent work when separate context materially improves quality or speed.
+- Prefer read-heavy parallel work such as exploration, test analysis, or review.
+- Keep one owner for overlapping writes and final integration.
+- Require independent evidence; an agent's completion claim is not a quality gate.
+- Fall back to the main agent and repository-native tools when no specialist exists.
 
-Do not do everything yourself. Delegate. But maintain the holistic view — you're responsible
-for how the pieces fit together across all 15 steps.
+Maintain the holistic view and remain responsible for how work fits together across all steps.
 
 ---
 
@@ -393,8 +388,9 @@ Read these when you need detail beyond what's in this conductor:
 
 | Reference File | When to Read |
 |---------------|-------------|
+| `references/platform-adapters.md` | Before selecting a skill, agent, MCP tool, or host command |
 | `references/process-steps.md` | Need detailed step instructions, checklists, or project size tailoring |
-| `references/skills-mapping.md` | Need to understand why a skill is recommended, or compare alternatives |
+| `references/skills-mapping.md` | Need capability-to-provider mapping and selection rationale |
 | `references/tech-selection.md` | Step 4 — making technology choices |
 | `references/capability-domains.md` | Entering a new domain (frontend/backend/mobile/etc.) — best practices |
 | `references/templates/requirements.md` | Step 1 — producing the requirements document |

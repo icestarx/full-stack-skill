@@ -1,11 +1,12 @@
 # full-stack-skill
 
-A Claude Code skill that orchestrates the complete full-stack development lifecycle — from requirements through shipped software. 15 steps, 10 phases, 10 mandatory documents.
+An agent-portable skill that orchestrates the full-stack development lifecycle from requirements through shipped software. Codex is a first-class target; Claude Code and other Agent Skills-compatible hosts can use the same core workflow through adapters.
 
 ## Features
 
 - **Complete pipeline**: Requirements → Design → Technical Planning → Development → Quality → Deployment → Operations
-- **Skill orchestration**: Delegates to 30+ specialized skills and agents at each step (gstack, superpowers, OpenSpec)
+- **Capability orchestration**: Selects available skills, agents, MCP tools, or portable fallbacks by outcome
+- **Codex adapter**: Supports `$full-stack-skill`, `AGENTS.md`, native subagents, and optional MCP providers
 - **10 document templates**: Every phase produces structured, reviewable documents
 - **Quality gates**: Hard checkpoints between phases — no skipping
 - **Project sizing**: Auto-detects Small/Medium/Large and tailors the pipeline
@@ -13,19 +14,15 @@ A Claude Code skill that orchestrates the complete full-stack development lifecy
 
 ## Quick Start
 
+Repository-scoped Codex installation:
+
 ```bash
-# 1. Clone to your Claude Code skills directory
-git clone https://github.com/icestarx/full-stack-skill.git ~/.claude/skills/full-stack-skill
-
-# 2. Run the dependency check
-bash ~/.claude/skills/full-stack-skill/setup
-
-# 3. Install missing dependencies (gstack, superpowers, agents)
-#    See DEPENDENCIES.md for details
-
-# 4. Use in Claude Code
-#    Just describe what you want to build — the skill auto-triggers
+mkdir -p .agents/skills
+git clone https://github.com/icestarx/full-stack-skill.git .agents/skills/full-stack-skill
+bash .agents/skills/full-stack-skill/setup --strict
 ```
+
+Invoke with `$full-stack-skill`, or describe a multi-layer build/change and allow implicit selection. For Claude Code or another host, place the same folder in that host's supported skill location. See [DEPENDENCIES.md](DEPENDENCIES.md) for adapters and degraded operation.
 
 ## Pipeline Overview
 
@@ -56,32 +53,23 @@ The skill automatically assesses project scale and asks you to confirm:
 
 ## Dependencies
 
-This skill is an **orchestrator** — it delegates to other skills and agents.
+This skill is an orchestrator, but it has no mandatory dependency on gstack, Superpowers, OpenSpec, named reviewer agents, or a particular MCP server. Those are optional capability providers. Missing providers fall back to the main agent and repository-native tools.
 
-### Required
-
-| Dependency | Purpose |
-|------------|---------|
-| [gstack](https://github.com/icestarx) | Product, design, deployment, QA, ops (16+ sub-skills) |
-| superpowers | Development discipline — TDD, planning, code review |
-
-### Agents
-
-11 core agents (architect, code-reviewer, security-reviewer, database-reviewer, e2e-runner, a11y-architect, performance-optimizer, tdd-guide, build-error-resolver, doc-updater, refactor-cleaner) plus 13 language-specific reviewers.
-
-Run `bash setup` for a full audit. See [DEPENDENCIES.md](DEPENDENCIES.md) for complete details.
+Run `bash setup` for a host/provider audit. See [DEPENDENCIES.md](DEPENDENCIES.md) for the complete runtime contract.
 
 ## File Structure
 
 ```
 full-stack-skill/
-├── SKILL.md                       # Main conductor — 413 lines
-├── setup                          # Dependency detection & install helper
-├── DEPENDENCIES.md                # Full dependency inventory
+├── SKILL.md                       # Portable lifecycle conductor
+├── agents/openai.yaml             # Codex-facing metadata
+├── setup                          # Host and provider audit
+├── DEPENDENCIES.md                # Runtime/provider contract
 ├── README.md                      # This file
 └── references/
+    ├── platform-adapters.md       # Capability contracts and host adapters
     ├── process-steps.md           # 15-step detailed instructions
-    ├── skills-mapping.md          # Per-step skill selection rationale
+    ├── skills-mapping.md          # Per-step capability mapping
     ├── tech-selection.md          # Technology choice guide
     ├── capability-domains.md      # Domain best practices
     └── templates/                 # 10 document templates

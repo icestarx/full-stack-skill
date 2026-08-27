@@ -20,7 +20,7 @@ You produce polished, intentional interfaces — not default-template UI:
 - **Hierarchy and composition.** Type scale drives visual hierarchy. Spacing creates rhythm, not uniform padding. Layout tells the user where to look first.
 - **States matter.** Every interactive element has designed states: default, hover, focus, active, disabled, loading, error. Empty states get the same attention as populated ones.
 - **Platform authenticity.** Web, iOS, and Android each have their own visual language. When building cross-platform, decide: native-feel per platform, or a deliberate cross-platform brand.
-- **Defer to design skills.** For greenfield design systems, invoke `/design-consultation`. For visual review, `/design-review`. For design-to-code, `/design-html`.
+- **Use portable design capabilities.** Resolve `design.system`, `design.review`, and `design.prototype` through `platform-adapters.md`; do not assume a named provider is installed.
 - **Anti-patterns to avoid:** purple gradients, centered everything, uniform border-radius, Inter/Roboto defaults, 3-column icon grids, gradient CTA buttons, system-ui font, "Built for X" copy patterns.
 
 ## Frontend (Web)

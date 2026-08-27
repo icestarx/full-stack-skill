@@ -80,7 +80,7 @@ Production Deploy ──→ Monitoring ──→ Retrospective
 | **Core Activities** | User research, problem qualification, user story writing, feature scoping, prioritization (P0/P1/P2), acceptance criteria definition, success metrics definition |
 | **Output** | **📄 Requirements Document** |
 | **Exit Criteria** | Team can state "who we're solving for and what problem" in one sentence; all P0 features have clear acceptance criteria |
-| **Recommended Skills** | `/office-hours` (gstack) → `superpowers:brainstorming` → `/plan-ceo-review` (gstack) |
+| **Capabilities** | `product.discovery` → `product.scope-review` |
 
 > **Template**: `references/templates/requirements.md`
 
@@ -104,7 +104,7 @@ Production Deploy ──→ Monitoring ──→ Retrospective
 | **Core Activities** | Information architecture (sitemap/navigation/page tree), interaction design (user flows/wireframes/prototypes/6 states), UI design (visual style/components/responsive/dark mode/design system) |
 | **Output** | **📄 UI Design Document (DESIGN.md)**, design mockups (desktop/tablet/mobile), clickable prototype |
 | **Exit Criteria** | All page states have designs, design system documented, 6 interaction states fully covered |
-| **Recommended Skills** | `/design-consultation` (gstack) → `/plan-design-review` (gstack) → `/design-html` |
+| **Capabilities** | `design.system` → `design.review` → `design.prototype` |
 
 > **Template**: `references/templates/ui-design.md`
 
@@ -128,7 +128,7 @@ Production Deploy ──→ Monitoring ──→ Retrospective
 | **Core Activities** | Prototype demo, stakeholder review, feedback collection, design iteration, sign-off |
 | **Output** | Approved demo (prototype/mockups), review notes, sign-off |
 | **Exit Criteria** | Stakeholders (product/business/tech leads) confirm "this is what we want to build," no unresolved objections |
-| **Recommended Skills** | `/design-review` (gstack) — design walkthrough; Claude artifacts — clickable prototype demo |
+| **Capabilities** | `design.prototype` for the clickable demo; `design.review` for the walkthrough |
 
 **Demo Confirmation Checklist:**
 
@@ -172,7 +172,7 @@ Post-demo outputs:
 | **Core Activities** | Frontend tech selection, backend tech selection, frontend architecture design, backend architecture design, security architecture, build toolchain selection |
 | **Output** | **📄 Frontend Design Doc + 📄 Backend Design Doc** |
 | **Exit Criteria** | Frontend and backend tech stacks have clear selections at every layer with rationale; architecture layers are clear; frontend-backend contract points identified |
-| **Recommended Skills** | `/plan-eng-review` (gstack) + **architect agent** |
+| **Capabilities** | `architecture.review`; use an independent reviewer for high-risk decisions |
 
 > **Note**: Step 4 produces architecture-level design docs. Detailed database design and API contracts are completed in Step 7 "Module Tech Docs." Step 4 sets the overall direction and boundaries; Step 7 refines to executable DDL and OpenAPI Spec.
 
@@ -191,7 +191,7 @@ Post-demo outputs:
 | **Core Activities** | Domain identification, module boundary definition, dependency analysis, parallel strategy formulation |
 | **Output** | Module list + dependency graph |
 | **Exit Criteria** | Each module has clear responsibilities, well-defined boundaries, no circular dependencies |
-| **Recommended Skills** | **architect agent** — domain-driven design, module boundary identification, dependency analysis; `/openspec:propose` — organize spec deltas by module |
+| **Capabilities** | `architecture.review`; optionally `spec.change` for module deltas |
 
 **Module Decomposition Principles:**
 - Organize by business domain, not technical layer
@@ -232,7 +232,7 @@ Modules with no dependencies can be developed in parallel: auth + notification c
 | **Core Activities** | Task breakdown, dependency analysis, effort estimation, timeline planning, ownership assignment, milestone setting |
 | **Output** | **📄 Development Plan Document** (task list + timeline + dependency graph + milestones) |
 | **Exit Criteria** | Each task ≤ 1 day effort, dependencies clear, no circular dependencies, P0 has clear completion dates |
-| **Recommended Skills** | `superpowers:writing-plans` — ultra-fine-grained task decomposition |
+| **Capabilities** | `planning.decompose` |
 
 > **Template**: `references/templates/development-plan.md`
 
@@ -250,7 +250,7 @@ Modules with no dependencies can be developed in parallel: auth + notification c
 | **Core Activities** | Database table design, index design, API endpoint design, request/response structure definition, error code system |
 | **Output** | **📄 Database Design Doc + 📄 API Doc** |
 | **Exit Criteria** | Every module's required tables/endpoints are defined; request/response structures complete; indexes cover core query paths |
-| **Recommended Skills** | **architect agent** + **database-reviewer agent** (DB); `/openspec:propose` (API) |
+| **Capabilities** | `architecture.review` + `database.review` (DB); optionally `spec.change` (API) |
 
 > **Document timing**:
 > - DB Doc + API Doc: produced at Step 7 (before coding, as frontend-backend contract)
@@ -273,7 +273,7 @@ Modules with no dependencies can be developed in parallel: auth + notification c
 | **Core Activities** | Database instance creation, initial migration execution, seed data writing & loading, staging environment setup, CI/CD integration with staging |
 | **Output** | **📄 Staging Deployment Doc**, usable staging environment, initialized database |
 | **Exit Criteria** | Developers can connect to database locally, staging auto-deploys via CI, seed data resettable |
-| **Recommended Skills** | `/setup-deploy` (gstack) + **database-reviewer agent** |
+| **Capabilities** | `delivery.release` + `database.review` |
 
 > **Template**: `references/templates/staging-deploy.md`
 
@@ -350,7 +350,7 @@ Staging Deployment Flow:
 | **Core Activities** | Backend TDD development → frontend component development → frontend-backend wiring → deploy to staging → E2E |
 | **Output** | Runnable code, test code, passing CI |
 | **Exit Criteria** | All P0 features working, unit test coverage ≥ 80%, integration tests pass, E2E core flows pass |
-| **Recommended Skills** | Backend: `superpowers:subagent-driven-dev` + `superpowers:tdd`; Frontend: `superpowers:subagent-driven-dev`; E2E: **e2e-runner** agent |
+| **Capabilities** | `development.tdd`, `qa.browser`, and risk-triggered specialist review |
 
 **Commit Standards (enforced within each module):**
 
@@ -430,7 +430,7 @@ Frontend Dev Flow (per module):
 - [ ] Semantic HTML + ARIA labels
 - [ ] Keyboard navigation functional
 - [ ] reduced-motion adaptation
-- [ ] Accessibility self-check passed (axe / **a11y-architect agent**)
+- [ ] Accessibility self-check passed (`review.accessibility`)
 
 #### 9c. Module Integration
 
@@ -475,7 +475,7 @@ Frontend + backend of same module can partially overlap (backend produces API co
 | **Core Activities** | Automated security review, code quality review, design consistency review, performance review, commit convention check |
 | **Output** | Review report (pass/pass-with-changes/reject), review comments, fix commits |
 | **Exit Criteria** | No CRITICAL or HIGH level unresolved issues; commit messages follow Conventional Commits |
-| **Recommended Skills** | `superpowers:requesting-code-review` (subagent independent review) + `/review` (gstack) |
+| **Capabilities** | `review.code` in independent context plus risk-triggered specialist review |
 
 > **Step 10 vs Step 11 relationship**: Step 10 = automated self-check (run review agents locally/on branch, no PR needed) → fix issues → Step 11 = create PR → human reviewer review → merge. Self-check passing is the prerequisite for PR creation — avoids wasting reviewer time on issues automation can catch.
 
@@ -520,7 +520,7 @@ Performance (MEDIUM):
 | **Core Activities** | PR creation, PR description writing, review iteration, conflict resolution, merge |
 | **Output** | Merged PR (with full context) |
 | **Exit Criteria** | CI green, review approved, no merge conflicts, PR description complete |
-| **Recommended Skills** | `/ship` (gstack) — auto merge base, run tests, review diff, create PR |
+| **Capabilities** | `delivery.release` — merge-base check, tests, diff review, and contextual PR |
 
 ```
 PR Title: <type>(<scope>): <brief description>
@@ -548,7 +548,7 @@ Submit PR → Request review → Address feedback → Re-request review → Appr
 | **Core Activities** | Coverage aggregation, test result organization, performance baseline recording, security scan results, known issues list |
 | **Output** | **📄 Test Document** |
 | **Exit Criteria** | All test layers have reports, no blocking bugs, performance meets targets |
-| **Recommended Skills** | `/qa-only` (gstack) + `/cso` (gstack) security audit; `lighthouse_audit` (chrome-devtools MCP) perf audit; **a11y-architect agent** accessibility audit |
+| **Capabilities** | deterministic QA evidence + `review.security`, `review.performance`, and `review.accessibility` |
 
 > **Template**: `references/templates/testing.md`
 
@@ -566,7 +566,7 @@ Submit PR → Request review → Address feedback → Re-request review → Appr
 | **Core Activities** | Production build & packaging, database migration (production), canary/gradual rollout, health checks, rollback verification |
 | **Output** | **📄 Production Deployment Document**, production running application |
 | **Exit Criteria** | Production health checks pass, core flow smoke tests pass, monitoring & alerting configured |
-| **Recommended Skills** | `/ship` → `/land-and-deploy` (gstack); prerequisite: `/setup-deploy` (gstack) |
+| **Capabilities** | `delivery.release` |
 
 > **Template**: `references/templates/production-deploy.md`
 
@@ -584,7 +584,7 @@ Submit PR → Request review → Address feedback → Re-request review → Appr
 | **Core Activities** | Real-time monitoring, log analysis, UX metric observation, alert response |
 | **Output** | Monitoring dashboards, alert configuration, launch observation report |
 | **Exit Criteria** | 24h post-launch with no P0 alerts, core metrics stable |
-| **Recommended Skills** | `/canary` (gstack) — post-deploy canary monitoring |
+| **Capabilities** | `operations.monitor` |
 
 **Four Monitoring Layers:**
 
@@ -607,7 +607,7 @@ Layer 4: User Experience (CWV / Crash rate / Page load time / User feedback volu
 | **Core Activities** | Data analysis, team retrospective, tech debt review, next iteration priority adjustment |
 | **Output** | Iteration retrospective report |
 | **Exit Criteria** | Clear on what went right, what went wrong, how to improve next time |
-| **Recommended Skills** | `/retro` (gstack) — engineering retrospective + trend tracking |
+| **Capabilities** | `operations.retro` |
 
 ---
 
