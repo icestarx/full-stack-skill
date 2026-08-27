@@ -20,6 +20,7 @@ Do not emit a slash command, `$skill` invocation, agent name, or MCP tool name u
 |---|---|---|
 | `product.discovery` | Problem, users, goals, scope, assumptions, acceptance criteria | Structured interview and requirements template |
 | `product.scope-review` | Expand/keep/reduce recommendation with rationale | Risk/value/effort review by the main agent |
+| `product.requirements-review` | Completeness, consistency, testability, boundary, and change-impact findings | Apply `requirements-workflow.md` Definition of Ready in a separate review pass |
 | `design.system` | IA, flows, states, visual system, responsive behavior | Produce the UI design template directly |
 | `design.prototype` | Reviewable mockup or runnable prototype | HTML/CSS prototype or design-tool output |
 | `design.review` | Evidence-based UX and visual findings | Browser screenshots plus heuristic review |

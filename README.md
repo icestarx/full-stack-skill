@@ -5,9 +5,12 @@ An agent-portable skill that orchestrates the full-stack development lifecycle f
 ## Features
 
 - **Complete pipeline**: Requirements → Design → Technical Planning → Development → Quality → Deployment → Operations
+- **Requirements discipline**: New, Review, and Change modes with capability trees, state machines, operational semantics, and a Definition of Ready
+- **Major-version baselines**: Separates long-lived product/UX/engineering versions from minor/patch release records
+- **End-to-end traceability**: Links requirements to decisions, tasks, code, tests, PRs, releases, and production signals
 - **Capability orchestration**: Selects available skills, agents, MCP tools, or portable fallbacks by outcome
 - **Codex adapter**: Supports `$full-stack-skill`, `AGENTS.md`, native subagents, and optional MCP providers
-- **10 document templates**: Every phase produces structured, reviewable documents
+- **Lifecycle templates**: Phase documents plus version, release, and traceability manifests
 - **Quality gates**: Hard checkpoints between phases — no skipping
 - **Project sizing**: Auto-detects Small/Medium/Large and tailors the pipeline
 - **Dependency checker**: `setup` script audits what's installed and what's missing
@@ -68,11 +71,14 @@ full-stack-skill/
 ├── README.md                      # This file
 └── references/
     ├── platform-adapters.md       # Capability contracts and host adapters
+    ├── document-organization.md   # Major-version baselines vs release records
+    ├── requirements-workflow.md   # New/review/change requirement modes and gates
+    ├── traceability.md            # Stable IDs, link ledger, propagation, and gates
     ├── process-steps.md           # 15-step detailed instructions
     ├── skills-mapping.md          # Per-step capability mapping
     ├── tech-selection.md          # Technology choice guide
     ├── capability-domains.md      # Domain best practices
-    └── templates/                 # 10 document templates
+    └── templates/                 # Phase and cross-cutting document templates
         ├── requirements.md
         ├── ui-design.md
         ├── frontend-design.md
@@ -82,7 +88,10 @@ full-stack-skill/
         ├── api-design.md
         ├── staging-deploy.md
         ├── testing.md
-        └── production-deploy.md
+        ├── production-deploy.md
+        ├── traceability-ledger.md
+        ├── version-manifest.md
+        └── release-manifest.md
 ```
 
 ## Non-Negotiable Rules

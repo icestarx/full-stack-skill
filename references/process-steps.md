@@ -12,7 +12,7 @@ Module Tech Docs (1) → Environment Setup (1) → Module Development (1) →
 Quality Verification (3) → Production Deploy (1) → Operations (2)
 ```
 
-**15 nodes, 10 phases, 10 mandatory documents.**
+**15 nodes, 10 phases, 10 phase documents, plus cross-cutting control records.**
 
 ```
 Step 1                      Step 2              Step 3
@@ -55,7 +55,7 @@ Production Deploy ──→ Monitoring ──→ Retrospective
 
 | # | Document | Produced At | Contents |
 |---|----------|-------------|----------|
-| 1 | **Requirements Doc** | Step 1 | Background, user stories, feature list (P0/P1/P2), acceptance criteria, success metrics |
+| 1 | **Requirements Doc** | Step 1 | Product brief, capability tree, stable requirement IDs, state transitions, operational semantics, acceptance criteria, quality attributes, impact and decisions |
 | 2 | **UI Design Doc** | Step 2 | Design system (DESIGN.md): color, typography, spacing, motion, component states |
 | 3 | **Frontend Design Doc** | Step 4 | Frontend tech stack, component architecture, state management, routing, rendering strategy, performance |
 | 4 | **Backend Design Doc** | Step 4 | Backend tech stack, system architecture, auth/authz, data flow, security, ADRs |
@@ -65,6 +65,16 @@ Production Deploy ──→ Monitoring ──→ Retrospective
 | 8 | **Staging Deploy Doc** | Step 8 | Staging architecture, DB init flow, CI/CD config, env vars, seed data |
 | 9 | **Test Doc** | Step 12 | Test strategy, case list, coverage report, performance baseline, known issues |
 | 10 | **Production Deploy Doc** | Step 13 | Production architecture, release strategy, rollback plan, monitoring & alerting |
+
+These 10 phase documents are accompanied by cross-cutting records rather than
+counted as additional phases:
+
+- major-version manifest — effective product/UX/engineering baseline;
+- traceability ledger — normalized artifact relationships, coverage, and exceptions;
+- release manifest — immutable scope and delivery evidence for one release.
+
+Read `references/document-organization.md` for placement and
+`references/traceability.md` for update rules and gates.
 
 ---
 
@@ -76,19 +86,23 @@ Production Deploy ──→ Monitoring ──→ Retrospective
 
 | Dimension | Content |
 |-----------|---------|
-| **Entry** | User feedback, business needs, data insights, competitive analysis |
-| **Core Activities** | User research, problem qualification, user story writing, feature scoping, prioritization (P0/P1/P2), acceptance criteria definition, success metrics definition |
-| **Output** | **📄 Requirements Document** |
-| **Exit Criteria** | Team can state "who we're solving for and what problem" in one sentence; all P0 features have clear acceptance criteria |
-| **Capabilities** | `product.discovery` → `product.scope-review` |
+| **Entry** | Product idea, existing PRD, requested change, repository behavior, user feedback, business need, or data insight |
+| **Core Activities** | Source inventory, mode selection (New/Review/Change), problem qualification, capability tree and scope, actor/rule/data coverage, state machines, operational semantics, acceptance criteria, change impact, readiness review |
+| **Output** | **📄 Requirements Document**, baseline/ledger updates, or review findings when review-only was requested |
+| **Exit Criteria** | Requirements pass `requirements-workflow.md` Definition of Ready; the capability tree has no missing/orphan P0 leaves; committed REQ/AC items are indexed in the version line; no hidden blocker remains |
+| **Capabilities** | `product.discovery` → `product.scope-review` → `product.requirements-review` |
 
+> **Workflow**: `references/requirements-workflow.md`
 > **Template**: `references/templates/requirements.md`
 
 **Key Questions:**
-- Is this a real need or imagined? Where's the evidence?
-- How do users currently solve this (alternatives)?
-- What does the user gain if solved? What's lost if not?
-- Is P0/P1/P2 priority consensus reached?
+- What is already confirmed, where did it come from, and which sources conflict?
+- Is this a new requirement, a review, or a delta to existing behavior?
+- Does the capability tree cover every module, function, and applicable subfunction?
+- Who can act, under which permissions, states, business rules, and data constraints?
+- Which state transitions and concurrency/idempotency/cancellation/recovery semantics apply?
+- What is explicitly outside this release, and what may regress when behavior changes?
+- Can every P0 item be verified through positive, negative, and recovery behavior?
 
 ---
 
@@ -101,9 +115,9 @@ Production Deploy ──→ Monitoring ──→ Retrospective
 | Dimension | Content |
 |-----------|---------|
 | **Entry** | Requirements doc feature list + user stories |
-| **Core Activities** | Information architecture (sitemap/navigation/page tree), interaction design (user flows/wireframes/prototypes/6 states), UI design (visual style/components/responsive/dark mode/design system) |
+| **Core Activities** | Information architecture, interaction design, UI design, responsive/state coverage, and REQ/AC-to-flow/screen/state mapping |
 | **Output** | **📄 UI Design Document (DESIGN.md)**, design mockups (desktop/tablet/mobile), clickable prototype |
-| **Exit Criteria** | All page states have designs, design system documented, 6 interaction states fully covered |
+| **Exit Criteria** | All page states have designs, design system documented, 6 interaction states covered, and every committed UX-affecting REQ/AC has a valid design link or approved N/A |
 | **Capabilities** | `design.system` → `design.review` → `design.prototype` |
 
 > **Template**: `references/templates/ui-design.md`
@@ -127,7 +141,7 @@ Production Deploy ──→ Monitoring ──→ Retrospective
 | **Entry** | UI design doc + clickable prototype |
 | **Core Activities** | Prototype demo, stakeholder review, feedback collection, design iteration, sign-off |
 | **Output** | Approved demo (prototype/mockups), review notes, sign-off |
-| **Exit Criteria** | Stakeholders (product/business/tech leads) confirm "this is what we want to build," no unresolved objections |
+| **Exit Criteria** | Stakeholders confirm "this is what we want to build," no unresolved objections remain, and approval evidence links to affected REQ/AC items |
 | **Capabilities** | `design.prototype` for the clickable demo; `design.review` for the walkthrough |
 
 **Demo Confirmation Checklist:**
@@ -169,9 +183,9 @@ Post-demo outputs:
 | Dimension | Content |
 |-----------|---------|
 | **Entry** | Requirements doc + UI design doc + demo confirmation passed |
-| **Core Activities** | Frontend tech selection, backend tech selection, frontend architecture design, backend architecture design, security architecture, build toolchain selection |
+| **Core Activities** | Frontend/backend tech selection and architecture, security/toolchain decisions, ADRs, and REQ/AC-to-decision/contract mapping |
 | **Output** | **📄 Frontend Design Doc + 📄 Backend Design Doc** |
-| **Exit Criteria** | Frontend and backend tech stacks have clear selections at every layer with rationale; architecture layers are clear; frontend-backend contract points identified |
+| **Exit Criteria** | Stack and architecture rationale are clear; frontend-backend contract points are identified; every committed requirement maps to decisions/contracts or approved N/A |
 | **Capabilities** | `architecture.review`; use an independent reviewer for high-risk decisions |
 
 > **Note**: Step 4 produces architecture-level design docs. Detailed database design and API contracts are completed in Step 7 "Module Tech Docs." Step 4 sets the overall direction and boundaries; Step 7 refines to executable DDL and OpenAPI Spec.
@@ -188,7 +202,7 @@ Post-demo outputs:
 | Dimension | Content |
 |-----------|---------|
 | **Entry** | Frontend design doc + backend design doc |
-| **Core Activities** | Domain identification, module boundary definition, dependency analysis, parallel strategy formulation |
+| **Core Activities** | Domain identification, capability-to-module reconciliation, boundary definition, dependency analysis, parallel strategy formulation |
 | **Output** | Module list + dependency graph |
 | **Exit Criteria** | Each module has clear responsibilities, well-defined boundaries, no circular dependencies |
 | **Capabilities** | `architecture.review`; optionally `spec.change` for module deltas |
@@ -204,11 +218,11 @@ Post-demo outputs:
 ```markdown
 # Module List
 
-| Module | Responsibility | Out of Scope | Frontend Scope | Backend Scope | Depends On |
-|--------|---------------|--------------|----------------|---------------|------------|
-| auth | AuthN & AuthZ | No user profiling | Login/Register/Password reset pages | JWT/Session/Permission middleware | — |
-| user | User management | No auth | Profile settings/Admin panel | User CRUD/Roles | auth |
-| ... | | | | | |
+| Module | CAP / REQ IDs | Responsibility | Out of Scope | Frontend Scope | Backend Scope | Depends On |
+|---|---|---|---|---|---|---|
+| auth | CAP-AUTH / REQ-AUTH-* | AuthN & AuthZ | No user profiling | Login/Register/Password reset pages | JWT/Session/Permission middleware | — |
+| user | CAP-USER / REQ-USER-* | User management | No auth | Profile settings/Admin panel | User CRUD/Roles | auth |
+| ... | | | | | | |
 
 ## Dependency Graph
 ```
@@ -229,9 +243,9 @@ Modules with no dependencies can be developed in parallel: auth + notification c
 | Dimension | Content |
 |-----------|---------|
 | **Entry** | Module list + dependency graph + frontend/backend design docs |
-| **Core Activities** | Task breakdown, dependency analysis, effort estimation, timeline planning, ownership assignment, milestone setting |
+| **Core Activities** | Task breakdown, origin mapping, dependency analysis, planned code/test evidence, estimation, ownership, milestones |
 | **Output** | **📄 Development Plan Document** (task list + timeline + dependency graph + milestones) |
-| **Exit Criteria** | Each task ≤ 1 day effort, dependencies clear, no circular dependencies, P0 has clear completion dates |
+| **Exit Criteria** | Each task ≤ 1 day, dependencies are acyclic, P0 has completion dates, and every task has a REQ/AC, BUG, TECH, SEC, or OPS origin |
 | **Capabilities** | `planning.decompose` |
 
 > **Template**: `references/templates/development-plan.md`
@@ -247,9 +261,9 @@ Modules with no dependencies can be developed in parallel: auth + notification c
 | Dimension | Content |
 |-----------|---------|
 | **Entry** | Frontend/backend design docs + module list + dependency graph |
-| **Core Activities** | Database table design, index design, API endpoint design, request/response structure definition, error code system |
+| **Core Activities** | Database/index/migration design, API/event contracts, errors, and REQ/AC/ADR-to-contract/test mapping |
 | **Output** | **📄 Database Design Doc + 📄 API Doc** |
-| **Exit Criteria** | Every module's required tables/endpoints are defined; request/response structures complete; indexes cover core query paths |
+| **Exit Criteria** | Tables/endpoints and schemas are complete, indexes cover core queries, and every committed requirement has valid data/API/contract links where applicable |
 | **Capabilities** | `architecture.review` + `database.review` (DB); optionally `spec.change` (API) |
 
 > **Document timing**:
@@ -270,9 +284,9 @@ Modules with no dependencies can be developed in parallel: auth + notification c
 | Dimension | Content |
 |-----------|---------|
 | **Entry** | Database design doc + API doc + development plan |
-| **Core Activities** | Database instance creation, initial migration execution, seed data writing & loading, staging environment setup, CI/CD integration with staging |
+| **Core Activities** | Database/migration/seed setup, staging and CI/CD integration, and linkage to NFR/OPS/SEC origins |
 | **Output** | **📄 Staging Deployment Doc**, usable staging environment, initialized database |
-| **Exit Criteria** | Developers can connect to database locally, staging auto-deploys via CI, seed data resettable |
+| **Exit Criteria** | Developers can connect locally, staging auto-deploys, seed data resets, and environment evidence traces to valid origins |
 | **Capabilities** | `delivery.release` + `database.review` |
 
 > **Template**: `references/templates/staging-deploy.md`
@@ -347,9 +361,9 @@ Staging Deployment Flow:
 | Dimension | Content |
 |-----------|---------|
 | **Entry** | Environment ready + module tech docs (DB + API) |
-| **Core Activities** | Backend TDD development → frontend component development → frontend-backend wiring → deploy to staging → E2E |
+| **Core Activities** | Backend/frontend TDD, integration/E2E, and replacement of planned trace links with actual code symbols and test evidence |
 | **Output** | Runnable code, test code, passing CI |
-| **Exit Criteria** | All P0 features working, unit test coverage ≥ 80%, integration tests pass, E2E core flows pass |
+| **Exit Criteria** | P0 works, coverage ≥80%, integration/E2E pass, and completed tasks map backward to valid origins and forward to code/test evidence |
 | **Capabilities** | `development.tdd`, `qa.browser`, and risk-triggered specialist review |
 
 **Commit Standards (enforced within each module):**
@@ -506,6 +520,12 @@ Performance (MEDIUM):
 □ No N+1 queries
 □ List queries have pagination
 □ Heavy computation in async queues
+
+Traceability (HIGH):
+□ Changed behavior maps to a REQ/AC or classified BUG/TECH/SEC/OPS origin
+□ Planned code/test links were replaced with actual evidence
+□ No unexplained orphan task/test or stale link remains
+□ Source requirements changed when product semantics changed
 ```
 
 ---
@@ -517,9 +537,9 @@ Performance (MEDIUM):
 | Dimension | Content |
 |-----------|---------|
 | **Entry** | Code review passed branch |
-| **Core Activities** | PR creation, PR description writing, review iteration, conflict resolution, merge |
+| **Core Activities** | PR creation, traceability delta, test/risk evidence, review iteration, conflict resolution, merge |
 | **Output** | Merged PR (with full context) |
-| **Exit Criteria** | CI green, review approved, no merge conflicts, PR description complete |
+| **Exit Criteria** | CI green, review approved, no conflicts, and PR origin/code/test/ledger links are complete |
 | **Capabilities** | `delivery.release` — merge-base check, tests, diff review, and contextual PR |
 
 ```
@@ -527,10 +547,14 @@ PR Title: <type>(<scope>): <brief description>
 
 PR Description Template:
 ## Background — What problem does this solve
+## Traceability — Affected REQ/AC/TASK/BUG/TECH/SEC/OPS IDs
 ## Changes — What was done
+## Code Surfaces — Actual paths and symbols
 ## Test Plan — Backend/Frontend/E2E test checklist
+## Evidence — TEST IDs, results, reports, screenshots
 ## Screenshots/Recordings — Before/After (if UI changes)
 ## Risk Assessment — What changed / Rollback plan
+## Documentation — Baseline, contracts, and ledger updates
 
 Review Cycle:
 Submit PR → Request review → Address feedback → Re-request review → Approve → Merge
@@ -545,9 +569,9 @@ Submit PR → Request review → Address feedback → Re-request review → Appr
 | Dimension | Content |
 |-----------|---------|
 | **Entry** | All modules complete + unit tests + integration tests + E2E + perf tests + security scan |
-| **Core Activities** | Coverage aggregation, test result organization, performance baseline recording, security scan results, known issues list |
+| **Core Activities** | AC-to-TEST reconciliation, coverage/results, orphan/stale analysis, performance/security evidence, known issues |
 | **Output** | **📄 Test Document** |
-| **Exit Criteria** | All test layers have reports, no blocking bugs, performance meets targets |
+| **Exit Criteria** | All layers report, every committed AC has accepted evidence, no blocking bug remains, and performance meets targets |
 | **Capabilities** | deterministic QA evidence + `review.security`, `review.performance`, and `review.accessibility` |
 
 > **Template**: `references/templates/testing.md`
@@ -563,9 +587,9 @@ Submit PR → Request review → Address feedback → Re-request review → Appr
 | Dimension | Content |
 |-----------|---------|
 | **Entry** | All tests passing + PR merged + review approved + staging verified |
-| **Core Activities** | Production build & packaging, database migration (production), canary/gradual rollout, health checks, rollback verification |
-| **Output** | **📄 Production Deployment Document**, production running application |
-| **Exit Criteria** | Production health checks pass, core flow smoke tests pass, monitoring & alerting configured |
+| **Core Activities** | Build/package, migration, rollout, rollback, release-manifest closure, deployment and production evidence |
+| **Output** | **📄 Production Deployment Document + Release Manifest**, production running application |
+| **Exit Criteria** | Health/smoke checks pass, monitoring is configured, and committed scope has no missing/stale/blocked implementation, test, or release edge |
 | **Capabilities** | `delivery.release` |
 
 > **Template**: `references/templates/production-deploy.md`
@@ -581,9 +605,9 @@ Submit PR → Request review → Address feedback → Re-request review → Appr
 | Dimension | Content |
 |-----------|---------|
 | **Entry** | Production deployment complete |
-| **Core Activities** | Real-time monitoring, log analysis, UX metric observation, alert response |
+| **Core Activities** | Monitoring/log/trace/audit analysis, alert response, and REQ-to-production-signal mapping |
 | **Output** | Monitoring dashboards, alert configuration, launch observation report |
-| **Exit Criteria** | 24h post-launch with no P0 alerts, core metrics stable |
+| **Exit Criteria** | 24h post-launch has no P0 alerts, core metrics are stable, and critical released requirements map to production signals or approved exceptions |
 | **Capabilities** | `operations.monitor` |
 
 **Four Monitoring Layers:**
@@ -604,9 +628,9 @@ Layer 4: User Experience (CWV / Crash rate / Page load time / User feedback volu
 | Dimension | Content |
 |-----------|---------|
 | **Entry** | 1-2 weeks of post-launch data accumulated |
-| **Core Activities** | Data analysis, team retrospective, tech debt review, next iteration priority adjustment |
+| **Core Activities** | Data/incident analysis, retrospective, trace-gap closure, tech-debt origins, next-iteration adjustment |
 | **Output** | Iteration retrospective report |
-| **Exit Criteria** | Clear on what went right, what went wrong, how to improve next time |
+| **Exit Criteria** | Lessons and owned actions are clear; affected stale/blocked links are closed or carried forward with valid BUG/TECH/OPS/REQ origins |
 | **Capabilities** | `operations.retro` |
 
 ---
@@ -615,32 +639,35 @@ Layer 4: User Experience (CWV / Crash rate / Page load time / User feedback volu
 
 | Step | Document | Contents |
 |------|----------|----------|
-| 1. Clarify Reqs | 📄 Requirements Doc | Background, user stories, feature scope (P0/P1/P2), acceptance criteria |
-| 2. UI/UX Design | 📄 UI Design Doc | Design system: IA, interaction, color/type/spacing/motion/component states |
+| 1. Clarify Reqs | 📄 Requirements Doc | Source-grounded capability tree, stable IDs, state transitions, operational semantics, acceptance criteria, quality attributes, impacts and decisions |
+| 2. UI/UX Design | 📄 UI Design Doc | Design system plus REQ/AC-to-flow/screen/state coverage |
 | 3. Demo Confirm | (Review record) | Demo notes, feedback, sign-off |
-| 4. Tech Planning | 📄 Frontend + Backend Design | Frontend: tech stack/components/state/routing/rendering; Backend: tech stack/architecture/auth/data flow/ADRs |
+| 4. Tech Planning | 📄 Frontend + Backend Design | Architecture and REQ/AC-to-decision/contract/planned-verification mapping |
 | 5. Module Decomp | (Merged into design docs) | Module list, responsibility boundaries, dependency graph |
-| 6. Dev Plan | 📄 Dev Plan Doc | Task breakdown, timeline, dependencies, milestones |
-| 7. Module Tech Docs | 📄 DB Doc + API Doc | Table structures/ERD/indexes + endpoint definitions/request-response/error codes |
+| 6. Dev Plan | 📄 Dev Plan Doc | Stable TASK IDs, origins, dependencies, planned code/test evidence, milestones |
+| 7. Module Tech Docs | 📄 DB Doc + API Doc | Data/API contracts traced to REQ/AC/ADR and contract tests |
 | 8. Env Setup | 📄 Staging Deploy Doc | Staging architecture, DB init flow, CI/CD config, seed data |
 | 9. Module Dev | (Code + tests) | Runnable code, backend unit/integration tests, frontend component/VR tests |
-| 10+11+12. Review→PR→Test | 📄 Test Doc | Coverage reports, test results, perf baseline, known issues |
-| 13. Prod Deploy | 📄 Production Deploy Doc | Production architecture, release strategy, rollback plan, monitoring & alerting |
+| 10+11+12. Review→PR→Test | 📄 Test Doc | AC-to-TEST coverage, PR evidence, orphan/stale links, results and known issues |
+| 13. Prod Deploy | 📄 Production Deploy + Release Manifest | Baseline, committed scope, PR/build/test/deployment/production evidence |
+
+Cross-cutting: major-version manifest + traceability ledger/coverage/exceptions are
+updated whenever an affected phase artifact changes.
 
 ---
 
 ## Quality Gates
 
 ```
-Step 1 → 2: Requirements clarified, P0/P1/P2 consensus reached
-Step 2 → 3: Design system documented, prototype available → 🚪 Demo Confirmation
-Step 3 → 4: Stakeholder sign-off on design → Enter technical planning
-Step 7 → 8: DB + API design complete → 🚪 Environment Readiness Check
+Step 1 → 2: Requirements pass Definition of Ready; no hidden blocker remains
+Step 2 → 3: Design system documented, REQ/AC mapped, prototype available → 🚪 Demo Confirmation
+Step 3 → 4: Stakeholder sign-off linked → Enter technical planning
+Step 7 → 8: DB + API design complete and traced → 🚪 Environment Readiness Check
 Step 8 → 9: Database connectable, staging deployable → Enter development
-Step 9 → 10: All modules complete + tests passing → 🚪 Code Review Gate
-Step 10 → 11: No CRITICAL/HIGH unresolved issues
-Step 12 → 13: All test layers passing → 🚪 Production Release Approval
-Step 13 → 14: Production smoke tests pass
+Step 9 → 10: All modules complete + implementation/test links valid → 🚪 Code Review Gate
+Step 10 → 11: No CRITICAL/HIGH issue or unexplained trace gap
+Step 12 → 13: All committed ACs verified → 🚪 Production Release Approval
+Step 13 → 14: Release manifest closed and smoke tests pass
 ```
 
 ---
@@ -664,7 +691,8 @@ Step 13 → 14: Production smoke tests pass
 14. Monitoring → Sentry or similar lightweight
 15. (Skip independent retro)
 
-Docs: Requirements/UI Design/Frontend+Backend(merged)/API/Deploy(merged) — each lean, 1-2 pages
+Docs: phase documents may be merged and lean, but committed scope still needs a
+version/release reference and a minimal origin→code→test→PR/release ledger.
 ```
 
 ### Medium Projects (5-10 people, 1-3 months) → Full 15 Steps

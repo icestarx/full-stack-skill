@@ -3,6 +3,12 @@
 ```markdown
 # API Documentation — [Project Name]
 
+## Requirement and Contract Coverage
+
+| Endpoint / event | REQ / AC IDs | ADR / data contract | Implementation task | Contract/integration tests |
+|---|---|---|---|---|
+| | | | TASK-* | TEST-* |
+
 ## 1. General Conventions
 ### Base URL
 - Staging: https://staging-api.example.com/v1
@@ -27,7 +33,10 @@
 ## 2. Endpoint Definitions
 ### Auth Module
 #### POST /auth/register
+- REQ / AC IDs
 - Description / Auth required / Rate limit / Request body / Response / Errors
+- Idempotency, concurrency, compatibility, and observability contract where applicable
+- Implementation TASK IDs and contract/integration TEST IDs
 
 [... all endpoints for every module ...]
 ```

@@ -3,6 +3,11 @@
 ```markdown
 # Production Deployment — [Project Name]
 
+> **Version line / release**: [v2 / 2.0.0]
+> **Baseline manifest**: [Path]
+> **Release manifest**: [Use `references/templates/release-manifest.md`]
+> **Traceability ledger**: [Path or tracker URL]
+
 ## 1. Production Architecture
 - Deployment topology diagram
 - High availability plan
@@ -78,4 +83,11 @@
   - Disk usage > 85% → P1 alert
 - Oncall rotation
 - Escalation path
+
+## 7. Traceability Closure
+
+- All committed REQ/AC items map to accepted TEST evidence.
+- PRs, commits, build artifacts, deployment IDs, and approvals are pinned in the release manifest.
+- Critical released behavior maps to production signals or an approved `N/A` exception.
+- No missing, stale, or blocked delivery edges remain without release-owner approval.
 ```

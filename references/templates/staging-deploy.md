@@ -3,6 +3,11 @@
 ```markdown
 # Staging Environment Deployment — [Project Name]
 
+> **Version line / release target**: [v2 / 2.0.0]
+> **Baseline manifest**: [Path]
+> **Source NFR / OPS / SEC IDs**: [IDs]
+> **Traceability ledger**: [Path or tracker URL]
+
 ## 1. Staging Architecture
 - Topology diagram
 | Component | Config | Address | Notes |

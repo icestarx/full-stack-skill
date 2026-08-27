@@ -4,7 +4,7 @@
 
 This repository defines a portable full-stack lifecycle skill rather than a deployable application. `SKILL.md` is the main entry point and must remain aligned with the 15-step, 10-phase workflow. `references/platform-adapters.md` defines host-neutral capability contracts and Codex/Claude adapters; `agents/openai.yaml` supplies Codex-facing metadata. Detailed guidance lives under `references/`, and reusable document skeletons are in `references/templates/`. The executable `setup` script audits the core structure, supported hosts, and optional providers.
 
-When changing a pipeline step, check every related source: `SKILL.md`, `references/process-steps.md`, `references/skills-mapping.md`, and the relevant template. Avoid duplicating detailed instructions in the README.
+When changing a pipeline step, check every related source: `SKILL.md`, `references/process-steps.md`, `references/skills-mapping.md`, and the relevant template. Requirement-stage changes must stay aligned with `references/requirements-workflow.md`; versioning and evidence-chain changes must stay aligned with `references/document-organization.md` and `references/traceability.md`. Avoid duplicating detailed instructions in the README.
 
 ## Build, Test, and Development Commands
 

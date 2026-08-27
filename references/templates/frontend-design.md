@@ -3,6 +3,12 @@
 ```markdown
 # Frontend Design — [Project Name]
 
+## Traceability
+
+| REQ / AC IDs | UX/design reference | Frontend decision or contract | Planned code surface | Verification |
+|---|---|---|---|---|
+| | | | `src/path:Symbol` | TEST-* / planned |
+
 ## 1. Frontend Tech Stack
 | Layer | Choice | Version | Rationale |
 |-------|--------|---------|-----------|

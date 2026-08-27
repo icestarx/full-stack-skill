@@ -3,6 +3,12 @@
 ```markdown
 # Backend Design — [Project Name]
 
+## Traceability
+
+| REQ / AC IDs | ADR / API / data contract | Backend decision | Planned code surface | Verification |
+|---|---|---|---|---|
+| | | | `src/path:Symbol` | TEST-* / planned |
+
 ## 1. Backend Tech Stack
 | Layer | Choice | Version | Rationale |
 |-------|--------|---------|-----------|
@@ -93,8 +99,8 @@ api/
 ```
 
 ## 10. Architecture Decision Records (ADR)
-| # | Decision | Context | Alternatives | Rationale | Date |
-|---|----------|---------|--------------|-----------|------|
+| ID | Governs REQ / AC IDs | Decision | Context | Alternatives | Rationale | Date |
+|---|---|---|---|---|---|---|
 
 ## 11. Risks & Trade-offs
 | Risk | Impact | Probability | Mitigation |

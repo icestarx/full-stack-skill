@@ -19,9 +19,9 @@ This mapping is host-neutral. It defines the capability required at each lifecyc
 | Field | Value |
 |---|---|
 | Primary | `product.discovery` |
-| Supplement | `product.scope-review` |
-| Outcome | Problem, users, alternatives, scope, priorities, acceptance criteria, success metrics |
-| Evidence | Confirmed requirements document and explicit unresolved questions |
+| Supplement | `product.scope-review`, `product.requirements-review` |
+| Outcome | Source-grounded New, Review, or Change requirements with a complete capability tree, explicit stateful behavior, operational semantics, boundaries, quality attributes, and impact |
+| Evidence | Capability-to-requirement coverage, stable P0 IDs, baseline/ledger entries, transition tables, operational semantics, acceptance criteria, decisions/open questions, and Definition of Ready result |
 
 ### Steps 2-3: UI/UX and Demo Confirmation
 
@@ -29,8 +29,8 @@ This mapping is host-neutral. It defines the capability required at each lifecyc
 |---|---|
 | Primary | `design.system`, `design.prototype` |
 | Review | `design.review` |
-| Outcome | Implementable design specification and reviewable prototype |
-| Evidence | State coverage, responsive views, feedback resolution, stakeholder decision |
+| Outcome | Implementable design specification and reviewable prototype mapped to committed behavior |
+| Evidence | REQ/AC-to-flow/screen/state links, responsive views, feedback resolution, and linked approval |
 
 ### Steps 4-5: Technical Planning and Module Boundaries
 
@@ -38,8 +38,8 @@ This mapping is host-neutral. It defines the capability required at each lifecyc
 |---|---|
 | Primary | `architecture.review` |
 | Optional | `spec.change` |
-| Outcome | Stack rationale, boundaries, dependency direction, contract points, ADRs |
-| Evidence | Architecture documents, module map, dependency graph, known trade-offs |
+| Outcome | Stack rationale, boundaries, dependency direction, contract points, ADRs, and capability-to-module alignment |
+| Evidence | REQ/AC-to-decision/contract links, architecture documents, module map, dependency graph, and trade-offs |
 
 ### Step 6: Development Plan
 
@@ -47,8 +47,8 @@ This mapping is host-neutral. It defines the capability required at each lifecyc
 |---|---|
 | Primary | `planning.decompose` |
 | Optional | `spec.change` |
-| Outcome | Dependency-ordered, bounded, verifiable tasks |
-| Evidence | Every task has scope, acceptance evidence, dependencies, and owner/status |
+| Outcome | Dependency-ordered, bounded, verifiable tasks with stable origins |
+| Evidence | Every TASK has REQ/AC/BUG/TECH/SEC/OPS origin, planned code/test evidence, dependencies, owner, and status |
 
 ### Step 7: Database and API Contracts
 
@@ -56,8 +56,8 @@ This mapping is host-neutral. It defines the capability required at each lifecyc
 |---|---|
 | Primary | `architecture.review`, `database.review` |
 | Optional | `spec.change` |
-| Outcome | Data model, indexes, migration strategy, API schemas, errors, auth |
-| Evidence | Validated schemas/contracts and documented risks |
+| Outcome | Data model, indexes, migrations, API/event schemas, errors, auth, and contract traceability |
+| Evidence | REQ/AC/ADR-to-data/API/contract-test links, validated contracts, and documented risks |
 
 ### Step 8: Environment Setup
 
@@ -65,7 +65,7 @@ This mapping is host-neutral. It defines the capability required at each lifecyc
 |---|---|
 | Primary | `delivery.release`, `database.review` |
 | Outcome | Reproducible local environment, CI, resettable data, deployable staging |
-| Evidence | Commands and CI runs that demonstrate readiness |
+| Evidence | NFR/OPS/SEC origins plus commands and CI runs that demonstrate readiness |
 
 ### Step 9: Development and Integration
 
@@ -73,8 +73,8 @@ This mapping is host-neutral. It defines the capability required at each lifecyc
 |---|---|
 | Primary | `development.tdd` |
 | Supplements | `qa.browser`, `review.accessibility` |
-| Outcome | Working vertical behavior with unit, integration, component, and E2E evidence |
-| Evidence | Fail-before/pass-after results, build output, screenshots where relevant |
+| Outcome | Working vertical behavior with actual code/test links and unit, integration, component, and E2E evidence |
+| Evidence | TASK origins, `path:symbol`, TEST IDs, fail-before/pass-after results, build output, and screenshots where relevant |
 
 Use subagents only for bounded tasks. In Codex, native subagents can isolate exploration, tests, and review; avoid parallel overlapping writes.
 
@@ -84,16 +84,16 @@ Use subagents only for bounded tasks. In Codex, native subagents can isolate exp
 |---|---|
 | Primary | `review.code` |
 | Risk-triggered | `review.security`, `database.review`, language/framework specialist |
-| Outcome | Independent findings classified by impact, with actionable evidence |
-| Evidence | Reviewed diff and resolution of blocking findings |
+| Outcome | Independent findings on code risk and forward/backward trace completeness |
+| Evidence | Reviewed diff, origin audit, orphan/stale-link report, and resolution of blocking findings |
 
 ### Step 11: PR Management
 
 | Field | Value |
 |---|---|
 | Primary | `delivery.release` |
-| Outcome | Contextual PR, green CI, resolved feedback, controlled merge |
-| Evidence | PR description, checks, approvals, and merge/deploy record |
+| Outcome | Contextual PR with portable origins, actual code surfaces, verification, and ledger delta |
+| Evidence | Affected IDs, TEST evidence, docs/ledger update, checks, approvals, and merge record |
 
 ### Step 12: Test Summary
 
@@ -101,24 +101,24 @@ Use subagents only for bounded tasks. In Codex, native subagents can isolate exp
 |---|---|
 | Primary | Deterministic project test commands |
 | Risk-triggered | `review.security`, `review.performance`, `review.accessibility`, `qa.browser` |
-| Outcome | Aggregated quality evidence and known limitations |
-| Evidence | Test artifacts rather than agent assertions |
+| Outcome | Aggregated AC-to-TEST quality evidence, gaps, and known limitations |
+| Evidence | Stable TEST references, results, uncovered ACs, orphan/stale mappings, and defect links |
 
 ### Step 13: Production Deployment
 
 | Field | Value |
 |---|---|
 | Primary | `delivery.release` |
-| Outcome | Approved progressive rollout with health checks and recovery readiness |
-| Evidence | Deployment record, smoke tests, metrics, rollback or roll-forward plan |
+| Outcome | Approved progressive rollout with a closed release manifest and recovery readiness |
+| Evidence | Baseline/docs commit, scope IDs, PR/commit/build/test/deployment/approval evidence, signals, and rollback plan |
 
 ### Steps 14-15: Monitoring and Retrospective
 
 | Field | Value |
 |---|---|
 | Primary | `operations.monitor`, `operations.retro` |
-| Outcome | Production signals, incident learning, owned improvements, synchronized docs |
-| Evidence | Dashboards/logs, retrospective actions, and documentation changes |
+| Outcome | Requirement-linked production signals, incident learning, owned origins, and synchronized baselines/releases |
+| Evidence | REQ-to-signal links, dashboards/logs, incident/release IDs, retrospective actions, and stale-link disposition |
 
 ## Provider Classes
 

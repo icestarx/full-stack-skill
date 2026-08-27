@@ -3,6 +3,15 @@
 ```markdown
 # Design System — [Project Name]
 
+## Requirement and Acceptance Coverage
+
+| REQ / AC IDs | User flow | Screens / components / states | Prototype or evidence | Status |
+|---|---|---|---|---|
+| | | | | Planned / Reviewed / Approved |
+
+Every committed UX-affecting requirement and acceptance criterion must map to its
+normal, alternate, error, permission, and recovery surfaces or an approved `N/A`.
+
 ## Product Context
 - Product type, target users, industry/competitors
 

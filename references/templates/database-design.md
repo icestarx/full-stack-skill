@@ -3,12 +3,18 @@
 ```markdown
 # Database Design — [Project Name]
 
+## Requirement and Decision Coverage
+
+| REQ / AC IDs | ADR / rule | Entities / tables / migrations | Verification |
+|---|---|---|---|
+| | | | TEST-* / review |
+
 ## 1. Entity Relationship Diagram (ERD)
 - [Mermaid/PlantUML ER diagram]
 
 ## 2. Entity Inventory
-| Entity | Table | Description | Est. Data Volume | Growth Rate |
-|--------|-------|-------------|------------------|-------------|
+| Entity | Table | Source REQ / ADR IDs | Description | Est. Data Volume | Growth Rate |
+|---|---|---|---|---|---|
 
 ## 3. Table Definitions
 ### Table: users
@@ -27,6 +33,10 @@
 ## 5. Migration Plan
 - Migration tool: Prisma Migrate / Alembic / golang-migrate
 - Strategy: one independent migration file per change, versioned, reversible
+
+| Migration / task | Source IDs | Compatibility requirement | Up/down verification | Release |
+|---|---|---|---|---|
+| | | | TEST-* | |
 
 ## 6. Data Security
 - Fields requiring encryption (PII)

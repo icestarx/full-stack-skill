@@ -3,6 +3,18 @@
 ```markdown
 # Test Documentation — [Project Name]
 
+> **Version line / release target**: [v2 / 2.0.0]
+> **Traceability ledger**: [Path or tracker URL]
+
+## Acceptance Traceability
+
+| TEST ID | REQ / AC IDs | Test layer | Test path/name or case URL | Environment/build | Result | Evidence |
+|---|---|---|---|---|---|---|
+| TEST-[AREA]-001 | | | | | Pass / Fail / Blocked | |
+
+Every committed AC has at least one accepted automated test or approved manual
+evidence. Record orphan tests, uncovered ACs, and stale mappings explicitly.
+
 ## 1. Test Strategy Overview
 | Test Layer | Tool | Coverage Target | Actual Coverage | Status |
 |------------|------|-----------------|-----------------|--------|
@@ -21,6 +33,6 @@
 ## 5. Performance Tests — Lighthouse / API load test / comparison with previous
 ## 6. Security Tests — Dependency scan, OWASP Top 10 check
 ## 7. Known Issues
-| ID | Description | Severity | Status | Target Fix Version |
-|----|-------------|----------|--------|-------------------|
+| BUG ID | Affected REQ / AC / TEST IDs | Description | Severity | Status | Target Fix Version |
+|---|---|---|---|---|---|
 ```
