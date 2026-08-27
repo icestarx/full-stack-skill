@@ -5,6 +5,7 @@
 
 > **Version line**: [v1 / v2 / ...]
 > **Release target**: [Release or TBD]
+> **Change work item**: [CHG-* path / tracker URL]
 > **Traceability ledger**: [Path or tracker URL]
 
 ## 1. Milestones
@@ -13,7 +14,7 @@
 | M1: Infrastructure | D+3 | Project scaffold + CI skeleton + env vars | Local runnable, CI green |
 | M2: Env Setup | D+5 | Database init + staging deploy | Staging available |
 | M3: Auth Module | D+9 | Register/Login/Token refresh API | Integration tests pass |
-| M4: Core API | D+15 | Core business CRUD API | Integration tests pass, coverage 80% |
+| M4: Core API | D+15 | Core business CRUD API | Contract/integration checks and risk-based coverage pass |
 | M5: Frontend Skeleton | D+10 | Routes + layouts + base components + design tokens | Pages accessible |
 | M6: Frontend Pages | D+18 | Core pages + API integration | Component tests pass |
 | M7: Integration | D+21 | Full chain wiring + E2E tests | E2E core flows pass |

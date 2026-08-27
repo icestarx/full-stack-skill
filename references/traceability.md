@@ -26,6 +26,7 @@ Use immutable IDs for logical artifacts:
 | `REQ-*` | Functional or quality requirement |
 | `AC-*` | Acceptance criterion |
 | `PDR-*` / `ADR-*` | Product or architecture decision |
+| `CHG-*` | Active change work item that coordinates track state and evidence |
 | `TASK-*` | Planned implementation or verification work |
 | `TEST-*` | Stable test scenario or test-case record |
 | `BUG-*`, `TECH-*`, `SEC-*`, `OPS-*` | Valid non-feature work origins |
@@ -37,6 +38,9 @@ comments throughout source files. Prefer `path:symbol` because line numbers drif
 
 Never reuse an ID. If semantics change after release, create a new ID and connect
 it with `supersedes` / `superseded_by`.
+
+`CHG-*` is a container, not a substitute origin. Its slices and tasks still point
+to a valid `REQ/AC/BUG/TECH/SEC/OPS` reason for the work.
 
 ## Relationship Ledger
 
@@ -81,6 +85,8 @@ owner, and last verification. Allowed statuses are `planned`, `valid`, `stale`,
 
 ### Planning and Implementation
 
+- Keep the active four-track state in one `CHG-*` work item or equivalent tracker
+  record; do not duplicate authoritative PRD, design, or test contents there.
 - Every task must have at least one source ID: `REQ/AC`, `BUG`, `TECH`, `SEC`, or `OPS`.
 - Record expected code and test surfaces during planning; replace expectations with
   actual `path:symbol` and `TEST-*` evidence during implementation.

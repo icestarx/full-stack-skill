@@ -5,6 +5,7 @@
 
 > **Version line**: [v2]
 > **Baseline manifest**: `docs/versions/v2/manifest.md`
+> **Included change work items**: [CHG-* paths / tracker URLs]
 > **Documentation commit**: [SHA]
 > **Source tag / commit**: [Tag and SHA]
 > **Build / artifact**: [Immutable ID and digest]

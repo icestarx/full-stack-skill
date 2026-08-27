@@ -5,6 +5,7 @@
 
 > **Version line / release**: [v2 / 2.0.0]
 > **Baseline manifest**: [Path]
+> **Change work item**: [CHG-* path / tracker URL]
 > **Release manifest**: [Use `references/templates/release-manifest.md`]
 > **Traceability ledger**: [Path or tracker URL]
 
@@ -32,7 +33,7 @@
 
 ## 3. Database Migrations (Production)
 - Migration execution method: auto before deploy
-- Rollback scripts: every migration paired with down script
+- Recovery: tested rollback or roll-forward; use forward repair when destructive down migration is unsafe
 - Large table change strategy (>1M rows): online DDL / maintenance window
 - Migration execution order: run migrations first → then deploy new code (backward compatible)
 

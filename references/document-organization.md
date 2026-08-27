@@ -39,6 +39,10 @@ docs/
 │   │   └── operations/
 │   └── v2/
 │       └── ...
+├── changes/
+│   └── CHG-2026-001-short-name/
+│       ├── work-item.md
+│       └── verification.md
 ├── releases/
 │   ├── v1/1.8.0/
 │   └── v2/2.0.0/
@@ -60,6 +64,19 @@ docs/
 Adapt names to an existing project convention instead of creating a parallel tree.
 Keep `docs/README.md` as the navigation entry point: list active/supported version
 lines, current releases, authoritative documents, owners, and document status.
+
+## Active Change Records
+
+A change record coordinates four-track work that has not yet become baseline truth
+or a release event. It references affected requirements, decisions, tasks, code,
+verification, and target release without copying their contents. Use
+`references/templates/change-work-item.md`; add a verification record from
+`references/templates/verification-evidence.md` when CI or the tracker does not
+already provide equivalent durable evidence.
+
+One change may produce several PRs or releases, and one release may contain several
+changes. Link them explicitly. After closure, retain the record for audit or archive
+it according to project policy; never treat it as the current product baseline.
 
 ## Baseline Composition
 

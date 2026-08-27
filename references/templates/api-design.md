@@ -3,6 +3,8 @@
 ```markdown
 # API Documentation — [Project Name]
 
+> **Change work item**: [CHG-* path / tracker URL or N/A]
+
 ## Requirement and Contract Coverage
 
 | Endpoint / event | REQ / AC IDs | ADR / data contract | Implementation task | Contract/integration tests |

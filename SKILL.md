@@ -10,454 +10,233 @@ description: >
 
 # Full-Stack Development
 
-You are a senior full-stack engineer who ships complete products. Orchestrate the
-15-step lifecycle across 10 phases and preserve its quality gates. Use specialized
-providers when they add value, but keep the lifecycle executable on any capable
-coding-agent host.
+Deliver complete, maintainable product changes through four coordinated tracks:
+Product, Engineering, Verification, and Delivery & Learning. Treat the historical
+15 steps as an activity catalog, not a mandatory waterfall.
 
 ## Runtime Portability
 
 Before invoking another skill, agent, MCP tool, or host command, read
-`references/platform-adapters.md`. Resolve work by capability ID, discover an
-available provider, and use the portable fallback when no specialist exists.
+`references/platform-adapters.md`. Resolve work by capability ID and use the
+portable fallback when no specialist exists.
 
-- Never assume gstack, Superpowers, OpenSpec, a named agent, or a slash command is installed.
-- Never block only because a preferred provider is absent.
+- Never assume a named skill, agent, slash command, CLI, or MCP server is installed.
 - Keep provider syntax out of generated project documentation.
 - Preserve user authorization, sandbox, approval, and external-action boundaries.
-- In Codex, use repository `AGENTS.md` for durable project rules and native
-  subagents only for bounded work that benefits from independent context.
+- In Codex, use repository `AGENTS.md` for durable rules. Delegate only bounded,
+  independent work that benefits from separate context.
+
+## Start by Routing the Change
+
+Read `references/four-track-model.md`, then:
+
+1. Inspect repository instructions, status, architecture, tests, current behavior,
+   active version baseline, and related recent changes before proposing edits.
+2. Classify the operating mode: new product/major version, feature change, bug fix,
+   maintenance, or incident.
+3. Assess risk from blast radius, reversibility, sensitive data, external contracts,
+   migration complexity, operational novelty, and uncertainty. Team size affects
+   coordination, not risk.
+4. For substantial work, initialize or update one change work item using
+   `references/templates/change-work-item.md`. Do not create a parallel source of
+   truth when the repository's tracker already preserves the required fields.
+5. Identify the smallest vertical slice that can produce user value or retire risk
+   and can be independently verified, merged, and recovered.
+
+State the selected mode, risk, and execution depth. Ask for confirmation only when
+the classification would materially change scope, cost, external actions, or an
+irreversible decision; otherwise proceed and record assumptions.
+
+## Four Tracks
+
+The tracks are continuous responsibilities. One agent may own all four; several
+agents do not imply four tracks, and four tracks do not require parallel execution.
+
+### Product Track
+
+**Question**: Are we building the right observable behavior?
+
+- Own the problem, capability scope, actors, domain rules, states, UX, acceptance
+  criteria, priorities, non-goals, and product decisions.
+- For New/Review/Change requirements, read `references/requirements-workflow.md`.
+- For UI behavior, cover normal, empty, loading, error/denied, boundary, interruption,
+  and recovery states. Obtain human product/design decisions when genuinely needed.
+- Update only the affected major-version baseline or explicit delta. Never redefine
+  a released requirement ID when its semantics change.
+
+Use `product.discovery`, `product.scope-review`, `product.requirements-review`,
+`design.system`, `design.prototype`, and `design.review` as available.
+
+**Track evidence**: approved `CAP/REQ/AC` scope, UX/design links, decisions, and
+success/failure signals.
+
+### Engineering Track
+
+**Question**: Can we change the system safely and coherently?
+
+- Explore the repository before planning: dependencies, call paths, similar code,
+  governing decisions, contracts, migrations, tests, and relevant history.
+- Define only the architecture, data/API contracts, compatibility strategy, and
+  tasks required by the current change and its known consumers.
+- Decompose work into dependency-ordered vertical slices with stable `TASK-*` IDs
+  and `REQ/AC/BUG/TECH/SEC/OPS` origins.
+- Implement one bounded slice at a time. Keep changes mergeable and recoverable;
+  avoid a long-lived backend-first then frontend-first integration batch.
+- Replace planned trace links with actual `path:symbol`, contract, migration, and
+  commit/PR evidence as work completes.
+
+Read `references/process-steps.md` for detailed architecture, planning, environment,
+database, API, and implementation activities. Use `architecture.review`,
+`planning.decompose`, `database.review`, `spec.change`, and `development.tdd` as
+applicable.
+
+**Track evidence**: decisions, impact analysis, tasks, code/contracts, migrations,
+and integrated slices.
+
+### Verification Track
+
+**Question**: What evidence proves the change works and remains safe?
+
+- Start test design with the acceptance criteria, not after implementation.
+- Define positive, negative, boundary, concurrency, permission, cancellation,
+  recovery, compatibility, and operational evidence according to risk.
+- For bug fixes and observable behavior changes, capture fail-before/pass-after
+  evidence where practical.
+- Prefer deterministic repository checks and CI artifacts. Use independent review
+  for high-risk or hard-to-reverse work; an agent's confidence is not evidence.
+- Verify the affected regression surface. Record uncovered acceptance criteria,
+  orphan tests, stale links, and approved exceptions explicitly.
+- Use `references/templates/verification-evidence.md` per slice/PR when existing CI
+  and tracker output do not already provide an equivalent record.
+
+Use project-native commands first, then `qa.browser`, `review.code`,
+`review.accessibility`, `review.security`, or `review.performance` when triggered.
+
+**Track evidence**: stable `TEST-*` references, commands and results, reports,
+review findings, screenshots where material, and exception decisions.
+
+### Delivery & Learning Track
+
+**Question**: Can we release, operate, recover, and learn from the change?
+
+- Address environments, seed/test data, compatibility, migrations, feature flags,
+  rollout, rollback or roll-forward, and observability early enough to influence
+  design.
+- Keep build, artifact, deployment, approval, and production evidence in the release
+  record; do not copy product/UX/architecture baselines into release folders.
+- Use staged rollout proportional to risk. Verify health and business signals during
+  an explicit observation window.
+- Preserve incident evidence, create regression origins, update runbooks/baselines,
+  and assign cleanup for temporary flags, adapters, and migration states.
+- Feed repeated human-test findings and escaped defects back into requirements,
+  deterministic tests, lint, architecture rules, or operational checks.
+
+Use `delivery.release`, `operations.monitor`, and `operations.retro` as available.
+
+**Track evidence**: environment readiness, immutable release manifest, deployment
+and recovery records, production signals, and owned learning actions.
+
+## Shared Execution Loop
+
+For each vertical slice:
+
+1. Bring all applicable tracks to **Slice Ready**: bounded origin and outcome,
+   affected surfaces, acceptance evidence, dependencies, and recovery approach.
+2. Implement and integrate the slice while Verification runs focused checks.
+3. Update the change work item and traceability ledger with actual evidence.
+4. Pass **Merge Ready**: deterministic checks green, findings resolved, documents
+   synchronized, and no unexplained stale or blocked link.
+5. Merge or release according to the change strategy; then select the next slice.
+
+Do not wait for every feature to finish before integration, review, or verification.
+Pause at a gate only for missing evidence, a recorded decision, an authorization
+boundary, or an external dependency that prevents meaningful progress.
+
+## Synchronization Gates
+
+| Gate | Required outcome |
+|---|---|
+| Change Ready | Product contract, impact, verification plan, and delivery/operability concerns are sufficient to start a slice |
+| Slice Ready | One bounded slice has origin, dependencies, expected code/contracts, tests, and recovery |
+| Merge Ready | Actual implementation and test evidence is valid; review and documentation/ledger deltas are complete |
+| Release Ready | Committed scope maps to accepted tests, PR/build/deploy evidence, compatibility checks, approvals, and signals |
+| Learning Closed | Observation completed; defects, stale evidence, temporary mechanisms, and follow-ups have owners/dispositions |
+
+If a required outcome is inapplicable, record `N/A` with rationale. Do not satisfy a
+gate with circular links or prose assertions.
 
 ## Documentation and Traceability
 
-For new project documentation or a major-version change, read
-`references/document-organization.md`. Keep major-version baselines under the
-project's version model and release evidence under its release model; never use a
-release folder as a copied product/UX/architecture baseline.
+Read `references/document-organization.md` when initializing documentation, starting
+a major version, or preparing a release. Major-version baselines describe effective
+product/UX/engineering/quality/operations truth; release records describe delivery
+events; change work items coordinate active work.
 
-Read `references/traceability.md` before Phase 1 and maintain its bidirectional
-evidence graph through every later gate. Use an existing issue/ALM system when it
-preserves the required IDs, relationships, evidence, and queries; otherwise use the
-repository ledger template. Small projects may keep a lean ledger, but may not skip
-origin, implementation, test, PR/release, and exception links for committed scope.
+Read `references/traceability.md` before changing committed behavior. Maintain the
+bidirectional graph:
 
-## Pipeline Overview
-
-```
-PHASE 1: REQUIREMENTS ─── Step 1: Clarify Requirements → 📄 Requirements Doc
-PHASE 2: DESIGN ───────── Step 2: UI/UX Design Spec → 📄 UI Design Doc
-                          Step 3: Demo Confirmation → Sign-off
-PHASE 3: TECH PLANNING ── Step 4: Technical Planning → 📄 Frontend + Backend Design Docs
-                          Step 5: Module Decomposition → Module List + Dependency Graph
-PHASE 4: DEV PLAN ─────── Step 6: Development Plan → 📄 Dev Plan Doc
-PHASE 5: TECH DOCS ────── Step 7: Module Tech Docs → 📄 DB Doc + 📄 API Doc
-PHASE 6: ENV SETUP ────── Step 8: Environment Setup → 📄 Staging Deploy Doc
-PHASE 7: DEVELOPMENT ──── Step 9: Module Development [loop per module]
-                            9a. Backend Dev (TDD → Unit → Integration)
-                            9b. Frontend Dev (Components → Tests → VR)
-                            9c. Module Integration (Wiring → Deploy → E2E)
-PHASE 8: QUALITY ──────── Step 10: Code Review → Review Report
-                          Step 11: PR Management → Merged PR
-                          Step 12: Test Summary → 📄 Test Doc
-PHASE 9: DEPLOYMENT ───── Step 13: Production Deploy → 📄 Production Deploy Doc
-PHASE 10: OPERATIONS ──── Step 14: Production Monitoring
-                          Step 15: Iteration Retrospective
+```text
+CAP → REQ → AC → design/decision → TASK → code → TEST → PR/build → release → OBS
 ```
 
-The pipeline produces 10 phase documents plus applicable baseline/release manifests
-and cross-cutting traceability records. Every step has a gate. Don't skip gates.
-
-## Project Sizing
-
-Before starting, assess the project size. Base your assessment on the scope the
-user describes: number of features, layers touched (web/mobile/desktop/API/DB),
-and team context.
-
-| Size | Team | Timeline | Pipeline | Documents |
-|------|------|----------|----------|-----------|
-| **Small** | 1-2 people | 1-2 weeks | ~9 steps (condensed) | Lean, 1-2 pages each |
-| **Medium** | 5-10 people | 1-3 months | Full 15 steps | Complete |
-| **Large** | 10+ people | 3+ months | 15 steps + extensions | Complete + formal reviews |
-
-**Always state your assessment and ask the user to confirm before proceeding:**
-
-> I assess this as a **[Small/Medium/Large]** project based on [specific reasons].
-> I'll follow the [condensed/full/extended] pipeline. Does this match your expectations?
-
-For Small projects, read `references/process-steps.md#project-size-tailoring` for
-the condensed path. For Large, add formal sign-offs, peer reviews, technical spikes,
-dedicated security reviews, performance load testing, and UAT at each step.
-
----
-
-## Phase-by-Phase Execution Guide
-
-### Phase 1: Requirements Definition
-
-#### Step 1: Clarify Requirements → 📄 Requirements Doc
-
-**Goal**: Confirm we're solving the right problem before any code is written.
-
-**How**:
-1. Read `references/requirements-workflow.md` and select New, Review, or Change mode
-2. Inventory existing sources and current behavior before asking for missing decisions
-3. Run `product.discovery` and `product.scope-review` only for unresolved product questions
-4. Produce or review the specification with `references/templates/requirements.md`
-5. Initialize or update the major-version manifest and traceability ledger
-6. Run `product.requirements-review` against the Definition of Ready
-
-**Output**: `references/templates/requirements.md`
-**Gate**: The capability tree has no missing or orphan P0 leaves; every P0
-requirement has a stable ID and testable acceptance criteria; applicable state
-transitions and operational semantics are defined; actors, rules, data constraints,
-edge cases, non-goals, and change impacts are explicit; no hidden blocker remains.
-
----
-
-### Phase 2: Design
-
-#### Step 2: UI/UX Design Specification → 📄 UI Design Doc
-
-**Goal**: Produce an executable design system — not just mockups, but a spec developers can implement.
-
-**How**:
-1. Run `design.system` for IA, interaction, color, typography, spacing, and motion
-2. Run `design.review` for interaction and state-coverage checks
-3. Run `design.prototype` when a reviewable mockup or runnable prototype is needed
-4. Map every committed UX-affecting REQ/AC to flows, screens, states, and evidence
-
-**Output**: `references/templates/ui-design.md`
-**Gate**: All page states have designs, design system documented, 6 interaction
-states covered, and committed UX requirements have valid design links.
-
-#### Step 3: Demo Confirmation → Sign-off
-
-**Goal**: Get stakeholder sign-off on the design before investing engineering resources.
-
-**How**:
-1. Present a clickable prototype using the best available design or browser tooling
-2. Run `design.review` for visual QA and a design walkthrough
-3. Collect feedback, iterate, get sign-off
-
-**Gate**: Product/business/tech leads confirm "this is what we want to build," and
-the approval evidence is linked to affected REQ/AC items.
-
-**Why mandatory**: Design changes after this gate cost 10x+ more. Get it right here.
-
----
-
-### Phase 3: Technical Planning
-
-#### Step 4: Technical Planning → 📄 Frontend Design Doc + 📄 Backend Design Doc
-
-**Goal**: Tech stack selection and architecture design. Two independent but aligned docs.
-
-**How**:
-1. Run `architecture.review` for layering, data flow, boundaries, testing, tech selection, and ADRs
-2. Use an independent architecture reviewer when the decision is high risk or hard to reverse
-3. Read `references/tech-selection.md` for technology decision guidance
-4. Read `references/capability-domains.md` for domain-specific best practices
-5. Link each committed REQ/AC to frontend/backend decisions, ADRs, and planned verification
-
-**Output**: `references/templates/frontend-design.md` + `references/templates/backend-design.md`
-**Gate**: Tech stacks selected with rationale, architecture layers and contract
-points are clear, and committed requirements map to decisions/contracts or approved `N/A`.
-
-> Step 4 sets architecture direction. Detailed DB and API definitions come in Step 7.
-
-#### Step 5: Module Decomposition → Module List + Dependency Graph
-
-**Goal**: Decompose the system into independent, parallelizable modules organized by business domain.
-
-**How**:
-1. Run `architecture.review` for domain boundaries and dependency analysis
-2. Optionally run `spec.change` to organize versioned deltas by module
-3. Reconcile module boundaries with capability and requirement IDs
-
-**Gate**: Every module has clear responsibility and boundaries. No circular dependencies.
-
----
-
-### Phase 4: Development Plan
-
-#### Step 6: Development Plan → 📄 Dev Plan Doc
-
-**Goal**: Create an executable, trackable plan with fine-grained tasks.
-
-**How**:
-1. Run `planning.decompose` to produce small, dependency-ordered, verifiable tasks
-2. Use `spec.change` when the work benefits from a versioned proposal and delta
-3. Give every task a stable TASK ID, valid origin ID, and planned code/test evidence
-
-**Output**: `references/templates/development-plan.md`
-**Gate**: Each task ≤ 1 day, dependencies are clear, no circular dependencies
-exist, and every task has a REQ/AC, BUG, TECH, SEC, or OPS origin.
-
----
-
-### Phase 5: Module Technical Docs
-
-#### Step 7: Module Tech Docs → 📄 DB Doc + 📄 API Doc
-
-**Goal**: Before coding, produce detailed database design and API contracts for each module.
-
-**How**:
-1. **Database**: combine `architecture.review` entity modeling with `database.review`
-2. **API**: use `spec.change` when versioned API contract deltas add value
-3. Map tables, migrations, endpoints, events, and contract tests to REQ/AC/ADR IDs
-
-**Output**: `references/templates/database-design.md` + `references/templates/api-design.md`
-**Gate**: Every module's tables and endpoints are defined, request/response
-structures are complete, and committed requirements have valid contract links.
-
----
-
-### Phase 6: Environment Setup
-
-#### Step 8: Environment Setup → 📄 Staging Deploy Doc
-
-**Goal**: Infrastructure ready before coding starts. Database running, staging deployable.
-
-**How**:
-1. Run `delivery.release` setup for the staging environment and CI/CD configuration
-2. Run `database.review` for migration safety (no DROP COLUMN/TABLE without justification)
-3. Execute: create DB instances → run migrations → load seed data → verify
-4. Link environment work and evidence to its NFR/OPS/SEC origins
-
-**Output**: `references/templates/staging-deploy.md`
-**Gate**: Devs can connect to DB locally. Staging auto-deploys via CI. Seed data is resettable.
-
----
-
-### Phase 7: Module Development
-
-#### Step 9: Module Development Execution
-
-**Goal**: Build each module bottom-up. Backend first (data → service → API), then frontend (tokens → components → pages → API wiring), then integrate and E2E.
-
-**How — Backend (9a)**:
-1. Implement one bounded task at a time; use a worker subagent only when available and useful
-2. Run `development.tdd` with RED→GREEN→REFACTOR and the project test runner
-3. Run focused integration tests against a real database where practical
-
-**How — Frontend (9b)**:
-1. Implement components in bounded tasks with an independent quality pass
-2. Run `development.tdd` for utility, hook, and component behavior
-3. Run `review.accessibility` for WCAG 2.2 evidence
-4. Run `qa.browser` for visual regression evidence at key breakpoints
-
-**How — Integration (9c)**:
-1. Wire frontend to real API, verify request/response match
-2. Deploy to staging (CI auto-deploy configured in Step 8)
-3. Run `qa.browser` for core flows and required browsers
-
-**Traceability update**: Replace planned implementation/test links with actual
-`path:symbol`, TEST IDs, and deterministic evidence. Mark impacted stale links valid
-only after verification.
-
-**Commit Standards**: Every commit follows Conventional Commits (`feat/fix/refactor/perf/test/docs/chore/style/ci`). Pre-commit: lint + type-check + no debug code + no hardcoded secrets.
-
-**Gate**: All P0 features work, coverage ≥ 80%, integration/E2E tests pass, and
-every completed task maps backward to a valid origin and forward to code/test evidence.
-
----
-
-### Phase 8: Quality Verification
-
-#### Step 10: Code Review → Review Report
-
-**Goal**: Automated self-check before creating a PR. Catch issues automation can find — don't waste human reviewers' time.
-
-**How**:
-1. Run `review.code` in independent context and classify findings by severity
-2. Include SQL safety, trust boundaries, and conditional side effects where applicable
-3. Add language- or framework-specific review only when an available provider matches the code
-4. Audit forward coverage, backward orphans, stale links, and changed source requirements
-
-**Gate**: No CRITICAL/HIGH unresolved issues and no unexplained traceability gap for changed behavior.
-
-> **Step 10 vs 11**: Step 10 = automated self-check (run on branch, no PR needed). Step 11 = create formal PR for human review. Fix issues here before opening the PR.
-
-#### Step 11: PR Management → Merged PR
-
-**Goal**: Create, describe, and shepherd the PR through review to merge.
-
-**How**:
-1. Run `delivery.release` to inspect the merge base, verify the diff, and create a contextual PR
-2. Include affected IDs, actual code surfaces, test evidence, compatibility impact, and ledger delta
-3. Address human reviewer feedback
-4. After approval, continue `delivery.release`: merge → wait CI → deploy → health check
-
-**Gate**: CI is green, review is approved, no merge conflict exists, and the PR has valid origin/evidence links.
-
-#### Step 12: Test Summary → 📄 Test Doc
-
-**Goal**: Aggregate all test layers into one deliverable document.
-
-**How**:
-1. Aggregate deterministic test results and structured defect evidence
-2. Run `review.security` for OWASP, threat, secret, and dependency checks
-3. Run `review.performance` for client and API targets
-4. Run `review.accessibility` for WCAG 2.2 AA evidence
-5. Reconcile every committed AC with TEST evidence and report orphan/stale mappings
-
-**Output**: `references/templates/testing.md`
-**Gate**: All test layers have reports, every committed AC has accepted evidence,
-no blocking bugs remain, and performance meets targets.
-
----
-
-### Phase 9: Production Deployment
-
-#### Step 13: Production Deploy → 📄 Production Deploy Doc
-
-**Goal**: Safely deliver verified code to production with canary rollout, feature flags, and rollback readiness.
-
-**How**:
-1. Run `delivery.release` through the complete approved deployment chain
-2. Use canary release: 5% → observe 10min → 50% → observe 10min → 100%
-3. Deploy high-risk features dark (feature flags off), enable gradually
-4. Rehearse rollback on staging before production deploy (target < 5 min)
-5. Create the release manifest and pin baseline, docs commit, scope, PRs/commits,
-   tests, build artifacts, deployment IDs, approvals, flags, and production checks
-
-**Output**: `references/templates/production-deploy.md`
-**Gate**: Production health/smoke checks pass, monitoring is configured, and no
-committed requirement has missing/stale/blocked implementation, test, or release edges.
-
----
-
-### Phase 10: Operations
-
-#### Step 14: Production Monitoring
-
-**Goal**: Observe system health continuously post-deployment. Catch issues before users report them.
-
-**How**:
-1. Run `operations.monitor` for release comparison, errors, performance, and regressions
-2. Monitor four layers: Infrastructure → Application Performance → Business Metrics → User Experience
-3. Use the project's configured logs, metrics, traces, and error tracking
-4. Link critical released requirements to production signals or approved exceptions
-
-**Gate**: 24h post-launch with no P0 alerts. Core metrics stable.
-
-#### Step 15: Iteration Retrospective
-
-**Goal**: Learn from data and experience. Drive improvements into the next iteration.
-
-**How**:
-1. Run `operations.retro` over delivery evidence, incidents, metrics, and work patterns
-2. Synchronize README, architecture, and release documentation in the same change
-3. Close or carry forward stale/blocked links and create owned BUG/TECH/OPS/REQ origins
-
-**Gate**: Clear on what went right, what went wrong, and how to improve next time.
-
----
-
-## Capability Quick Reference
-
-| Step | Required capabilities |
-|------|-----------------------|
-| 1. Clarify Reqs | `product.discovery`, `product.scope-review`, `product.requirements-review` |
-| 2-3. UI/UX + Demo | `design.system`, `design.prototype`, `design.review` |
-| 4-5. Tech Planning | `architecture.review`, optionally `spec.change` |
-| 6. Dev Plan | `planning.decompose` |
-| 7. Tech Docs | `architecture.review`, `database.review`, optionally `spec.change` |
-| 8. Env Setup | `delivery.release`, `database.review` |
-| 9. Development | `development.tdd`, `qa.browser`, `review.accessibility` |
-| 10. Code Review | `review.code`, risk-triggered specialist review |
-| 11. PR Mgmt | `delivery.release` |
-| 12. Test Summary | `review.security`, `review.performance`, `review.accessibility` |
-| 13. Prod Deploy | `delivery.release` |
-| 14. Monitoring | `operations.monitor` |
-| 15. Retro | `operations.retro` |
-
-Resolve each capability through `references/platform-adapters.md`; provider names
-and invocation syntax are host-specific implementation details.
-
----
-
-## Quality Gates
-
-```
-Step 1 → 2:  Requirements pass Definition of Ready; no hidden blocker remains
-Step 2 → 3:  Design system documented, REQ/AC mapped, prototype available ─── 🚪 Demo Confirmation
-Step 3 → 4:  Stakeholder sign-off linked ─── Enter technical planning
-Step 7 → 8:  DB + API design complete and traced ─── 🚪 Environment Readiness Check
-Step 8 → 9:  Database connectable, staging deployable ─── Enter development
-Step 9 → 10: All modules complete + implementation/test links valid ─── 🚪 Code Review Gate
-Step 10 → 11: No CRITICAL/HIGH issues or unexplained trace gaps
-Step 12 → 13: All committed ACs verified ─── 🚪 Production Release Approval
-Step 13 → 14: Release manifest closed and production smoke tests pass
-```
-
-**A gate is a gate.** If the exit criteria aren't met, don't proceed. Fix the issue in the current step.
-
----
-
-## Non-Negotiable Rules
-
-These apply regardless of project size:
-
-1. **TDD**: Write tests first (RED → GREEN → REFACTOR). Backend unit + integration, frontend component + VR.
-2. **80% coverage minimum**: Unit test coverage ≥ 80%. Integration tests cover all API endpoints.
-3. **Conventional Commits**: `feat/fix/refactor/perf/test/docs/chore/style/ci`. No amorphous "update" commits.
-4. **Security scan in CI**: SAST + dependency scan runs on every push. No CRITICAL vulns in production.
-5. **No hardcoded secrets**: Secrets in env vars or secret manager. Never in source code.
-6. **Database migrations are reversible**: Every up migration has a tested down migration.
-7. **Code review before merge**: Automated self-check (Step 10) passes before PR creation (Step 11).
-8. **Staging before production**: Code hits staging and passes E2E before production deploy.
-9. **Accessibility baseline**: Semantic HTML, ARIA labels, keyboard navigation. Not optional.
-10. **Documentation is code**: Phase documents, manifests, decisions, and trace
-    records are reviewed deliverables, not afterthoughts.
-11. **Bidirectional traceability**: Current committed scope traces from requirement
-    to release/production evidence and backward from changed code to a valid origin.
-
----
+Code, tests, PRs, and production evidence must also trace backward to a valid
+`REQ/AC/BUG/TECH/SEC/OPS` origin. Use the project's durable tracker when it supports
+the required relationships; otherwise use the repository ledger template.
+
+## Quality Invariants
+
+Apply these to every mode, at depth proportional to risk:
+
+1. Observable behavior has testable acceptance or a valid non-product origin.
+2. Changed behavior has focused deterministic verification; defects gain regression
+   evidence. Coverage percentages are diagnostic, not a substitute for behavior and
+   risk coverage.
+3. Secrets never enter source or logs. Security, privacy, permissions, and audit
+   controls are reviewed when affected.
+4. Data changes define compatibility, backup/recovery, and a tested rollback or
+   roll-forward strategy. Do not require a destructive down migration when forward
+   repair is safer.
+5. Production changes pass an equivalent pre-production or controlled cohort check
+   and have health signals plus a recovery path.
+6. Accessibility is part of acceptance for affected user interfaces.
+7. Review precedes merge; high-risk work receives independent review and named
+   approval where required.
+8. Baselines, contracts, decisions, work state, evidence, and release records change
+   with the implementation rather than as a later cleanup task.
+9. Use Conventional Commits when consistent with repository policy; never override
+   a repository's established contribution rules.
+
+## Long-Running Work
+
+Do not rely on conversation history as the only state. Before ending a session,
+record completed slices, decisions, commands/results, blockers, repository state,
+and the next smallest ready action in the change work item. On resume, inspect the
+repository state and re-run the cheapest relevant smoke check before continuing.
 
 ## Provider and Delegation Policy
 
-Specialized skills and agents are optional providers, not lifecycle requirements.
+Specialized skills, agents, and tools are optional providers.
 
-- Discover providers from the active host before naming or invoking them.
-- Delegate bounded, independent work when separate context materially improves quality or speed.
-- Prefer read-heavy parallel work such as exploration, test analysis, or review.
+- Discover providers from the active host before invoking them.
+- Delegate bounded, independent work only when separate context improves quality or
+  latency; prefer read-heavy exploration and independent verification.
 - Keep one owner for overlapping writes and final integration.
-- Require independent evidence; an agent's completion claim is not a quality gate.
+- Require artifacts or deterministic results, not completion claims.
 - Fall back to the main agent and repository-native tools when no specialist exists.
 
-Maintain the holistic view and remain responsible for how work fits together across all steps.
+## Reference Router
 
----
+Load references only when the current work requires them:
 
-## Reference Index
-
-Read these when you need detail beyond what's in this conductor:
-
-| Reference File | When to Read |
-|---------------|-------------|
-| `references/platform-adapters.md` | Before selecting a skill, agent, MCP tool, or host command |
-| `references/document-organization.md` | Initializing docs or starting a major version/release |
-| `references/requirements-workflow.md` | Step 1 — creating, reviewing, or changing requirements |
-| `references/traceability.md` | Maintaining requirement-to-production evidence and gates |
-| `references/process-steps.md` | Need detailed step instructions, checklists, or project size tailoring |
-| `references/skills-mapping.md` | Need capability-to-provider mapping and selection rationale |
-| `references/tech-selection.md` | Step 4 — making technology choices |
-| `references/capability-domains.md` | Entering a new domain (frontend/backend/mobile/etc.) — best practices |
-| `references/templates/requirements.md` | Step 1 — producing the requirements document |
-| `references/templates/ui-design.md` | Step 2 — producing the UI design document |
-| `references/templates/frontend-design.md` | Step 4 — producing the frontend design document |
-| `references/templates/backend-design.md` | Step 4 — producing the backend design document |
-| `references/templates/development-plan.md` | Step 6 — producing the development plan |
-| `references/templates/database-design.md` | Step 7 — producing the database design document |
-| `references/templates/api-design.md` | Step 7 — producing the API document |
-| `references/templates/staging-deploy.md` | Step 8 — producing the staging deploy document |
-| `references/templates/testing.md` | Step 12 — producing the test document |
-| `references/templates/production-deploy.md` | Step 13 — producing the production deploy document |
-| `references/templates/traceability-ledger.md` | Maintaining artifact indexes, links, coverage, and exceptions |
-| `references/templates/version-manifest.md` | Defining a major-version documentation baseline |
-| `references/templates/release-manifest.md` | Pinning one release's scope and delivery evidence |
-
-Load references on demand, not all at once. Read the template when you're about to
-produce that document. Read capability-domains when entering that layer of the stack.
-Read process-steps when you need the full detail on a step.
+| Reference | Read when |
+|---|---|
+| `references/four-track-model.md` | Routing a change, selecting gates, or coordinating tracks |
+| `references/platform-adapters.md` | Selecting a skill, agent, MCP tool, or host command |
+| `references/document-organization.md` | Initializing docs, a major-version baseline, change record, or release |
+| `references/requirements-workflow.md` | Creating, reviewing, or changing product requirements |
+| `references/traceability.md` | Creating IDs, links, coverage views, exceptions, or release evidence |
+| `references/process-steps.md` | Detailed instructions for any of the 15 reusable activities |
+| `references/skills-mapping.md` | Capability selection and provider fallback by track/activity |
+| `references/tech-selection.md` | Making a material technology choice |
+| `references/capability-domains.md` | Entering a specialized application/domain layer |
+| `references/templates/` | Producing an affected lifecycle artifact; use only the needed template |

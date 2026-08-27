@@ -3,6 +3,8 @@
 ```markdown
 # Database Design — [Project Name]
 
+> **Change work item**: [CHG-* path / tracker URL or N/A]
+
 ## Requirement and Decision Coverage
 
 | REQ / AC IDs | ADR / rule | Entities / tables / migrations | Verification |

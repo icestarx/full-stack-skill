@@ -1,6 +1,9 @@
-# Full-Stack Process Capability Mapping
+# Four-Track Capability Mapping
 
-This mapping is host-neutral. It defines the capability required at each lifecycle step, not a mandatory product, plugin, skill name, agent name, or invocation syntax. Read `platform-adapters.md` before selecting a provider.
+This mapping is host-neutral. It defines capabilities by four-track responsibility
+and detailed activity, not a mandatory product, plugin, skill name, agent name, or
+invocation syntax. Read `four-track-model.md` to route work and
+`platform-adapters.md` before selecting a provider.
 
 ## Selection Principles
 
@@ -12,7 +15,20 @@ This mapping is host-neutral. It defines the capability required at each lifecyc
 6. Use independent context for consequential review when available.
 7. Fall back to the main agent instead of blocking on a missing specialist.
 
-## Per-Step Mapping
+## Track Mapping
+
+| Track | Core capabilities | Risk-triggered supplements |
+|---|---|---|
+| Product | `product.discovery`, `product.scope-review`, `product.requirements-review`, `design.system` | `design.prototype`, `design.review` |
+| Engineering | `architecture.review`, `planning.decompose`, `development.tdd` | `database.review`, `spec.change`, domain specialist |
+| Verification | Deterministic project commands, `review.code` | `qa.browser`, `review.accessibility`, `review.security`, `review.performance` |
+| Delivery & Learning | `delivery.release`, `operations.monitor`, `operations.retro` | `database.review`, platform/incident specialist |
+
+The same activity may require more than one track. Select providers for bounded
+outcomes; never assign a whole track to a provider merely because its name sounds
+similar.
+
+## Detailed Activity Mapping
 
 ### Step 1: Clarify Requirements
 

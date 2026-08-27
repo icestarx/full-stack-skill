@@ -3,6 +3,8 @@
 ```markdown
 # Design System — [Project Name]
 
+> **Change work item**: [CHG-* path / tracker URL or N/A]
+
 ## Requirement and Acceptance Coverage
 
 | REQ / AC IDs | User flow | Screens / components / states | Prototype or evidence | Status |

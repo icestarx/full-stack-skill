@@ -5,6 +5,7 @@
 
 > **Version line / release target**: [v2 / 2.0.0]
 > **Baseline manifest**: [Path]
+> **Change work item**: [CHG-* path / tracker URL]
 > **Source NFR / OPS / SEC IDs**: [IDs]
 > **Traceability ledger**: [Path or tracker URL]
 

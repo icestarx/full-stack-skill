@@ -4,6 +4,7 @@
 # Test Documentation — [Project Name]
 
 > **Version line / release target**: [v2 / 2.0.0]
+> **Change work item**: [CHG-* path / tracker URL]
 > **Traceability ledger**: [Path or tracker URL]
 
 ## Acceptance Traceability
@@ -18,9 +19,9 @@ evidence. Record orphan tests, uncovered ACs, and stale mappings explicitly.
 ## 1. Test Strategy Overview
 | Test Layer | Tool | Coverage Target | Actual Coverage | Status |
 |------------|------|-----------------|-----------------|--------|
-| Backend Unit | Vitest/Jest/pytest | ≥80% | XX% | ✅/❌ |
+| Backend Unit | Vitest/Jest/pytest | Repository/risk target | XX% | ✅/❌ |
 | Backend Integration | Supertest/httpx | 100% API | XX% | ✅/❌ |
-| Frontend Component | Vitest + Testing Library | ≥80% | XX% | ✅/❌ |
+| Frontend Component | Vitest + Testing Library | Repository/risk target | XX% | ✅/❌ |
 | Visual Regression | Playwright screenshots | Key pages | X/X | ✅/❌ |
 | E2E | Playwright | Core flows | X/X pass | ✅/❌ |
 | Performance | Lighthouse/k6 | LCP<2.5s | X.Xs | ✅/❌ |

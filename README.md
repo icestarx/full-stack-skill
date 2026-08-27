@@ -4,15 +4,16 @@ An agent-portable skill that orchestrates the full-stack development lifecycle f
 
 ## Features
 
-- **Complete pipeline**: Requirements → Design → Technical Planning → Development → Quality → Deployment → Operations
+- **Four-track delivery**: Product, Engineering, Verification, and Delivery & Learning advance through shared evidence gates
+- **Change-aware routing**: Distinct paths for new products, feature changes, bug fixes, maintenance, and incidents
 - **Requirements discipline**: New, Review, and Change modes with capability trees, state machines, operational semantics, and a Definition of Ready
 - **Major-version baselines**: Separates long-lived product/UX/engineering versions from minor/patch release records
 - **End-to-end traceability**: Links requirements to decisions, tasks, code, tests, PRs, releases, and production signals
 - **Capability orchestration**: Selects available skills, agents, MCP tools, or portable fallbacks by outcome
 - **Codex adapter**: Supports `$full-stack-skill`, `AGENTS.md`, native subagents, and optional MCP providers
-- **Lifecycle templates**: Phase documents plus version, release, and traceability manifests
-- **Quality gates**: Hard checkpoints between phases — no skipping
-- **Project sizing**: Auto-detects Small/Medium/Large and tailors the pipeline
+- **Lifecycle templates**: Activity documents plus change, version, release, verification, and traceability records
+- **Risk-driven gates**: Control depth follows blast radius, reversibility, contracts, data, and operational risk
+- **Long-running handoffs**: Durable change state, evidence, blockers, and next-action records survive agent sessions
 - **Dependency checker**: `setup` script audits what's installed and what's missing
 
 ## Quick Start
@@ -27,32 +28,24 @@ bash .agents/skills/full-stack-skill/setup --strict
 
 Invoke with `$full-stack-skill`, or describe a multi-layer build/change and allow implicit selection. For Claude Code or another host, place the same folder in that host's supported skill location. See [DEPENDENCIES.md](DEPENDENCIES.md) for adapters and degraded operation.
 
-## Pipeline Overview
+## Operating Model
 
-```
-PHASE 1: REQUIREMENTS ─── Step 1: Clarify Requirements → 📄 Requirements Doc
-PHASE 2: DESIGN ───────── Step 2: UI/UX Design Spec → 📄 UI Design Doc
-                          Step 3: Demo Confirmation → Sign-off
-PHASE 3: TECH PLANNING ── Step 4: Technical Planning → 📄 Frontend + Backend Design
-                          Step 5: Module Decomposition → Module List + Dependency Graph
-PHASE 4: DEV PLAN ─────── Step 6: Development Plan → 📄 Dev Plan Doc
-PHASE 5: TECH DOCS ────── Step 7: Module Tech Docs → 📄 DB Doc + 📄 API Doc
-PHASE 6: ENV SETUP ────── Step 8: Environment Setup → 📄 Staging Deploy Doc
-PHASE 7: DEVELOPMENT ──── Step 9: Module Development [backend → frontend → integrate]
-PHASE 8: QUALITY ──────── Step 10: Code Review → Step 11: PR → Step 12: Test Summary
-PHASE 9: DEPLOYMENT ───── Step 13: Production Deploy → 📄 Production Deploy Doc
-PHASE 10: OPERATIONS ──── Step 14: Monitoring → Step 15: Retrospective
-```
+| Track | Continuous responsibility |
+|---|---|
+| **Product** | Problem, scope, UX, domain rules, requirements, acceptance, decisions |
+| **Engineering** | Repository analysis, architecture, contracts, tasks, code, migrations |
+| **Verification** | Test design, deterministic checks, reviews, quality and risk evidence |
+| **Delivery & Learning** | Environments, compatibility, rollout, observability, incidents, feedback |
 
-## Project Sizing
+Each substantial change has a shared work item. The tracks synchronize at Change
+Ready, Slice Ready, Merge Ready, Release Ready, and Learning Closed. Work proceeds
+in small vertical slices; the existing 15 steps remain available as a detailed
+activity catalog rather than a fixed waterfall.
 
-The skill automatically assesses project scale and asks you to confirm:
-
-| Size | Team | Timeline | Pipeline |
-|------|------|----------|----------|
-| **Small** | 1-2 people | 1-2 weeks | ~9 steps (condensed) |
-| **Medium** | 5-10 people | 1-3 months | Full 15 steps |
-| **Large** | 10+ people | 3+ months | 15 steps + extensions |
+Execution depth is risk-driven. Low-risk work uses lean records and focused checks;
+medium-risk work adds impact/compatibility analysis, independent review, and staged
+rollout; high-risk work adds formal decisions, named approvals, recovery rehearsal,
+and applicable security, performance, migration, and failure evidence.
 
 ## Dependencies
 
@@ -71,6 +64,7 @@ full-stack-skill/
 ├── README.md                      # This file
 └── references/
     ├── platform-adapters.md       # Capability contracts and host adapters
+    ├── four-track-model.md        # Track ownership, routing, gates, and slice loop
     ├── document-organization.md   # Major-version baselines vs release records
     ├── requirements-workflow.md   # New/review/change requirement modes and gates
     ├── traceability.md            # Stable IDs, link ledger, propagation, and gates
@@ -78,7 +72,7 @@ full-stack-skill/
     ├── skills-mapping.md          # Per-step capability mapping
     ├── tech-selection.md          # Technology choice guide
     ├── capability-domains.md      # Domain best practices
-    └── templates/                 # Phase and cross-cutting document templates
+    └── templates/                 # Activity and cross-cutting document templates
         ├── requirements.md
         ├── ui-design.md
         ├── frontend-design.md
@@ -89,6 +83,8 @@ full-stack-skill/
         ├── staging-deploy.md
         ├── testing.md
         ├── production-deploy.md
+        ├── change-work-item.md
+        ├── verification-evidence.md
         ├── traceability-ledger.md
         ├── version-manifest.md
         └── release-manifest.md
@@ -96,18 +92,19 @@ full-stack-skill/
 
 ## Non-Negotiable Rules
 
-1. **TDD**: RED → GREEN → REFACTOR, coverage ≥ 80%
-2. **Conventional Commits**: `feat/fix/refactor/perf/test/docs/chore/style/ci`
-3. **Security scan in CI**: SAST + dependency scan on every push
-4. **No hardcoded secrets**: Env vars or secret manager only
-5. **Reversible migrations**: Every `up` has a tested `down`
-6. **Code review before merge**: Automated self-check before PR creation
-7. **Staging before production**: Code hits staging and passes E2E first
-8. **Accessibility baseline**: Semantic HTML, ARIA, keyboard navigation
+1. Every change has a valid product or non-product origin and testable acceptance.
+2. Verification covers changed behavior and risk; defects gain regression evidence.
+3. No hardcoded secrets; affected security, privacy, permissions, and audit controls are reviewed.
+4. Data changes define compatibility, recovery, and tested rollback or roll-forward.
+5. Review precedes merge; high-risk work receives independent review and approval.
+6. Production changes use a controlled pre-production/cohort check, health signals, and recovery path.
+7. Accessibility is part of acceptance for affected user interfaces.
+8. Baselines, contracts, evidence, and release records change with the implementation.
 
-## Design Documents
+## Background Documents
 
-The full process specification and skill mapping matrix are maintained in the [auto-dev-skills](https://github.com/icestarx/auto-dev-skills) repository:
+The local `SKILL.md` and `references/` files are authoritative for this version.
+Earlier process background is available in the [auto-dev-skills](https://github.com/icestarx/auto-dev-skills) repository:
 
 - [fullstack-process.md](https://github.com/icestarx/auto-dev-skills/blob/main/docs/fullstack-process.md) — 15-step process V4 spec
 - [skills-mapping.md](https://github.com/icestarx/auto-dev-skills/blob/main/docs/skills-mapping.md) — Skill mapping matrix V4

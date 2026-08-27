@@ -10,6 +10,7 @@ material omissions `N/A` with a reason. Do not invent unresolved product decisio
 > **Mode**: New / Review / Change
 > **Version line**: [v1 / v2 / ...]
 > **Baseline manifest**: [Path or TBD]
+> **Change work item**: [CHG-* path / tracker URL or N/A]
 > **Traceability ledger**: [Path or tracker URL]
 > **Owner**: [Name or role]
 > **Approver(s)**: [Name or role]

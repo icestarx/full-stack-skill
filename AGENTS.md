@@ -2,9 +2,9 @@
 
 ## Project Structure & Module Organization
 
-This repository defines a portable full-stack lifecycle skill rather than a deployable application. `SKILL.md` is the main entry point and must remain aligned with the 15-step, 10-phase workflow. `references/platform-adapters.md` defines host-neutral capability contracts and Codex/Claude adapters; `agents/openai.yaml` supplies Codex-facing metadata. Detailed guidance lives under `references/`, and reusable document skeletons are in `references/templates/`. The executable `setup` script audits the core structure, supported hosts, and optional providers.
+This repository defines a portable full-stack lifecycle skill rather than a deployable application. `SKILL.md` is the concise four-track router; `references/four-track-model.md` defines track ownership, change modes, synchronization gates, and vertical-slice execution. The historical 15 steps remain a detailed activity catalog in `references/process-steps.md`, not a fixed waterfall. `references/platform-adapters.md` defines host-neutral capability contracts and Codex/Claude adapters; `agents/openai.yaml` supplies Codex-facing metadata. Reusable document skeletons are in `references/templates/`, and the executable `setup` script audits core structure, supported hosts, and optional providers.
 
-When changing a pipeline step, check every related source: `SKILL.md`, `references/process-steps.md`, `references/skills-mapping.md`, and the relevant template. Requirement-stage changes must stay aligned with `references/requirements-workflow.md`; versioning and evidence-chain changes must stay aligned with `references/document-organization.md` and `references/traceability.md`. Avoid duplicating detailed instructions in the README.
+When changing a track, activity, or gate, check `SKILL.md`, `references/four-track-model.md`, `references/process-steps.md`, `references/skills-mapping.md`, and the relevant template. Requirement-stage changes must stay aligned with `references/requirements-workflow.md`; versioning and evidence-chain changes must stay aligned with `references/document-organization.md` and `references/traceability.md`. Avoid duplicating detailed instructions in the README.
 
 ## Build, Test, and Development Commands
 
@@ -28,7 +28,7 @@ For Bash, retain `#!/usr/bin/env bash` and `set -euo pipefail`. Quote variable e
 
 ## Testing Guidelines
 
-No automated test framework or repository coverage threshold currently exists. For documentation changes, verify links, command examples, capability identifiers, phase/step counts, and consistency across affected files. For runtime changes, run `bash -n setup`, `bash setup --strict`, the skill validator, and `git diff --check`.
+No automated test framework or repository coverage threshold currently exists. For documentation changes, verify links, command examples, capability identifiers, track/activity mappings, and consistency across affected files. For runtime changes, run `bash -n setup`, `bash setup --strict`, the skill validator, and `git diff --check`.
 
 ## Commit & Pull Request Guidelines
 

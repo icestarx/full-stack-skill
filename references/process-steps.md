@@ -1,10 +1,12 @@
-# 15-Step Full-Stack Process — Detailed Steps
+# Full-Stack Activity Catalog — 15 Detailed Activities
 
-> This is the detailed reference for each step. The SKILL.md conductor tells you which step to execute; this file tells you how.
+> This is the detailed reference for the 15 reusable activities. Read
+> `references/four-track-model.md` first: it determines which activities to run,
+> when to repeat them for a vertical slice, and which synchronization gate applies.
 > 
 > For document templates, see `references/templates/`. For skill selection rationale, see `references/skills-mapping.md`.
 
-## Pipeline Overview
+## Activity Catalog Overview
 
 ```
 Requirements (1) → Design (2) → Technical Planning (2) → Development Plan (1) →
@@ -12,7 +14,21 @@ Module Tech Docs (1) → Environment Setup (1) → Module Development (1) →
 Quality Verification (3) → Production Deploy (1) → Operations (2)
 ```
 
-**15 nodes, 10 phases, 10 phase documents, plus cross-cutting control records.**
+**15 activities, historically grouped into 10 phases, plus cross-cutting control records.**
+
+The numbering is a stable lookup key, not a fixed execution order. Product,
+Engineering, Verification, and Delivery & Learning may advance concurrently when
+their inputs are ready. Verification begins with acceptance design; delivery and
+operability concerns may constrain product and architecture before implementation.
+
+| Activities | Primary track | Supporting tracks |
+|---|---|---|
+| 1-3 | Product | Verification, Engineering |
+| 4-7 | Engineering | Product, Verification, Delivery & Learning |
+| 8 | Delivery & Learning | Engineering, Verification |
+| 9 | Engineering | Product, Verification |
+| 10-12 | Verification | Engineering, Delivery & Learning |
+| 13-15 | Delivery & Learning | Verification, Engineering, Product |
 
 ```
 Step 1                      Step 2              Step 3
@@ -51,7 +67,7 @@ Production Deploy ──→ Monitoring ──→ Retrospective
 
 ---
 
-## Mandatory Document Checklist
+## Lifecycle Document Catalog
 
 | # | Document | Produced At | Contents |
 |---|----------|-------------|----------|
@@ -66,10 +82,13 @@ Production Deploy ──→ Monitoring ──→ Retrospective
 | 9 | **Test Doc** | Step 12 | Test strategy, case list, coverage report, performance baseline, known issues |
 | 10 | **Production Deploy Doc** | Step 13 | Production architecture, release strategy, rollback plan, monitoring & alerting |
 
-These 10 phase documents are accompanied by cross-cutting records rather than
-counted as additional phases:
+Create or update only the documents affected by the selected mode and risk. These
+activity documents are accompanied by cross-cutting records rather than counted as
+additional activity groups:
 
 - major-version manifest — effective product/UX/engineering baseline;
+- change work item — shared four-track state for substantial active work;
+- verification evidence — slice/PR evidence index when CI/tracker output is insufficient;
 - traceability ledger — normalized artifact relationships, coverage, and exceptions;
 - release manifest — immutable scope and delivery evidence for one release.
 
@@ -78,7 +97,7 @@ Read `references/document-organization.md` for placement and
 
 ---
 
-## Phase 1: Requirements Definition (Step 1)
+## Activity Group 1: Requirements Definition (Step 1)
 
 ### Step 1: Clarify Requirements ← 📄
 
@@ -106,7 +125,7 @@ Read `references/document-organization.md` for placement and
 
 ---
 
-## Phase 2: Design (Steps 2-3)
+## Activity Group 2: Design (Steps 2-3)
 
 ### Step 2: UI/UX Design Specification ← 📄
 
@@ -163,10 +182,10 @@ During demo:
 Post-demo outputs:
 □ Review notes (who attended, what feedback, what decisions)
 □ Change item list (if any) with expected completion time
-□ Sign-off: cleared to enter technical planning phase
+□ Sign-off: cleared for the affected technical planning activities
 ```
 
-**Why this step is mandatory:**
+**Why this checkpoint matters when interactive product behavior requires it:**
 - Looking good in mockups ≠ actually usable when interactive
 - Stakeholders often only discover missing scenarios when seeing an interactive prototype
 - Design changes at this stage are cheap (Figma/prototype); changes after coding cost 10x+
@@ -174,7 +193,7 @@ Post-demo outputs:
 
 ---
 
-## Phase 3: Technical Planning (Steps 4-5)
+## Activity Group 3: Technical Planning (Steps 4-5)
 
 ### Step 4: Technical Planning ← 📄📄
 
@@ -234,7 +253,7 @@ Modules with no dependencies can be developed in parallel: auth + notification c
 
 ---
 
-## Phase 4: Development Plan (Step 6)
+## Activity Group 4: Development Plan (Step 6)
 
 ### Step 6: Development Plan ← 📄
 
@@ -252,7 +271,7 @@ Modules with no dependencies can be developed in parallel: auth + notification c
 
 ---
 
-## Phase 5: Module Technical Docs (Step 7)
+## Activity Group 5: Module Technical Docs (Step 7)
 
 ### Step 7: Module Technical Docs ← 📄📄
 
@@ -275,7 +294,7 @@ Modules with no dependencies can be developed in parallel: auth + notification c
 
 ---
 
-## Phase 6: Environment Setup (Step 8)
+## Activity Group 6: Environment Setup (Step 8)
 
 ### Step 8: Development Environment Setup ← 📄
 
@@ -352,18 +371,20 @@ Staging Deployment Flow:
 
 ---
 
-## Phase 7: Module Development (Step 9)
+## Activity Group 7: Development and Integration (Step 9)
 
 ### Step 9: Module Development Execution
 
-> Each module follows "backend business logic + API first → frontend builds UI against API → wiring → E2E verification." Dependency-free modules can run in parallel.
+> Deliver one mergeable vertical slice at a time. Choose backend-first,
+> contract-first, frontend-with-fake, or migration-first sequencing from the slice's
+> dependencies and risk; integrate against the real contract as early as practical.
 
 | Dimension | Content |
 |-----------|---------|
-| **Entry** | Environment ready + module tech docs (DB + API) |
+| **Entry** | Slice Ready: bounded origin/outcome, affected contracts, environment path, planned evidence, and recovery approach |
 | **Core Activities** | Backend/frontend TDD, integration/E2E, and replacement of planned trace links with actual code symbols and test evidence |
 | **Output** | Runnable code, test code, passing CI |
-| **Exit Criteria** | P0 works, coverage ≥80%, integration/E2E pass, and completed tasks map backward to valid origins and forward to code/test evidence |
+| **Exit Criteria** | The current slice's committed behavior works; risk-based unit/component/contract/integration/E2E checks pass; completed tasks map backward to valid origins and forward to code/test evidence |
 | **Capabilities** | `development.tdd`, `qa.browser`, and risk-triggered specialist review |
 
 **Commit Standards (enforced within each module):**
@@ -397,7 +418,8 @@ Backend Dev Flow (per module):
    RED → GREEN → REFACTOR cycle
 
 2. Unit Tests
-   Coverage ≥ 80%
+   Coverage target follows repository policy and changed-risk analysis; inspect
+   changed branches and critical domain rules rather than chasing a universal number
    Cover: normal inputs / boundary values / invalid inputs / dependency failures
    Naming: test('[module] behavior description', () => {})
    Structure: Arrange → Act → Assert
@@ -477,7 +499,7 @@ Frontend + backend of same module can partially overlap (backend produces API co
 
 ---
 
-## Phase 8: Quality Verification (Steps 10-12)
+## Activity Group 8: Quality Verification (Steps 10-12)
 
 ### Step 10: Code Review
 
@@ -568,7 +590,7 @@ Submit PR → Request review → Address feedback → Re-request review → Appr
 
 | Dimension | Content |
 |-----------|---------|
-| **Entry** | All modules complete + unit tests + integration tests + E2E + perf tests + security scan |
+| **Entry** | Merge/release candidate plus its unit/component, contract/integration, affected E2E, and risk-triggered performance/security evidence |
 | **Core Activities** | AC-to-TEST reconciliation, coverage/results, orphan/stale analysis, performance/security evidence, known issues |
 | **Output** | **📄 Test Document** |
 | **Exit Criteria** | All layers report, every committed AC has accepted evidence, no blocking bug remains, and performance meets targets |
@@ -578,7 +600,7 @@ Submit PR → Request review → Address feedback → Re-request review → Appr
 
 ---
 
-## Phase 9: Production Deployment (Step 13)
+## Activity Group 9: Production Deployment (Step 13)
 
 ### Step 13: Production Deployment ← 📄
 
@@ -596,7 +618,7 @@ Submit PR → Request review → Address feedback → Re-request review → Appr
 
 ---
 
-## Phase 10: Operations (Steps 14-15)
+## Activity Group 10: Operations (Steps 14-15)
 
 ### Step 14: Production Monitoring
 
@@ -651,61 +673,52 @@ Layer 4: User Experience (CWV / Crash rate / Page load time / User feedback volu
 | 10+11+12. Review→PR→Test | 📄 Test Doc | AC-to-TEST coverage, PR evidence, orphan/stale links, results and known issues |
 | 13. Prod Deploy | 📄 Production Deploy + Release Manifest | Baseline, committed scope, PR/build/test/deployment/production evidence |
 
-Cross-cutting: major-version manifest + traceability ledger/coverage/exceptions are
-updated whenever an affected phase artifact changes.
+Cross-cutting: the active change work item, slice/PR verification evidence,
+major-version manifest, and traceability ledger/coverage/exceptions are updated
+whenever affected implementation or lifecycle evidence changes.
 
 ---
 
-## Quality Gates
+## Synchronization Gates
 
-```
-Step 1 → 2: Requirements pass Definition of Ready; no hidden blocker remains
-Step 2 → 3: Design system documented, REQ/AC mapped, prototype available → 🚪 Demo Confirmation
-Step 3 → 4: Stakeholder sign-off linked → Enter technical planning
-Step 7 → 8: DB + API design complete and traced → 🚪 Environment Readiness Check
-Step 8 → 9: Database connectable, staging deployable → Enter development
-Step 9 → 10: All modules complete + implementation/test links valid → 🚪 Code Review Gate
-Step 10 → 11: No CRITICAL/HIGH issue or unexplained trace gap
-Step 12 → 13: All committed ACs verified → 🚪 Production Release Approval
-Step 13 → 14: Release manifest closed and smoke tests pass
-```
+Use gates from `references/four-track-model.md`; do not force every change through
+all 15 activities in numeric order.
+
+| Gate | Required outcome |
+|---|---|
+| Change Ready | Product contract, engineering impact, verification plan, and delivery/operability concerns are sufficient to start |
+| Slice Ready | One bounded vertical slice has origin, dependencies, expected code/contracts, tests, and recovery |
+| Merge Ready | Actual implementation/test evidence is valid; findings and documentation/ledger deltas are resolved |
+| Release Ready | Committed scope links to accepted tests, immutable build/deploy evidence, compatibility checks, approvals, and signals |
+| Learning Closed | Observation completed and defects, stale evidence, temporary mechanisms, and follow-ups have owners/dispositions |
 
 ---
 
-## Project Size Tailoring
+## Execution Depth Tailoring
 
-### Small Projects (1-2 people, 1-2 weeks) → ~9 steps
+Project size affects document form and coordination. Risk determines which reviews,
+tests, approvals, rollout controls, and recovery exercises are required.
 
-```
-1. Clarify Reqs → Requirements Doc (lean)
-2. UI/UX Design → UI Design Doc (lean)
-3. Demo Confirm → Quick review
-4. Tech Planning → Frontend + Backend design merged (lean)
-5. (Skip module decomposition)
-6. Dev Plan → Lean task list
-7. (Skip independent module tech docs — merge into step 4)
-8. Env Setup → Docker Compose one-command (lean)
-9. Module Dev → Backend TDD + Frontend Dev + E2E (1-2 flows)
-10+11+12. (Simplify: merge directly, CI reports replace test doc)
-13. Prod Deploy (simplified single-step deploy)
-14. Monitoring → Sentry or similar lightweight
-15. (Skip independent retro)
+### Low Risk
 
-Docs: phase documents may be merged and lean, but committed scope still needs a
-version/release reference and a minimal origin→code→test→PR/release ledger.
-```
+- Keep the change work item and affected documents lean.
+- Run focused deterministic tests and ordinary review.
+- Use the repository's standard release and monitoring path.
 
-### Medium Projects (5-10 people, 1-3 months) → Full 15 Steps
+### Medium Risk
 
-### Large Projects (10+ people, 3+ months) → 15 Steps + Extensions
+- Record explicit cross-layer impact and compatibility analysis.
+- Add contract/regression coverage and an independent review pass.
+- Use staged rollout, a defined observation window, and verified recovery.
 
-```
-Each step adds:
-- Formal review/sign-off sessions
-- Peer review
-- Technical spike nodes
-- Dedicated security review
-- Dedicated performance load testing
-- Dedicated canary planning
-- User Acceptance Testing (UAT) node
-```
+### High Risk
+
+- Record formal product/architecture/security decisions and named approvals.
+- Rehearse migrations, version skew, failure recovery, and rollback/roll-forward.
+- Add applicable load, failure-injection, privacy, security, accessibility, and UAT evidence.
+- Use canary/cohort rollout with explicit abort thresholds.
+
+Small projects may merge related artifacts into concise documents. Large projects
+usually need separate owners, structured trackers, formal review records, and CI
+validation. Neither may omit origins, acceptance, deterministic evidence, recovery,
+or release/production traceability for committed behavior.

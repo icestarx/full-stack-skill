@@ -3,6 +3,8 @@
 ```markdown
 # Frontend Design — [Project Name]
 
+> **Change work item**: [CHG-* path / tracker URL or N/A]
+
 ## Traceability
 
 | REQ / AC IDs | UX/design reference | Frontend decision or contract | Planned code surface | Verification |

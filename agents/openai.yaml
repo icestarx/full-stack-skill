@@ -1,6 +1,6 @@
 interface:
   display_name: "Full-Stack Delivery"
-  short_description: "Plan and ship multi-layer software changes"
-  default_prompt: "Use $full-stack-skill to plan and deliver this multi-layer software change."
+  short_description: "Ship multi-layer changes through four evidence tracks"
+  default_prompt: "Use $full-stack-skill to route, implement, verify, and deliver this multi-layer change through its four-track workflow."
 policy:
   allow_implicit_invocation: true
