@@ -1,69 +1,47 @@
-# Staging Environment Deployment Document Template
+# Verification Environment Template
 
-```markdown
-# Staging Environment Deployment — [Project Name]
+Use for the minimum environment needed by the affected slice. It may describe local,
+ephemeral preview, shared integration, staging, device lab, or another target.
 
-> **Version line / release target**: [v2 / 2.0.0]
-> **Baseline manifest**: [Path]
-> **Change work item**: [CHG-* path / tracker URL]
-> **Source NFR / OPS / SEC IDs**: [IDs]
-> **Traceability ledger**: [Path or tracker URL]
+````markdown
+# Verification Environment — [Change / Environment]
 
-## 1. Staging Architecture
-- Topology diagram
-| Component | Config | Address | Notes |
-|-----------|--------|---------|-------|
-| App server | | staging.xxx.com | |
-| Database | | staging-db.xxx.com | |
-| Cache | | staging-cache.xxx.com | |
-| Queue | | | |
-| Storage | | | |
+> **Version/release target**: [Value or TBD]
+> **Change work item**: [CHG-* / tracker]
+> **Origins**: [NFR/OPS/SEC/REQ IDs]
 
-## 2. Database Initialization
-### Development Environment
-```bash
-# One-command local database startup
-docker compose up -d db
-# Run migrations
-pnpm db:migrate
-# Load seed data
-pnpm db:seed
-# Reset to clean state
-pnpm db:reset
-```
+## Purpose and Parity
 
-### Staging Environment
-- Database instance info
-- Migration execution method: CI auto / manual
-- Seed data location: `prisma/seeds/test/`
+- Behaviors/risks this environment verifies:
+- Relevant similarities/differences from production:
+- Limitations and approved risk:
 
-## 3. CI/CD Configuration
-```yaml
-# Staging deploy pipeline
-staging-deploy:
-  trigger: push to feature branches
-  steps:
-    1. Lint & Type-Check
-    2. Unit Tests
-    3. Security Scan (SAST + Dependency)
-    4. Build
-    5. Deploy to Staging
-    6. Smoke Tests
-```
+## Reproduction
 
-## 4. Environment Variables
-| Variable | Development | Staging | Notes |
-|----------|-------------|---------|-------|
-| DATABASE_URL | localhost:5432 | staging-db:5432 | DB connection |
-| API_BASE_URL | localhost:3000 | staging-api.xxx.com | API address |
+- Provision/start command or pipeline:
+- Required services/dependencies:
+- Secrets/permission source (never secret values):
+- Build/source revision:
 
-## 5. Environment Reset
-- How to reset staging to clean state
-- How to rollback database migrations
-- How to reload seed data
+## Data Setup and Reset
 
-## 6. Access Information
-- Staging URLs
-- Test accounts
-- VPN/firewall requirements (if any)
-```
+- Dataset/scenarios and sensitivity classification:
+- Idempotent seed/fixture method:
+- Reset/isolation method:
+- Migration and recovery verification:
+
+## Verification
+
+| Check | Command/artifact | Expected | Result/evidence |
+|---|---|---|---|
+| Provision/connectivity | | | |
+| Smoke/health | | | |
+| Required integration/E2E | | | |
+
+## Access and Ownership
+
+- URLs/targets:
+- Access prerequisites:
+- Owner/support path:
+- Cost/cleanup/expiry:
+````

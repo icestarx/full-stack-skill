@@ -1,44 +1,48 @@
-# API Document Template
+# Interface Contract Template
 
-```markdown
-# API Documentation — [Project Name]
+Use for affected APIs, events, files, webhooks, or service interfaces. Prefer the
+repository's generated specification when it is authoritative.
 
-> **Change work item**: [CHG-* path / tracker URL or N/A]
+````markdown
+# Interface Contract — [Name / Change]
 
-## Requirement and Contract Coverage
+> **Change work item**: [CHG-* / tracker]
+> **Source revision / generated spec**: [Path, commit, or N/A]
 
-| Endpoint / event | REQ / AC IDs | ADR / data contract | Implementation task | Contract/integration tests |
-|---|---|---|---|---|
-| | | | TASK-* | TEST-* |
+## Coverage and Consumers
 
-## 1. General Conventions
-### Base URL
-- Staging: https://staging-api.example.com/v1
-- Production: https://api.example.com/v1
+| Interface | REQ/AC/RULE/NFR/ADR | Producers | Consumers/versions | TASK | Contract TEST |
+|---|---|---|---|---|---|
+| | | | | | |
 
-### Authentication
-- Method: Bearer Token (JWT)
+## Conventions
 
-### Unified Response Envelope
-```json
-{
-  "code": 200, "message": "success",
-  "data": {},
-  "meta": { "total": 100, "page": 1, "pageSize": 20 }
-}
-```
+- Protocol/style and rationale:
+- Authentication/authorization:
+- Versioning and compatibility window:
+- Error representation and retryability:
+- Pagination/streaming/backpressure where applicable:
+- Rate/capacity limits:
+- Idempotency/concurrency rules:
+- Observability/audit contract:
 
-### Error Codes
-| Code | HTTP Status | Meaning | Client Action |
-|------|------------|---------|---------------|
+## Interface Definitions
 
-## 2. Endpoint Definitions
-### Auth Module
-#### POST /auth/register
-- REQ / AC IDs
-- Description / Auth required / Rate limit / Request body / Response / Errors
-- Idempotency, concurrency, compatibility, and observability contract where applicable
-- Implementation TASK IDs and contract/integration TEST IDs
+### [Operation / event / schema]
 
-[... all endpoints for every module ...]
-```
+- Purpose and origin IDs:
+- Preconditions and authorization:
+- Input/schema/validation:
+- Output/schema:
+- Errors and caller action:
+- Side effects and state transitions:
+- Compatibility/deprecation:
+- Implementation TASK/code:
+- TEST/evidence:
+
+## Change and Rollout Matrix
+
+| Consumer/version combination | Supported during rollout? | Adaptation/migration | Removal condition/owner |
+|---|---|---|---|
+| | | | |
+````

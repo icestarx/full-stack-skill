@@ -12,7 +12,7 @@ description: >
 
 Deliver complete, maintainable product changes through four coordinated tracks:
 Product, Engineering, Verification, and Delivery & Learning. Treat the historical
-15 steps as an activity catalog, not a mandatory waterfall.
+A1-A15 as compatibility identifiers in an activity index, not a mandatory waterfall.
 
 ## Runtime Portability
 
@@ -33,7 +33,8 @@ Read `references/four-track-model.md`, then:
 1. Inspect repository instructions, status, architecture, tests, current behavior,
    active version baseline, and related recent changes before proposing edits.
 2. Classify the operating mode: new product/major version, feature change, bug fix,
-   maintenance, or incident.
+   maintenance, or incident. Read the selected playbook in
+   `references/operating-modes.md`.
 3. Assess risk from blast radius, reversibility, sensitive data, external contracts,
    migration complexity, operational novelty, and uncertainty. Team size affects
    coordination, not risk.
@@ -67,7 +68,7 @@ agents do not imply four tracks, and four tracks do not require parallel executi
 Use `product.discovery`, `product.scope-review`, `product.requirements-review`,
 `design.system`, `design.prototype`, and `design.review` as available.
 
-**Track evidence**: approved `CAP/REQ/AC` scope, UX/design links, decisions, and
+**Track evidence**: approved `CAP/REQ/RULE/NFR/AC` scope, UX/design links, decisions, and
 success/failure signals.
 
 ### Engineering Track
@@ -79,14 +80,14 @@ success/failure signals.
 - Define only the architecture, data/API contracts, compatibility strategy, and
   tasks required by the current change and its known consumers.
 - Decompose work into dependency-ordered vertical slices with stable `TASK-*` IDs
-  and `REQ/AC/BUG/TECH/SEC/OPS` origins.
+  and `REQ/AC/RULE/NFR/BUG/TECH/SEC/OPS` origins.
 - Implement one bounded slice at a time. Keep changes mergeable and recoverable;
   avoid a long-lived backend-first then frontend-first integration batch.
 - Replace planned trace links with actual `path:symbol`, contract, migration, and
   commit/PR evidence as work completes.
 
-Read `references/process-steps.md` for detailed architecture, planning, environment,
-database, API, and implementation activities. Use `architecture.review`,
+Read `references/tracks/engineering.md` for detailed reconnaissance, planning,
+contract, migration, and implementation activities. Use `architecture.review`,
 `planning.decompose`, `database.review`, `spec.change`, and `development.tdd` as
 applicable.
 
@@ -159,7 +160,7 @@ boundary, or an external dependency that prevents meaningful progress.
 | Change Ready | Product contract, impact, verification plan, and delivery/operability concerns are sufficient to start a slice |
 | Slice Ready | One bounded slice has origin, dependencies, expected code/contracts, tests, and recovery |
 | Merge Ready | Actual implementation and test evidence is valid; review and documentation/ledger deltas are complete |
-| Release Ready | Committed scope maps to accepted tests, PR/build/deploy evidence, compatibility checks, approvals, and signals |
+| Release Ready | Committed scope maps to accepted tests and distinct PR, build, deployment, compatibility, approval, and signal evidence |
 | Learning Closed | Observation completed; defects, stale evidence, temporary mechanisms, and follow-ups have owners/dispositions |
 
 If a required outcome is inapplicable, record `N/A` with rationale. Do not satisfy a
@@ -176,11 +177,14 @@ Read `references/traceability.md` before changing committed behavior. Maintain t
 bidirectional graph:
 
 ```text
-CAP → REQ → AC → design/decision → TASK → code → TEST → PR/build → release → OBS
+CAP → REQ/RULE/NFR → TASK → CODE → PR → BUILD → RELEASE
+       REQ → AC ─────→ TEST ────────┘
+       REQ/AC/RULE/NFR → DESIGN/PDR/ADR/CONTRACT
+       REQ/AC/RULE/NFR → OBS
 ```
 
 Code, tests, PRs, and production evidence must also trace backward to a valid
-`REQ/AC/BUG/TECH/SEC/OPS` origin. Use the project's durable tracker when it supports
+`REQ/AC/RULE/NFR/BUG/TECH/SEC/OPS` origin. Use the project's durable tracker when it supports
 the required relationships; otherwise use the repository ledger template.
 
 ## Quality Invariants
@@ -231,11 +235,16 @@ Load references only when the current work requires them:
 | Reference | Read when |
 |---|---|
 | `references/four-track-model.md` | Routing a change, selecting gates, or coordinating tracks |
+| `references/operating-modes.md` | After selecting New/Major, Feature Change, Bug Fix, Maintenance, or Incident mode |
 | `references/platform-adapters.md` | Selecting a skill, agent, MCP tool, or host command |
 | `references/document-organization.md` | Initializing docs, a major-version baseline, change record, or release |
 | `references/requirements-workflow.md` | Creating, reviewing, or changing product requirements |
 | `references/traceability.md` | Creating IDs, links, coverage views, exceptions, or release evidence |
-| `references/process-steps.md` | Detailed instructions for any of the 15 reusable activities |
+| `references/process-steps.md` | Mapping a legacy activity number to the relevant track/reference |
+| `references/tracks/product.md` | Product requirements, UX contract, and acceptance activities |
+| `references/tracks/engineering.md` | Reconnaissance, architecture, planning, contracts, implementation |
+| `references/tracks/verification.md` | Verification design, review, PR evidence, and summary |
+| `references/tracks/delivery-learning.md` | Environment, release, observation, incident learning, and cleanup |
 | `references/skills-mapping.md` | Capability selection and provider fallback by track/activity |
 | `references/tech-selection.md` | Making a material technology choice |
 | `references/capability-domains.md` | Entering a specialized application/domain layer |

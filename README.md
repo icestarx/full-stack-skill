@@ -14,7 +14,8 @@ An agent-portable skill that orchestrates the full-stack development lifecycle f
 - **Lifecycle templates**: Activity documents plus change, version, release, verification, and traceability records
 - **Risk-driven gates**: Control depth follows blast radius, reversibility, contracts, data, and operational risk
 - **Long-running handoffs**: Durable change state, evidence, blockers, and next-action records survive agent sessions
-- **Dependency checker**: `setup` script audits what's installed and what's missing
+- **Deterministic validation**: Standard-library validators check metadata, links, Markdown, traceability, and eval contracts
+- **Behavior eval suite**: Forward-test cases cover all five operating modes and recurring failure patterns
 
 ## Quick Start
 
@@ -39,8 +40,8 @@ Invoke with `$full-stack-skill`, or describe a multi-layer build/change and allo
 
 Each substantial change has a shared work item. The tracks synchronize at Change
 Ready, Slice Ready, Merge Ready, Release Ready, and Learning Closed. Work proceeds
-in small vertical slices; the existing 15 steps remain available as a detailed
-activity catalog rather than a fixed waterfall.
+in small vertical slices; the A1-A15 identifiers remain a compatibility index rather
+than a fixed waterfall.
 
 Execution depth is risk-driven. Low-risk work uses lean records and focused checks;
 medium-risk work adds impact/compatibility analysis, independent review, and staged
@@ -53,6 +54,14 @@ This skill is an orchestrator, but it has no mandatory dependency on gstack, Sup
 
 Run `bash setup` for a host/provider audit. See [DEPENDENCIES.md](DEPENDENCIES.md) for the complete runtime contract.
 
+Repository validation:
+
+```bash
+python3 scripts/validate_skill.py
+python3 scripts/validate_traceability.py references/templates/traceability-ledger.json
+python3 scripts/run_evals.py
+```
+
 ## File Structure
 
 ```
@@ -60,18 +69,23 @@ full-stack-skill/
 ├── SKILL.md                       # Portable lifecycle conductor
 ├── agents/openai.yaml             # Codex-facing metadata
 ├── setup                          # Host and provider audit
+├── scripts/                       # Deterministic Skill, traceability, and eval checks
+├── evals/                         # Forward-testing cases and scoring rubric
 ├── DEPENDENCIES.md                # Runtime/provider contract
 ├── README.md                      # This file
 └── references/
     ├── platform-adapters.md       # Capability contracts and host adapters
     ├── four-track-model.md        # Track ownership, routing, gates, and slice loop
+    ├── operating-modes.md         # New/change/bugfix/maintenance/incident playbooks
     ├── document-organization.md   # Major-version baselines vs release records
     ├── requirements-workflow.md   # New/review/change requirement modes and gates
     ├── traceability.md            # Stable IDs, link ledger, propagation, and gates
-    ├── process-steps.md           # 15-step detailed instructions
-    ├── skills-mapping.md          # Per-step capability mapping
+    ├── process-steps.md           # Legacy A1-A15 activity index
+    ├── skills-mapping.md          # Per-track/activity capability mapping
     ├── tech-selection.md          # Technology choice guide
-    ├── capability-domains.md      # Domain best practices
+    ├── capability-domains.md      # Conditional domain review prompts
+    ├── tracks/                    # Product, engineering, verification, delivery detail
+    ├── schemas/                   # Machine-readable traceability schema
     └── templates/                 # Activity and cross-cutting document templates
         ├── requirements.md
         ├── ui-design.md
@@ -86,6 +100,7 @@ full-stack-skill/
         ├── change-work-item.md
         ├── verification-evidence.md
         ├── traceability-ledger.md
+        ├── traceability-ledger.json
         ├── version-manifest.md
         └── release-manifest.md
 ```
@@ -100,15 +115,6 @@ full-stack-skill/
 6. Production changes use a controlled pre-production/cohort check, health signals, and recovery path.
 7. Accessibility is part of acceptance for affected user interfaces.
 8. Baselines, contracts, evidence, and release records change with the implementation.
-
-## Background Documents
-
-The local `SKILL.md` and `references/` files are authoritative for this version.
-Earlier process background is available in the [auto-dev-skills](https://github.com/icestarx/auto-dev-skills) repository:
-
-- [fullstack-process.md](https://github.com/icestarx/auto-dev-skills/blob/main/docs/fullstack-process.md) — 15-step process V4 spec
-- [skills-mapping.md](https://github.com/icestarx/auto-dev-skills/blob/main/docs/skills-mapping.md) — Skill mapping matrix V4
-- [fullstack-process-review.md](https://github.com/icestarx/auto-dev-skills/blob/main/docs/fullstack-process-review.md) — Review & decision record
 
 ## License
 

@@ -1,47 +1,38 @@
-# Database Design Document Template
+# Data Contract and Migration Template
 
-```markdown
-# Database Design — [Project Name]
+Use for affected stored data. Select rollback or roll-forward from actual data-loss
+and compatibility risk; do not require a destructive down migration.
 
-> **Change work item**: [CHG-* path / tracker URL or N/A]
+````markdown
+# Data Design — [Change / Domain]
 
-## Requirement and Decision Coverage
+> **Change work item**: [CHG-* / tracker]
+> **Authoritative schema source**: [Path / generated artifact]
 
-| REQ / AC IDs | ADR / rule | Entities / tables / migrations | Verification |
-|---|---|---|---|
-| | | | TEST-* / review |
+## Coverage and Ownership
 
-## 1. Entity Relationship Diagram (ERD)
-- [Mermaid/PlantUML ER diagram]
-
-## 2. Entity Inventory
-| Entity | Table | Source REQ / ADR IDs | Description | Est. Data Volume | Growth Rate |
+| REQ/AC/RULE/NFR/ADR | Entity/schema | Owner | Readers/writers | Sensitivity/lifecycle | TEST |
 |---|---|---|---|---|---|
+| | | | | | |
 
-## 3. Table Definitions
-### Table: users
-| Column | Type | Constraints | Default | Description |
-|--------|------|-------------|---------|-------------|
-| id | UUID | PK | gen_random_uuid() | Primary key |
-| email | VARCHAR(255) | UNIQUE, NOT NULL | | Email address |
-| created_at | TIMESTAMPTZ | NOT NULL | now() | Creation time |
-| updated_at | TIMESTAMPTZ | NOT NULL | now() | Update time |
-| deleted_at | TIMESTAMPTZ | | NULL | Soft delete |
+## Current and Target Model
 
-## 4. Index Strategy
-| Table | Index Name | Columns | Type | Purpose |
-|-------|------------|---------|------|---------|
+- Current schema/format reference:
+- Target delta and invariants:
+- Query/access patterns and measured capacity assumptions:
+- Retention, archival, deletion, audit, and legal/privacy constraints:
 
-## 5. Migration Plan
-- Migration tool: Prisma Migrate / Alembic / golang-migrate
-- Strategy: one independent migration file per change, versioned, reversible
+## Migration and Compatibility
 
-| Migration / task | Source IDs | Compatibility requirement | Up/down verification | Release |
-|---|---|---|---|---|
-| | | | TEST-* | |
+| Stage | Schema/code behavior | Mixed-version compatibility | Verification | Abort/recovery | Owner |
+|---|---|---|---|---|---|
+| Expand/prepare | | | | | |
+| Migrate/backfill | | | | | |
+| Switch/activate | | | | | |
+| Contract/cleanup | | | | | |
 
-## 6. Data Security
-- Fields requiring encryption (PII)
-- Encryption method
-- Audit logging strategy
-```
+- Backup/restore or forward-repair plan:
+- Data reconciliation and loss/corruption checks:
+- Locking/load/online-change considerations:
+- Temporary dual-read/write/adapters and removal condition:
+````

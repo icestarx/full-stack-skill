@@ -1,6 +1,6 @@
 # Requirements Workflow
 
-Read this reference during Phase 1. It defines how to create, review, or change
+Read this reference for Product activity A1. It defines how to create, review, or change
 requirements without inventing missing product decisions.
 
 ## Operating Principles
@@ -13,10 +13,15 @@ requirements without inventing missing product decisions.
 - Make scope, exclusions, unhappy paths, and unknowns as explicit as the happy path.
 - Use stable requirement IDs once an item enters committed scope. Later delivery
   artifacts may reference these IDs without depending on document headings.
-- Select the major-version baseline using `document-organization.md` and maintain
-  requirement/acceptance links using `traceability.md`.
+- Select the major-version baseline using `references/document-organization.md` and maintain
+  requirement/acceptance links using `references/traceability.md`.
 
 ## Select a Mode
+
+These are requirement-document operations nested inside the lifecycle modes from
+`references/operating-modes.md`. For example, a Feature Change normally uses requirement
+Change mode; a Bug Fix uses Review or Change only when the expected contract is
+missing or must change.
 
 | Mode | Use when | Primary output |
 |---|---|---|
@@ -88,7 +93,7 @@ For every P0 requirement, evaluate the applicable coverage dimensions:
 | Flow | Entry, happy path, cancellation, interruption, retry, recovery, and exit |
 | Business states | Durable states, allowed and invalid transitions, guards, terminal states, side effects |
 | UI states | Initial, empty, loading, partial, success, error, stale, offline, denied |
-| Business rules | Ordering, limits, calculations, conflicts, ownership, expiration |
+| Domain rules/invariants | Ordering, limits, calculations, ownership, constraints that must always hold, violation behavior |
 | Data | Source, required fields, validation, defaults, retention, deletion, sensitivity |
 | Operational semantics | Concurrency, idempotency, cancellation, retry/resume, partial success, permission changes |
 | Dependencies | APIs, third parties, policies, operations, feature flags, other requirements |
@@ -128,6 +133,11 @@ Separate the user-visible contract from implementation suggestions. Each detaile
 requirement should contain its rationale, actors and preconditions, behavior,
 business rules, relevant data constraints, edge cases, and acceptance criteria.
 
+Give consequential cross-cutting domain rules and invariants stable `RULE-*` IDs.
+State what the rule protects, where it applies, when it may be temporarily violated
+(if ever), and the reject/repair/audit behavior on violation. Link each rule to its
+affected requirements and verification evidence rather than duplicating prose.
+
 Use Given/When/Then when sequence or state matters. Include at least one negative
 or recovery criterion when failure is plausible. Avoid subjective terms such as
 "fast", "intuitive", or "secure" unless accompanied by a measurable target or
@@ -139,7 +149,9 @@ Unknowns must be recorded as one of:
 - **Assumption**: work may proceed using the stated default and risk;
 - **Follow-up**: intentionally deferred outside the current scope.
 
-Give blocking questions an owner and decision date when those are known.
+Give blocking questions an owner and decision date when those are known. The
+affected slice remains blocked until the question is resolved or deliberately
+reclassified as an approved assumption with explicit risk.
 
 ## 5. Apply Mode-Specific Review
 
@@ -158,7 +170,7 @@ Report findings first. Modify the source only when the user asked for improvemen
 Use a compact findings table with: finding ID, severity, affected requirement IDs,
 evidence, delivery or user risk, recommended correction, and decision status. If
 the lifecycle will continue, the reviewed and accepted PRD—not the review report—
-remains the Phase 1 source of truth.
+remains the Product-track source of truth.
 
 ### Change Mode
 
@@ -177,7 +189,7 @@ mark downstream traceability edges stale until they are revalidated.
 
 ## Definition of Ready
 
-Phase 1 passes only when:
+Change Ready passes for the affected product scope only when:
 
 - the target user, problem, evidence, goals, and non-goals are explicit;
 - the version line/baseline is selected and committed REQ/AC items are indexed in
@@ -185,15 +197,18 @@ Phase 1 passes only when:
 - the capability tree covers modules, functions, and applicable subfunctions, and
   every P0 leaf maps to a detailed requirement without orphan requirements;
 - every P0 requirement has a stable ID and testable acceptance criteria;
-- applicable actors, business rules, data constraints, and edge cases are covered;
+- applicable actors, domain rules/invariants, violation behavior, data constraints,
+  and edge cases are covered;
+- affected data defines ownership/source, creation/correction, retention/archive/deletion,
+  access/sensitivity, audit, restore/export, and support diagnostics as applicable;
 - stateful entities and workflows define states, transitions, guards, terminal and invalid behavior;
 - applicable operations define concurrency, idempotency, cancellation, recovery,
   partial-success, and permission-change semantics;
 - measurable quality requirements are present or explicitly marked `N/A`;
 - existing-product changes include baseline and impact analysis;
 - no unresolved contradiction remains hidden;
-- blocking questions have an owner or the work stops for a decision;
+- no unresolved blocking question affects the slice; ownership alone is insufficient;
 - assumptions, risks, approver, and approval status are recorded.
 
-Passing this gate means the requirement is ready for design and technical planning,
+Passing this gate means the requirement is ready for the affected design and engineering work,
 not that implementation details have already been chosen.

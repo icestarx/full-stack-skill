@@ -54,7 +54,8 @@ docs/
 │       ├── release-notes.md
 │       └── retrospective.md
 └── traceability/
-    ├── ledger.md
+    ├── ledger.json
+    ├── ledger.md                 # Optional generated/small-project view
     ├── coverage/
     │   ├── v1.md
     │   └── v2.md
@@ -64,6 +65,9 @@ docs/
 Adapt names to an existing project convention instead of creating a parallel tree.
 Keep `docs/README.md` as the navigation entry point: list active/supported version
 lines, current releases, authoritative documents, owners, and document status.
+
+For medium/large projects, validate `ledger.json` with the provided traceability
+schema/script. Markdown-only ledgers are a small-project fallback or generated view.
 
 ## Active Change Records
 
@@ -86,21 +90,27 @@ Every `versions/<major>/manifest.md` declares one mode:
   definitions and imports only explicitly shared material. Prefer this for large
   product-model or architecture changes.
 - **Derived**: the major version explicitly reuses selected documents from one
-  immediate parent and replaces others. Use only when the unchanged surface is
-  substantial and the resolved baseline remains easy to understand.
+  immediate parent at a pinned source revision and replaces others. Use only when
+  the unchanged surface is substantial and the resolved baseline remains easy to
+  understand without following a live mutable parent.
 
 Rules:
 
 1. Never mechanically copy a previous major version's full document set.
-2. Promote genuinely cross-version material to `shared/`; do not make V2 depend
-   on a V1-specific file merely because copying is inconvenient.
+2. Promote material intended to evolve jointly across supported lines to `shared/`.
+   Derived reuse is only for immutable parent content pinned by revision; it must
+   never be an unpinned dependency on a mutable V1 document.
 3. Never edit a prior major version to describe new-version behavior.
 4. Allow at most one declared parent. Flatten the manifest's resolved document
-   list so readers never traverse `V4 → V3 → V2 → V1` inheritance chains.
+   list with each document's source baseline and pinned revision so readers never
+   traverse `V4 → V3 → V2 → V1` inheritance chains.
 5. When a requirement changes meaning, create a new ID and link it with
    `supersedes`; do not silently redefine an ID used by a released baseline.
 6. A generated, immutable resolved snapshot may be attached to a release for
    audit or offline reading. It is a build artifact, not an editable source.
+7. A manifest cannot contain the commit hash of the same commit that first contains
+   that value. `baseline source revision` pins the listed content; release tooling
+   may publish the manifest revision or resolved snapshot digest afterward.
 
 Use `references/templates/version-manifest.md` for a baseline manifest.
 
@@ -112,7 +122,7 @@ contain copied PRD, UX, or architecture baselines.
 
 The release manifest pins:
 
-- version line, release identifier, baseline manifest, and documentation commit;
+- version line, release identifier, baseline manifest, and immutable baseline source revision;
 - included requirement and acceptance-criterion IDs;
 - PRs/commits, build and artifact identifiers;
 - test/approval evidence, deployment environments, flags, and production signals.

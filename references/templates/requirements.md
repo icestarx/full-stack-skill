@@ -3,7 +3,7 @@
 Use with `references/requirements-workflow.md`. Keep sections that apply and mark
 material omissions `N/A` with a reason. Do not invent unresolved product decisions.
 
-```markdown
+````markdown
 # Requirements — [Product / Feature]
 
 > **Status**: Draft / In review / Approved
@@ -72,10 +72,13 @@ applicable subfunction leaves.
 ~~~text
 CAP-[DOMAIN] — [Module]
 ├── CAP-[DOMAIN]-01 — [Function]
-│   ├── REQ-[DOMAIN]-001 — [P0 subfunction / behavior]
-│   └── REQ-[DOMAIN]-002 — [P1 subfunction / behavior]
+│   ├── CAP-[DOMAIN]-01-01 — [Subfunction]
+│   │   └── REQ-[DOMAIN]-001 — [P0 behavior]
+│   └── CAP-[DOMAIN]-01-02 — [Subfunction]
+│       └── REQ-[DOMAIN]-002 — [P1 behavior]
 └── CAP-[DOMAIN]-02 — [Function]
-    └── REQ-[DOMAIN]-003 — [Subfunction / behavior]
+    └── CAP-[DOMAIN]-02-01 — [Subfunction]
+        └── REQ-[DOMAIN]-003 — [Behavior]
 ~~~
 
 Tree review:
@@ -92,7 +95,7 @@ Unchanged-by-reference.
 
 | Capability / requirement ID | Parent capability | Priority | Delta | Summary | Rationale | Dependencies |
 |---|---|---|---|---|---|---|
-| REQ-[AREA]-001 | CAP-[AREA]-01 | P0 / P1 / P2 | | | | |
+| REQ-[AREA]-001 | CAP-[AREA]-01-01 | P0 / P1 / P2 | | | | |
 
 ## 5. User Flows and State Coverage
 
@@ -136,7 +139,16 @@ individual fields `N/A` with a reason when they do not apply.
 |---|---|---|---|---|---|---|
 | REQ-[AREA]-001 / [operation] | | | | | | |
 
-## 7. Detailed Requirements
+## 7. Domain Rules and Invariants
+
+Use stable `RULE-*` IDs for consequential rules shared by requirements or system
+surfaces. Keep a requirement-local rule within its detailed requirement.
+
+| Rule ID | Rule / invariant | Applies to REQ/capability/data | Valid states / scope | Violation behavior and repair | Audit / verification |
+|---|---|---|---|---|---|
+| RULE-[AREA]-001 | | | | | TEST-* / signal |
+
+## 8. Detailed Requirements
 
 ### REQ-[AREA]-001 — [Requirement Name]
 
@@ -146,6 +158,7 @@ individual fields `N/A` with a reason when they do not apply.
 - **Trigger**: [Event or user action]
 - **User-visible behavior**: [Observable product contract]
 - **Business rules**: [Limits, ordering, calculations, ownership, conflicts]
+- **Linked rules/invariants**: [RULE-* IDs or requirement-local invariant]
 - **Data contract**: [Inputs, outputs, source, validation, defaults, retention]
 - **Dependencies**: [Other requirements, policies, services, operations]
 
@@ -165,13 +178,21 @@ individual fields `N/A` with a reason when they do not apply.
 - **Success signal**: [Metric, event, log, audit record, or N/A]
 - **Failure signal**: [Metric, event, log, support diagnostic, or N/A]
 
-## 8. Non-Functional Requirements
+## 9. Non-Functional Requirements
 
 | ID | Category | Requirement and measurable target | Validation method | Applies to |
 |---|---|---|---|---|
-| NFR-001 | Performance / Availability / Security / Privacy / Accessibility / Compatibility / Localization / Capacity | | | |
+| NFR-[AREA]-001 | Performance / Availability / Security / Privacy / Accessibility / Compatibility / Localization / Capacity | | | |
 
-## 9. Change Impact Analysis
+### Data Lifecycle, Audit, and Diagnostics
+
+Complete for affected data or mark individual rows `N/A` with rationale.
+
+| Data/domain | Owner/source | Create/validate/update | Retain/archive/delete | Restore/correct/export | Sensitivity/access | Audit/support evidence |
+|---|---|---|---|---|---|---|
+| | | | | | | |
+
+## 10. Change Impact Analysis
 
 Complete for Change mode; otherwise mark N/A.
 
@@ -184,14 +205,14 @@ Complete for Change mode; otherwise mark N/A.
 | Analytics and audit | | | |
 | Tests and operations | | | |
 
-## 10. Delivery Constraints
+## 11. Delivery Constraints
 
 - **Rollout / feature flags**: [Required behavior or N/A]
 - **Migration / backward compatibility**: [Requirement or N/A]
 - **Rollback expectations**: [User/data behavior on rollback]
 - **Support and communication**: [Training, release note, support impact, or N/A]
 
-## 11. Risks, Questions, and Decisions
+## 12. Risks, Questions, and Decisions
 
 ### Risks
 
@@ -211,17 +232,21 @@ Complete for Change mode; otherwise mark N/A.
 |---|---|---|---|---|
 | | | | | |
 
-## 12. Definition of Ready
+## 13. Definition of Ready
 
 - [ ] Goals and non-goals are explicit.
 - [ ] Capability tree covers modules, functions, and applicable subfunctions.
 - [ ] Every P0 leaf maps to a detailed requirement; no detailed requirement is orphaned.
 - [ ] Every P0 requirement has a stable ID and acceptance criteria.
-- [ ] Applicable actors, rules, data constraints, and edge cases are covered.
+- [ ] Applicable actors, data constraints, and edge cases are covered.
+- [ ] Consequential domain rules/invariants have stable IDs, affected scope,
+      violation behavior, and acceptance/verification links.
 - [ ] Stateful behavior has a transition table including guards, terminal states, and invalid transitions.
 - [ ] Applicable operations define concurrency, idempotency, cancellation, recovery, partial success, and permission-change behavior.
 - [ ] Non-functional targets are measurable or marked N/A with a reason.
+- [ ] Affected data defines ownership, lifecycle, access, audit, and support/observability evidence.
 - [ ] Change mode includes baseline and cross-layer impact analysis.
-- [ ] Blocking questions and conflicting sources are resolved or assigned.
+- [ ] Blocking questions and conflicting sources affecting the slice are resolved;
+      unresolved items are explicitly out of scope or approved assumptions, not merely assigned.
 - [ ] Approver and approval status are recorded.
-```
+````

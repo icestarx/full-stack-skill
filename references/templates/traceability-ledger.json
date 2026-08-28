@@ -1,0 +1,33 @@
+{
+  "schema_version": 1,
+  "product": "Example product",
+  "artifacts": [
+    {"id": "CAP-AREA-01", "type": "CAP", "title": "Example capability", "version_line": "v1", "status": "approved", "owner": "product"},
+    {"id": "REQ-AREA-001", "type": "REQ", "title": "Example behavior", "version_line": "v1", "status": "approved", "owner": "product"},
+    {"id": "RULE-AREA-001", "type": "RULE", "title": "Example invariant", "version_line": "v1", "status": "approved", "owner": "product"},
+    {"id": "AC-AREA-001", "type": "AC", "title": "Example acceptance", "version_line": "v1", "status": "approved", "owner": "product"},
+    {"id": "TASK-AREA-001", "type": "TASK", "title": "Implement example", "version_line": "v1", "status": "done", "owner": "engineering"},
+    {"id": "src/example.ts:example", "type": "CODE", "title": "Implementation symbol", "version_line": "v1", "status": "merged", "owner": "engineering", "location": "src/example.ts:example"},
+    {"id": "TEST-AREA-001", "type": "TEST", "title": "Acceptance test", "version_line": "v1", "status": "passed", "owner": "verification", "location": "tests/example.test.ts:example"},
+    {"id": "PR-123", "type": "PR", "title": "Pull request 123", "version_line": "v1", "status": "merged", "owner": "engineering", "location": "https://example.invalid/pull/123"},
+    {"id": "BUILD-456", "type": "BUILD", "title": "Immutable build 456", "version_line": "v1", "status": "passed", "owner": "delivery"},
+    {"id": "RELEASE-1.0.0", "type": "RELEASE", "title": "Release 1.0.0", "version_line": "v1", "status": "released", "owner": "delivery"},
+    {"id": "OBS-example-success", "type": "OBS", "title": "Example success metric", "version_line": "v1", "status": "healthy", "owner": "operations", "location": "https://example.invalid/dashboard/example"}
+  ],
+  "edges": [
+    {"source": "CAP-AREA-01", "source_type": "CAP", "relationship": "contains", "target": "REQ-AREA-001", "target_type": "REQ", "version_line": "v1", "status": "valid", "evidence": "docs/versions/v1/product/requirements/example.md", "owner": "product", "last_verified": "2026-01-01"},
+    {"source": "CAP-AREA-01", "source_type": "CAP", "relationship": "contains", "target": "RULE-AREA-001", "target_type": "RULE", "version_line": "v1", "status": "valid", "evidence": "docs/versions/v1/product/requirements/example.md", "owner": "product", "last_verified": "2026-01-01"},
+    {"source": "REQ-AREA-001", "source_type": "REQ", "relationship": "accepted_by", "target": "AC-AREA-001", "target_type": "AC", "version_line": "v1", "status": "valid", "evidence": "docs/versions/v1/product/requirements/example.md", "owner": "product", "last_verified": "2026-01-01"},
+    {"source": "REQ-AREA-001", "source_type": "REQ", "relationship": "planned_by", "target": "TASK-AREA-001", "target_type": "TASK", "version_line": "v1", "status": "valid", "evidence": "tracker:TASK-AREA-001", "owner": "engineering", "last_verified": "2026-01-01"},
+    {"source": "RULE-AREA-001", "source_type": "RULE", "relationship": "planned_by", "target": "TASK-AREA-001", "target_type": "TASK", "version_line": "v1", "status": "valid", "evidence": "tracker:TASK-AREA-001", "owner": "engineering", "last_verified": "2026-01-01"},
+    {"source": "TASK-AREA-001", "source_type": "TASK", "relationship": "implemented_by", "target": "src/example.ts:example", "target_type": "CODE", "version_line": "v1", "status": "valid", "evidence": "PR-123", "owner": "engineering", "last_verified": "2026-01-01"},
+    {"source": "AC-AREA-001", "source_type": "AC", "relationship": "verified_by", "target": "TEST-AREA-001", "target_type": "TEST", "version_line": "v1", "status": "valid", "evidence": "BUILD-456", "owner": "verification", "last_verified": "2026-01-01"},
+    {"source": "RULE-AREA-001", "source_type": "RULE", "relationship": "verified_by", "target": "TEST-AREA-001", "target_type": "TEST", "version_line": "v1", "status": "valid", "evidence": "BUILD-456", "owner": "verification", "last_verified": "2026-01-01"},
+    {"source": "src/example.ts:example", "source_type": "CODE", "relationship": "delivered_by", "target": "PR-123", "target_type": "PR", "version_line": "v1", "status": "valid", "evidence": "commit:abc123", "owner": "engineering", "last_verified": "2026-01-01"},
+    {"source": "TEST-AREA-001", "source_type": "TEST", "relationship": "delivered_by", "target": "PR-123", "target_type": "PR", "version_line": "v1", "status": "valid", "evidence": "PR-123 checks", "owner": "verification", "last_verified": "2026-01-01"},
+    {"source": "PR-123", "source_type": "PR", "relationship": "delivered_by", "target": "BUILD-456", "target_type": "BUILD", "version_line": "v1", "status": "valid", "evidence": "ci:456", "owner": "delivery", "last_verified": "2026-01-01"},
+    {"source": "BUILD-456", "source_type": "BUILD", "relationship": "delivered_by", "target": "RELEASE-1.0.0", "target_type": "RELEASE", "version_line": "v1", "status": "valid", "evidence": "deployment:789", "owner": "delivery", "last_verified": "2026-01-01"},
+    {"source": "REQ-AREA-001", "source_type": "REQ", "relationship": "observed_by", "target": "OBS-example-success", "target_type": "OBS", "version_line": "v1", "status": "valid", "evidence": "release:1.0.0 observation", "owner": "operations", "last_verified": "2026-01-01"}
+  ],
+  "exceptions": []
+}

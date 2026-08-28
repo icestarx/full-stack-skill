@@ -1,159 +1,135 @@
 # End-to-End Traceability
 
-Read this reference before creating lifecycle documents and again at planning,
-review, release, and retrospective gates. Traceability is a maintained evidence
-graph, not a one-time matrix appended after development.
+Traceability is a maintained evidence graph, not a one-time matrix. Read this when
+creating committed IDs and again at planning, merge, release, and learning gates.
 
-## Trace Model
+## Graph Model
 
-The required forward chain is:
+Logical intent and physical delivery use explicit nodes and edges:
 
 ```text
-CAP → REQ → AC → design/decision → TASK → code → TEST → PR/build → release → OBS
+CAP contains REQ/RULE/NFR
+REQ accepted_by AC
+REQ/AC/RULE/NFR constrained_by DESIGN/PDR/ADR/CONTRACT
+REQ/AC/RULE/NFR/BUG/TECH/SEC/OPS planned_by TASK
+TASK/REQ/RULE/NFR implemented_by CODE
+AC/RULE/NFR/BUG/TECH/SEC/OPS verified_by TEST
+TASK/CODE/TEST delivered_by PR
+PR delivered_by BUILD
+BUILD delivered_by RELEASE
+REQ/AC/RULE/NFR observed_by OBS
 ```
 
-The chain must also work backward: a production signal, test, code change, or PR
-must identify the requirement or explicitly classified non-product work that
-justified it.
+`CODE`, `PR`, `BUILD`, `RELEASE`, and `OBS` above are artifact types, not invented
+ID prefixes. Use native repository paths/symbols, PR numbers/URLs, commit SHAs,
+artifact IDs/digests, release tags/deployment IDs, feature flags, dashboards,
+metrics, logs, traces, alerts, and audit references.
 
-## Stable Identifiers
+The graph must work backward: a production signal, release, build, PR, test, or code
+change identifies the requirement/NFR or classified non-product origin that
+justified it. Lean projects may omit inapplicable logical intermediates only where
+the relationship schema permits it. Delivery evidence must still keep PR, build,
+and release nodes distinct rather than collapsing them into an ambiguous target.
 
-Use immutable IDs for logical artifacts:
+## Stable Logical IDs
 
 | Prefix | Artifact |
 |---|---|
 | `CAP-*` | Module, function, or subfunction capability |
-| `REQ-*` | Functional or quality requirement |
+| `REQ-*` | Functional/product requirement |
+| `RULE-*` | Consequential domain rule or invariant |
+| `NFR-*` | Measurable non-functional requirement |
 | `AC-*` | Acceptance criterion |
 | `PDR-*` / `ADR-*` | Product or architecture decision |
-| `CHG-*` | Active change work item that coordinates track state and evidence |
+| `CHG-*` | Active change container; never a substitute origin |
 | `TASK-*` | Planned implementation or verification work |
-| `TEST-*` | Stable test scenario or test-case record |
-| `BUG-*`, `TECH-*`, `SEC-*`, `OPS-*` | Valid non-feature work origins |
+| `TEST-*` | Stable test scenario/case |
+| `BUG-*`, `TECH-*`, `SEC-*`, `OPS-*` | Non-feature work origins |
 
-Keep native identifiers for physical evidence: repository paths and symbols, PR
-numbers, commit SHAs, build/artifact IDs, release tags, feature flags, dashboards,
-metrics, logs, traces, and alerts. Do not invent `CODE-*` IDs or add requirement
-comments throughout source files. Prefer `path:symbol` because line numbers drift.
+Never reuse a logical ID. Preserve it while observable semantics remain compatible.
+When released semantics change incompatibly, create a successor and connect it with
+`supersedes` / `superseded_by`.
 
-Never reuse an ID. If semantics change after release, create a new ID and connect
-it with `supersedes` / `superseded_by`.
+## Relationship Schema
 
-`CHG-*` is a container, not a substitute origin. Its slices and tasks still point
-to a valid `REQ/AC/BUG/TECH/SEC/OPS` reason for the work.
-
-## Relationship Ledger
-
-Maintain a normalized link ledger rather than one increasingly wide row per
-requirement. Use the project's issue tracker or ALM system when it already provides
-durable bidirectional links; otherwise use a repository-local ledger based on
-`references/templates/traceability-ledger.md`.
-
-For medium/large projects, keep the canonical edges in structured tracker fields or
-a machine-readable companion and validate required relationships in CI. A manually
-maintained Markdown-only ledger is a lean fallback for small projects, not the
-preferred large-project control plane. Do not parse arbitrary prose to infer gates.
-
-Supported relationships include:
-
-| Relationship | Meaning |
+| Relationship | Valid intent |
 |---|---|
-| `contains` | Parent capability contains a child capability or requirement |
+| `contains` | Capability contains a child capability, requirement, domain rule, or NFR |
 | `accepted_by` | Requirement defines acceptable behavior through an AC |
-| `verified_by` | AC/requirement is verified by a test or approved review artifact |
-| `constrained_by` | Requirement or implementation is governed by a decision/contract |
-| `planned_by` | Requirement/AC/non-product origin is covered by a task |
-| `implemented_by` | Task or requirement maps to code path and symbol |
-| `delivered_by` | Work is included in a PR, build, or release |
-| `observed_by` | Released behavior has a production signal or audit evidence |
-| `supersedes` | A new artifact replaces an older semantic contract |
-| `blocks` | An unresolved artifact prevents downstream readiness |
+| `verified_by` | AC/RULE/NFR/origin is verified by a TEST record, including approved manual-review evidence when applicable |
+| `constrained_by` | Intent/implementation is governed by design, decision, or contract |
+| `planned_by` | Intent or non-product origin is covered by a task |
+| `implemented_by` | Task or intent maps to an actual code/config/data symbol/path |
+| `delivered_by` | Artifact is included in the next physical delivery artifact |
+| `observed_by` | Released intent maps to a production/operational signal |
+| `supersedes` / `superseded_by` | Semantic replacement link |
+| `blocks` | Unresolved artifact prevents a gate |
 
-Each edge records source, relationship, target, version line, status, evidence,
-owner, and last verification. Allowed statuses are `planned`, `valid`, `stale`,
-`blocked`, and `deprecated`. A link without resolvable evidence is not `valid`.
+Every edge records source, relationship, target, source/target types, version line,
+status, evidence, owner, and last verification. Edge statuses are `planned`,
+`valid`, `stale`, `blocked`, and `deprecated`. Artifact lifecycle statuses are owned
+by their source system and must not be confused with edge status.
 
-## Stage Responsibilities
+Use the repository tracker/ALM when it provides durable fields and bidirectional
+queries. Otherwise:
 
-### Requirements and Design
+- small projects may use `references/templates/traceability-ledger.md`;
+- medium/large projects should use the JSON companion described by
+  `references/schemas/traceability.schema.json`, optionally generating Markdown coverage views;
+- CI should validate the structured ledger with `scripts/validate_traceability.py`.
 
-- Create `CAP`, `REQ`, and `AC` IDs in the approved baseline.
-- Link `REQ accepted_by AC`; link `AC verified_by TEST` or approved evidence.
-- Map every committed requirement to applicable UX flows/states, design sections,
-  PDR/ADR decisions, API/data contracts, or an explicit `N/A` exception.
-- A shared design or contract may satisfy several requirements; link each one.
+Do not infer gate-critical relationships from arbitrary prose.
 
-### Planning and Implementation
+## Track Responsibilities
 
-- Keep the active four-track state in one `CHG-*` work item or equivalent tracker
-  record; do not duplicate authoritative PRD, design, or test contents there.
-- Every task must have at least one source ID: `REQ/AC`, `BUG`, `TECH`, `SEC`, or `OPS`.
-- Record expected code and test surfaces during planning; replace expectations with
-  actual `path:symbol` and `TEST-*` evidence during implementation.
-- Shared foundation tasks list every known consumer or a documented cross-cutting origin.
-- Do not rely on branch names or commit messages as the only durable link.
+### Product
 
-### Tests and Review
+- Create `CAP/REQ/RULE/NFR/AC` in the authoritative baseline.
+- Link `REQ accepted_by AC`; link requirements/NFRs to applicable design/decisions,
+  verification plans, and success/failure signals or explicit exceptions.
 
-- Every committed AC maps to at least one test or explicitly approved manual evidence.
-- Tests use a stable test ID plus the framework's test path/name or case-system URL.
-- Review checks forward coverage, backward orphans, stale links, and whether changed
-  behavior updated its source requirement rather than only downstream artifacts.
+### Engineering
 
-### PR and Release
+- Give every `TASK` a `REQ/AC/RULE/NFR/BUG/TECH/SEC/OPS` origin.
+- Record expected code/test surfaces while planning; replace them with actual paths,
+  symbols, contracts, migrations, and tests during implementation.
 
-Behavior-changing PRs include affected IDs, code surfaces, test evidence, migration
-or compatibility impact, and ledger updates. Use native tracker-closing syntax only
-when the repository supports it; IDs remain portable.
+### Verification
 
-Before release, the manifest pins all committed requirements to accepted tests,
-PRs/commits, build artifacts, deployment evidence, and applicable production
-signals. A release note is not verification evidence by itself.
+- Map every committed AC/RULE/NFR to accepted tests or approved manual evidence.
+- Record stable TEST IDs plus native test paths/names/case URLs and immutable results.
+- Audit forward gaps, backward orphans, stale edges, and circular/ambiguous evidence.
 
-### Operations and Learning
+### Delivery & Learning
 
-Map critical released requirements to success/failure metrics, logs, traces, audit
-events, alerts, or a justified `N/A`. Incidents and retrospectives reference the
-affected release and requirement IDs and may create new `BUG/TECH/OPS/REQ` origins.
+- Link PRs, commits, builds/artifacts, deployments/releases, and applicable
+  production signals as distinct evidence.
+- Incidents reference affected requirements/NFRs and releases and create durable
+  `BUG/TECH/SEC/OPS/REQ/RULE/NFR` follow-ups.
 
 ## Change Propagation
 
-When a requirement, AC, or governing decision changes:
+When a requirement, rule/invariant, NFR, AC, or governing decision changes:
 
-1. retain the original ID only if its observable semantics remain compatible;
-2. otherwise create a successor and record `supersedes`;
+1. retain its ID only if observable semantics remain compatible;
+2. otherwise create a successor and record both replacement directions;
 3. mark affected downstream edges `stale` before implementation proceeds;
-4. inspect UX, architecture, contracts, tasks, code, tests, rollout, and observability;
-5. revalidate each edge or deprecate it with rationale;
+4. inspect UX, architecture, contracts, tasks, code, tests, rollout, and signals;
+5. revalidate or deprecate every affected edge with rationale;
 6. update every supported major-version baseline affected by the change.
 
-Never delete historical released edges merely to make current coverage look clean.
+Never delete released historical edges to improve current coverage.
 
-## Quality Gates
+## Gate Queries
 
-| Gate | Required evidence |
+| Gate | Required query outcome |
 |---|---|
-| Requirements ready | Committed `REQ` items have `AC`, owner, version line, and capability parent |
-| Design ready | Each committed `REQ/AC` maps to UX/design/decision/contracts or approved `N/A` |
-| Development ready | Tasks are dependency-ordered and every task has a valid origin ID |
-| PR ready | Changed IDs, actual code surfaces, tests, and ledger delta are present |
-| Release ready | No committed requirement has missing, stale, or blocked implementation/test/release edges |
-| Operability ready | Critical released behavior maps to signals/runbooks or approved `N/A` |
+| Change Ready | Committed `REQ/RULE/NFR` has owner, version, capability parent, AC/validation, and no affected blocker |
+| Slice Ready | Every task has a valid origin and planned verification/recovery evidence |
+| Merge Ready | Actual code/test/PR edges are resolvable; no unexplained stale or blocked affected edge |
+| Release Ready | PR→build→release evidence, accepted verification, compatibility, and approvals are pinned |
+| Learning Closed | Critical released intent has signals or exception; incidents/temporary mechanisms have dispositions |
 
-Current-release committed scope requires the complete chain. Future/deferred
-capabilities need only their capability and requirement definition until admitted
-to a release. Exceptions record owner, rationale, risk, expiry/review date, and
-alternative evidence.
-
-## Coverage Views
-
-Report at least:
-
-- committed requirements and acceptance criteria totals;
-- design, task, code, test, PR/build, release, and observability coverage;
-- orphan tasks/tests and behavior-changing PRs without origins;
-- `stale`, `blocked`, deprecated, and excepted edges;
-- released requirements without accepted verification evidence.
-
-Coverage percentages are diagnostic. A nominal 100% with weak or circular evidence
-does not pass a gate.
+Exceptions record artifact/edge, rationale, risk, alternative evidence, approver,
+owner, and review/expiry. Coverage percentages are diagnostic; circular or weak
+evidence does not pass a gate.

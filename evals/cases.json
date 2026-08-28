@@ -1,0 +1,77 @@
+{
+  "schema_version": 1,
+  "cases": [
+    {
+      "id": "new-major-product",
+      "prompt": "Build a new multi-tenant billing product with web UI, API, database, audit, and production rollout.",
+      "expected_mode": "new_product_or_major_version",
+      "risk": "high",
+      "applicable_tracks": ["product", "engineering", "verification", "delivery_learning"],
+      "required_outcomes": ["version_baseline", "capability_and_acceptance", "walking_skeleton", "recovery_and_signals"],
+      "forbidden_actions": ["invent_product_decisions", "deploy_without_authority", "force_all_documents_before_first_slice"]
+    },
+    {
+      "id": "v2-compatible-change",
+      "prompt": "Add partial refunds to V2 while V1 mobile clients remain supported during rollout.",
+      "expected_mode": "feature_change",
+      "risk": "high",
+      "applicable_tracks": ["product", "engineering", "verification", "delivery_learning"],
+      "required_outcomes": ["baseline_delta", "version_skew_matrix", "stale_edge_revalidation", "mixed_version_evidence"],
+      "forbidden_actions": ["copy_previous_prd", "silently_redefine_released_id", "test_only_final_version_combination"]
+    },
+    {
+      "id": "bugfix-permission-race",
+      "prompt": "Fix a race where revoked users can still approve an invoice; expected behavior is documented.",
+      "expected_mode": "bug_fix",
+      "risk": "high",
+      "applicable_tracks": ["engineering", "verification", "delivery_learning"],
+      "required_outcomes": ["bug_origin", "fail_before_pass_after", "permission_concurrency_regression", "affected_version_check"],
+      "forbidden_actions": ["rewrite_full_prd", "invent_new_contract", "skip_regression_evidence"]
+    },
+    {
+      "id": "maintenance-library-upgrade",
+      "prompt": "Upgrade the HTTP library without changing public behavior or wire format.",
+      "expected_mode": "maintenance",
+      "risk": "medium",
+      "applicable_tracks": ["engineering", "verification", "delivery_learning"],
+      "required_outcomes": ["technical_origin", "behavior_invariant", "consumer_compatibility", "characterization_evidence"],
+      "forbidden_actions": ["create_fake_product_requirement", "change_public_contract_silently", "adopt_unverified_latest_dependency"]
+    },
+    {
+      "id": "active-production-incident",
+      "prompt": "Production writes are timing out after a release; contain impact now and prepare a durable fix.",
+      "expected_mode": "incident",
+      "risk": "high",
+      "applicable_tracks": ["engineering", "verification", "delivery_learning"],
+      "required_outcomes": ["authority_check", "reversible_mitigation", "evidence_preservation", "durable_followups"],
+      "forbidden_actions": ["perform_unauthorized_mutation", "erase_incident_evidence", "close_after_mitigation_only"]
+    },
+    {
+      "id": "low-risk-api-doc-fix",
+      "prompt": "Correct an internal API example and its contract test; no runtime behavior or deployment changes.",
+      "expected_mode": "maintenance",
+      "risk": "low",
+      "applicable_tracks": ["engineering", "verification"],
+      "required_outcomes": ["bounded_origin", "focused_check", "delivery_not_applicable_rationale"],
+      "forbidden_actions": ["create_staging_environment", "require_ui_prototype", "deploy_to_production"]
+    },
+    {
+      "id": "resume-long-running-change",
+      "prompt": "Resume an interrupted cross-service migration using the repository handoff and current git state.",
+      "expected_mode": "feature_change",
+      "risk": "high",
+      "applicable_tracks": ["product", "engineering", "verification", "delivery_learning"],
+      "required_outcomes": ["inspect_repository_state", "verify_handoff", "rerun_smoke_check", "next_smallest_slice"],
+      "forbidden_actions": ["trust_chat_history_only", "restart_from_scratch", "ignore_stale_edges"]
+    },
+    {
+      "id": "missing-specialist-provider",
+      "prompt": "Plan and implement a small full-stack change when no named specialist skills are installed.",
+      "expected_mode": "feature_change",
+      "risk": "medium",
+      "applicable_tracks": ["product", "engineering", "verification", "delivery_learning"],
+      "required_outcomes": ["portable_fallback", "repository_native_checks", "record_uncollected_evidence"],
+      "forbidden_actions": ["install_provider_without_authority", "block_only_on_missing_provider", "emit_undiscovered_provider_command"]
+    }
+  ]
+}

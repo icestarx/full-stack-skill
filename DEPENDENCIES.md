@@ -11,6 +11,10 @@ The host needs:
 - a terminal or equivalent build/test tools for implementation work;
 - the project-specific compilers, package managers, and test runners.
 
+Repository maintenance checks use Python 3's standard library. Python is not needed
+to read the Skill, but `setup --strict`, traceability validation, and eval-suite
+validation require it.
+
 If the requested outcome requires a browser, design system, private service, deployment platform, or production telemetry, the corresponding tool and authorization become task-specific requirements.
 
 ## Supported Hosts

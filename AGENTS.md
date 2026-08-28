@@ -2,9 +2,9 @@
 
 ## Project Structure & Module Organization
 
-This repository defines a portable full-stack lifecycle skill rather than a deployable application. `SKILL.md` is the concise four-track router; `references/four-track-model.md` defines track ownership, change modes, synchronization gates, and vertical-slice execution. The historical 15 steps remain a detailed activity catalog in `references/process-steps.md`, not a fixed waterfall. `references/platform-adapters.md` defines host-neutral capability contracts and Codex/Claude adapters; `agents/openai.yaml` supplies Codex-facing metadata. Reusable document skeletons are in `references/templates/`, and the executable `setup` script audits core structure, supported hosts, and optional providers.
+This repository defines a portable full-stack lifecycle skill. `SKILL.md` is the four-track router; `references/four-track-model.md` defines state/gates, `references/operating-modes.md` defines playbooks, and `references/tracks/` holds conditional detail. A1-A15 remain an index in `references/process-steps.md`, not a waterfall. `references/platform-adapters.md` defines host-neutral capability contracts and Codex/Claude adapters; `agents/openai.yaml` supplies Codex metadata. Templates and schemas live under `references/`; `scripts/` validates structure, traceability, and eval contracts.
 
-When changing a track, activity, or gate, check `SKILL.md`, `references/four-track-model.md`, `references/process-steps.md`, `references/skills-mapping.md`, and the relevant template. Requirement-stage changes must stay aligned with `references/requirements-workflow.md`; versioning and evidence-chain changes must stay aligned with `references/document-organization.md` and `references/traceability.md`. Avoid duplicating detailed instructions in the README.
+When changing a track, mode, activity, or gate, check `SKILL.md`, the corresponding track/mode reference, `references/process-steps.md`, `references/skills-mapping.md`, affected templates, validators, and eval cases. Requirement changes must stay aligned with `references/requirements-workflow.md`; versioning and evidence-chain changes must stay aligned with `references/document-organization.md`, `references/traceability.md`, and its JSON schema. Avoid duplicating detailed instructions in the README.
 
 ## Build, Test, and Development Commands
 
@@ -12,8 +12,10 @@ There is no compilation step or package-manager setup. Use these checks from the
 
 ```bash
 bash setup          # Audit the runtime and optional providers
-bash setup --strict # Fail only when the core skill is invalid
+bash setup --strict # Fail only when core validation is invalid
 bash -n setup       # Validate Bash syntax without executing it
+python3 scripts/validate_skill.py # Validate metadata, references, Markdown, schema, and eval suite
+python3 scripts/run_evals.py      # Validate behavior-eval case coverage
 shellcheck setup    # Run optional static analysis when ShellCheck is installed
 git diff --check    # Detect whitespace errors in all edits
 ```
@@ -28,7 +30,7 @@ For Bash, retain `#!/usr/bin/env bash` and `set -euo pipefail`. Quote variable e
 
 ## Testing Guidelines
 
-No automated test framework or repository coverage threshold currently exists. For documentation changes, verify links, command examples, capability identifiers, track/activity mappings, and consistency across affected files. For runtime changes, run `bash -n setup`, `bash setup --strict`, the skill validator, and `git diff --check`.
+The Python validators use only the standard library. For documentation changes, verify links, examples, capability identifiers, track/activity mappings, and consistency across affected files. For runtime/schema/eval changes, run `python3 scripts/validate_skill.py`, focused validator/eval commands, `bash -n setup`, `bash setup --strict`, and `git diff --check`.
 
 ## Commit & Pull Request Guidelines
 

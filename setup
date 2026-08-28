@@ -45,6 +45,11 @@ CORE_FILES=(
     'DEPENDENCIES.md'
     'references/platform-adapters.md'
     'references/four-track-model.md'
+    'references/operating-modes.md'
+    'references/tracks/product.md'
+    'references/tracks/engineering.md'
+    'references/tracks/verification.md'
+    'references/tracks/delivery-learning.md'
     'references/document-organization.md'
     'references/requirements-workflow.md'
     'references/traceability.md'
@@ -52,10 +57,17 @@ CORE_FILES=(
     'references/templates/change-work-item.md'
     'references/templates/verification-evidence.md'
     'references/templates/traceability-ledger.md'
+    'references/templates/traceability-ledger.json'
+    'references/schemas/traceability.schema.json'
     'references/templates/version-manifest.md'
     'references/templates/release-manifest.md'
     'references/process-steps.md'
     'references/skills-mapping.md'
+    'scripts/validate_skill.py'
+    'scripts/validate_traceability.py'
+    'scripts/run_evals.py'
+    'evals/cases.json'
+    'evals/rubric.md'
     'agents/openai.yaml'
 )
 
@@ -75,6 +87,21 @@ fi
 
 if ! grep -Fq '$full-stack-skill' "$SKILL_DIR/agents/openai.yaml" 2>/dev/null; then
     printf '  %-40s %s\n' 'Codex default prompt' "$(fail) missing explicit invocation"
+    CORE_FAILURES=$((CORE_FAILURES + 1))
+fi
+
+printf '\n%s\n' "$(bold 'Deterministic validation')"
+printf '%s\n' '-------------------------------------'
+if command -v python3 >/dev/null 2>&1; then
+    if validation_output="$(python3 "$SKILL_DIR/scripts/validate_skill.py" 2>&1)"; then
+        printf '  %-40s %s\n' 'Skill/schema/eval validation' "$(ok)"
+    else
+        printf '  %-40s %s\n' 'Skill/schema/eval validation' "$(fail)"
+        printf '%s\n' "$validation_output" | sed 's/^/    /'
+        CORE_FAILURES=$((CORE_FAILURES + 1))
+    fi
+else
+    printf '  %-40s %s\n' 'Python 3 validator runtime' "$(fail) missing"
     CORE_FAILURES=$((CORE_FAILURES + 1))
 fi
 

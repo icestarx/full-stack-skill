@@ -1,41 +1,48 @@
-# Technology Selection Guide
+# Technology Decision Guide
 
-> Read this reference when at **Step 4 (Technical Planning)** or whenever a technology choice is needed.
+Read only when a material technology choice is actually open. Existing repository
+standards, team support, compatibility, and operational constraints outweigh generic
+tool popularity. Verify current support/security status in primary documentation;
+do not rely on this skill for a timeless product shortlist.
 
-## Default Choices
+## Decision Inputs
 
-When choosing technology, consider: team expertise, ecosystem maturity, performance requirements, and long-term maintenance. Here are sensible defaults:
+- Required behavior and measurable NFRs
+- Existing architecture, languages, deployment, data, and observability
+- Team ownership, support horizon, hiring/on-call capability, and migration cost
+- Ecosystem maturity, release cadence, security history, licensing, and exit path
+- Compatibility with supported clients, stored formats, integrations, and tooling
+- Total cost: build, operate, upgrade, debug, recover, and eventually replace
 
-| Problem | Default Choice | When to Deviate |
-|---------|---------------|-----------------|
-| Web app | Next.js + TypeScript | Astro for content, Svelte for perf |
-| Mobile (cross-platform) | React Native (Expo) | Flutter for pixel-perfect, embedded |
-| Mobile (Apple only) | SwiftUI | UIKit for complex custom interactions |
-| Mobile (Android only) | Jetpack Compose | XML-based for legacy codebases |
-| Desktop (cross-platform) | Tauri | Electron for larger teams, WPF for Windows-only |
-| API server | FastAPI (Python) or Hono (TS) | Go for high-throughput, Rust for systems |
-| Database | PostgreSQL | MongoDB for document-first, DynamoDB for serverless |
-| Cache | Redis | In-memory for single-instance |
-| Queue | BullMQ (Node) or Celery (Python) | Kafka for event streaming at scale |
-| Hosting | Vercel/Railway for apps, VPS for services | AWS/GCP when you need their managed services |
-| Auth | Lucia (TS) or Ory (self-hosted) | Auth0/Clerk for managed, Keycloak for enterprise |
-| Observability | OpenTelemetry + Grafana | Datadog for managed, Sentry for error tracking |
+## Selection Process
 
-These are starting points, not dogma. The right choice depends on context.
+1. First test whether the existing stack satisfies the requirement.
+2. Define knockout constraints and weighted criteria before naming candidates.
+3. Verify candidate status and required versions from official sources.
+4. Shortlist the smallest credible set; avoid broad comparative research without a
+   decision it can change.
+5. Run a bounded spike for uncertain, high-impact claims using representative load,
+   integration, deployment, debugging, and failure/recovery paths.
+6. Record the decision, evidence, alternatives, consequences, owner, and revisit trigger.
 
-## Selection Principles
+## Decision Record
 
-- **Start simple.** Monolith first, microservices when you have a reason. Modular monolith is the sweet spot for most applications.
-- **Domain-driven boundaries.** Organize code around business domains, not technical layers.
-- **Data flow.** Make data flow explicit. Event-driven for async communication, request-response for synchronous. CQRS when read/write patterns diverge.
-- **Integration patterns.** Idempotency keys for at-least-once delivery. Outbox pattern for reliable event publication. Saga for distributed transactions. Circuit breaker for external service calls.
-- **Document decisions.** Architecture Decision Records (ADRs) for significant choices. Document the why, not the what — code already tells you what.
+| Criterion | Weight | Existing option | Candidate A | Candidate B | Evidence |
+|---|---:|---:|---:|---:|---|
+| Functional fit | | | | | |
+| Reliability/operability | | | | | |
+| Security/compliance | | | | | |
+| Compatibility/migration | | | | | |
+| Team/maintenance | | | | | |
+| Cost/exit path | | | | | |
 
-## Cross-Platform Strategy
+Scores support judgment; they do not replace knockout constraints or experimental
+evidence. Prefer reversible choices when evidence is weak.
 
-When a product spans web, mobile, and desktop:
+## Cross-Platform and Distributed Changes
 
-- **Shared business logic.** Type definitions, validation, calculations, and API clients should be shared. A validation rule implemented three times is three places to fix a bug.
-- **Platform-specific UI.** Share logic, not pixels — unless using a framework deliberately designed for cross-platform rendering (Flutter, React Native).
-- **API versioning.** Mobile clients can't be force-upgraded. APIs must support old client versions.
-- **Feature flags.** Ship features dark, enable per-platform, roll back without a deploy.
+- Make shared contracts explicit but keep platform-specific UX and lifecycle needs.
+- Treat clients that cannot be force-upgraded as independently versioned consumers.
+- Define schema/API/event compatibility windows and removal conditions.
+- For distributed writes, select idempotency, publication, compensation, and failure
+  isolation patterns from actual delivery guarantees rather than pattern fashion.

@@ -1,135 +1,125 @@
 # Four-Track Operating Model
 
-Read this reference when routing work, deciding which lifecycle activities are
-needed, or coordinating a change across product, engineering, quality, and
-operations. The tracks are responsibility streams, not team names or mandatory
-parallel agents.
+Read this reference when routing work, selecting gates, or coordinating product,
+engineering, verification, and delivery responsibilities. Tracks are responsibility
+streams, not team names or a requirement to use four agents.
 
-## The Four Tracks
+## Track Contracts
 
-| Track | Question | Owns | Continuous output |
+| Track | Question | Owns | Accepted evidence |
 |---|---|---|---|
-| Product | Are we building the right behavior? | Problem, capability scope, UX, domain rules, acceptance criteria, product decisions | Approved product baseline or delta |
-| Engineering | Can we change the system safely? | Reconnaissance, architecture, contracts, tasks, code, migrations, technical decisions | Small, integrated vertical slices |
-| Verification | What evidence proves it works and remains safe? | Test design, deterministic checks, exploratory review, security/accessibility/performance evidence, trace coverage | Accepted or blocked evidence |
-| Delivery & Learning | Can we release, operate, and improve it? | Environments, rollout, compatibility, release records, observability, incidents, feedback | Releasable artifacts and production learning |
+| Product | Are we building the right behavior? | Problem, capability scope, UX, domain rules, acceptance, product decisions | Approved baseline/delta and `CAP/REQ/RULE/NFR/AC` links |
+| Engineering | Can the system change coherently? | Reconnaissance, architecture, contracts, slices, code, migrations | Decisions, impact map, actual code/contracts, integrated slices |
+| Verification | What proves the change works and remains safe? | Test design, deterministic checks, review, risk evidence | Stable tests, results, findings, exceptions |
+| Delivery & Learning | Can it be delivered, operated, recovered, and improved? | Environments, compatibility, rollout, observability, incidents, feedback | Distinct build and deployment evidence, production signals, owned learning |
 
-Verification starts when acceptance criteria are written. Delivery starts when
-compatibility, environments, and observability affect the design. Do not postpone
-either track until coding is complete.
+Verification begins when acceptance is defined. Delivery concerns begin when
+compatibility, migration, environment, or observability choices can affect design.
 
-## Shared Change Control
+## Shared Change State
 
-Create one change work item from `references/templates/change-work-item.md` for
-substantial work. It is the shared control plane for all tracks and references the
-canonical baseline, traceability ledger, tasks, evidence, and release records.
+For substantial work, keep one `CHG-*` record or equivalent tracker item as the
+shared control plane. It links to canonical artifacts rather than copying them.
 
-Use these states:
+Canonical states use lowercase snake case:
 
 ```text
-proposed → ready → in_progress → merge_ready → releasable → observing → closed
-                    ↘ blocked     ↘ cancelled
+proposed → ready → in_progress → merge_ready → release_ready → observing → closed
+    └──────────────→ cancelled       │              │
+                  any nonterminal → blocked → prior_state
 ```
 
-State is evidence-based. A track's narrative claim cannot advance the shared state
-without the required links or approved exception.
+| Transition | Required gate/evidence | Authority |
+|---|---|---|
+| `proposed → ready` | Change Ready | Change owner; named approval when risk requires it |
+| `ready → in_progress` | At least one Slice Ready | Change owner |
+| `in_progress → merge_ready` | Every committed slice is Merge Ready | Engineering and Verification evidence owners |
+| `merge_ready → release_ready` | Release Ready, or delivery explicitly `N/A` for non-released work | Release/change owner |
+| `release_ready → observing` | Artifact delivered to its intended cohort/environment | Delivery owner |
+| `observing → closed` | Learning Closed | Change owner |
+| `* → blocked` | Missing decision, evidence, authorization, or external dependency recorded | Any track owner |
+| `blocked → prior_state` | Blocking condition resolved and cheapest relevant check rerun | Owner of the blocking condition |
+| `proposed/ready/in_progress → cancelled` | Cancellation rationale and cleanup/disposition recorded | User or authorized change owner |
 
-## Operating Modes
+For work with no production delivery, record delivery as `N/A` with rationale,
+transition through `release_ready`, and close after merge/acceptance evidence. Never
+use `closed` to hide stale links or unfinished committed scope.
 
-| Mode | Default route |
-|---|---|
-| New product / major version | Establish all four tracks and a version baseline; execute the full relevant activity set |
-| Feature change | Record requirement/design deltas, inspect impact, deliver vertical slices, verify regressions, update the active baseline |
-| Bug fix | Reproduce and create `BUG-*`; clarify the product contract only if ambiguous; add regression evidence; use a proportionate release path |
-| Maintenance | Use `TECH-*`, `SEC-*`, or `OPS-*` origin; focus on impact, compatibility, deterministic verification, and recovery |
-| Incident | Mitigate first within incident authority; preserve evidence; then create durable fix, regression test, baseline/runbook updates, and learning actions |
-
-Do not regenerate every lifecycle document for each change. Update only the
-authoritative baseline, affected contracts, work item, evidence, and release record.
+Track-local status uses: `not_applicable`, `planned`, `active`, `blocked`,
+`evidence_ready`, `accepted`. A shared-state transition requires every applicable
+track to have the evidence named by that gate; it does not require identical local
+statuses.
 
 ## Risk Determines Depth
 
-Assess blast radius, reversibility, data sensitivity, external contracts, migration
-complexity, operational novelty, and uncertainty. Team size affects coordination and
-document form; it does not determine risk.
+Assess blast radius, reversibility, sensitive data, external contracts, migration
+complexity, operational novelty, and uncertainty. Team size affects coordination
+and document form, not risk.
 
-| Risk | Expected control depth |
+| Risk | Expected depth |
 |---|---|
-| Low | Lean work item, focused design notes, deterministic tests, ordinary review and release |
-| Medium | Explicit impact analysis, contract/regression coverage, independent review, staged rollout and monitored acceptance |
-| High | Formal product/architecture/security decisions, compatibility rehearsal, failure injection or load evidence where applicable, named approvals, canary and tested recovery |
+| Low | Lean record, focused design, deterministic affected checks, ordinary review and delivery |
+| Medium | Explicit impact/compatibility analysis, regression and contract evidence, independent review, staged delivery |
+| High | Formal product/architecture/security decisions, named approvals, recovery rehearsal, controlled cohort, applicable failure/load/privacy evidence |
 
-Raise risk when evidence is missing. Lowering risk requires a recorded rationale.
+Missing evidence raises uncertainty and therefore risk. Lowering risk requires a
+recorded rationale; it cannot be justified only by schedule pressure.
 
 ## Synchronization Gates
 
 ### Change Ready
 
-- Product: origin, scope, non-goals, and acceptance are clear.
-- Engineering: affected surfaces, dependencies, decisions, and unknowns are known.
-- Verification: planned evidence covers positive, negative, boundary, and recovery behavior.
-- Delivery & Learning: compatibility, rollout, rollback/roll-forward, and signals are addressed or explicitly `N/A`.
+- Product: origin, scope, non-goals, and acceptance are clear enough for the next slice.
+- Engineering: affected surfaces, dependencies, decisions, and unknowns are recorded.
+- Verification: planned evidence covers applicable positive, negative, boundary,
+  permission, concurrency, compatibility, and recovery behavior.
+- Delivery & Learning: rollout, recovery, signals, and operational ownership are
+  addressed or explicitly `N/A`.
+- No unresolved blocker affects the slice. Assigning a blocker an owner does not
+  satisfy this gate.
 
 ### Slice Ready
 
-The next vertical slice has an origin, bounded outcome, affected paths/contracts,
-acceptance evidence, dependencies, and recovery approach. It can be merged or
-reverted without waiting for unrelated slices.
+One independently useful or risk-reducing slice has a valid origin, bounded outcome,
+affected paths/contracts, dependencies, acceptance evidence, and recovery approach.
+It can be merged or reverted without waiting for unrelated slices.
 
 ### Merge Ready
 
-Actual code and test evidence replace planned links; deterministic checks pass;
-review findings are resolved; affected baselines, contracts, work item, and ledger
-are updated in the same change.
+Actual code/test evidence replaces plans, deterministic affected checks pass,
+review findings are resolved or approved as exceptions, and affected baselines,
+contracts, change state, and trace edges are synchronized.
 
 ### Release Ready
 
-Committed scope has no unexplained missing, stale, or blocked evidence; build and
-deployment artifacts are pinned; compatibility and migration checks pass; approval,
-rollback/roll-forward, and production signals are ready.
+Committed scope has no unexplained missing, stale, or blocked evidence. Immutable
+build inputs and artifacts, compatibility/migration evidence, approvals, recovery,
+and production signals are ready or explicitly inapplicable.
 
 ### Learning Closed
 
-The observation window completed; escaped defects and incidents have owners and
-regression actions; stale links and temporary flags/adapters have dispositions;
-reusable learning has updated requirements, tests, architecture rules, or runbooks.
+The risk-appropriate observation window has completed. Escaped defects, incidents,
+stale links, and temporary flags/adapters/migration states have owners and explicit
+dispositions. Reusable learning has updated a requirement, test, architecture rule,
+runbook, or backlog origin.
 
 ## Vertical-Slice Loop
 
-For each independently valuable or risk-reducing slice:
-
-1. Select the smallest ready slice from the change work item.
-2. Refine only the product and technical decisions needed for that slice.
-3. Define verification before implementation; capture fail-before evidence when
-   fixing a defect or changing observable behavior where practical.
-4. Implement and integrate the slice, keeping compatibility with in-flight versions.
+1. Select the smallest ready slice from the change record.
+2. Refine only the product and technical decisions required for that slice.
+3. Define verification before implementation; reproduce defects first when practical.
+4. Implement and integrate using the safest dependency order for this slice.
 5. Run focused deterministic checks, then risk-triggered independent review.
-6. Update actual trace links and pass Merge Ready.
-7. Merge or release according to the change strategy; do not accumulate a giant
-   end-of-project integration batch.
+6. Replace planned links with actual evidence and pass Merge Ready.
+7. Merge or deliver according to strategy, then select the next slice.
 
-## Mapping the 15 Activities
+Do not accumulate a large end-of-project integration batch. Do not force staging,
+browser tests, a prototype, or production delivery when the affected behavior and
+risk do not require them.
 
-The numbered activities remain a reusable detail catalog in
-`references/process-steps.md`; they are not a mandatory waterfall.
+## Long-Running Handoffs
 
-| Activities | Primary track | Supporting tracks |
-|---|---|---|
-| 1-3 Requirements, UX, confirmation | Product | Verification, Engineering |
-| 4-7 Architecture, decomposition, planning, contracts | Engineering | Product, Verification, Delivery & Learning |
-| 8 Environment setup | Delivery & Learning | Engineering, Verification |
-| 9 Development and integration | Engineering | Product, Verification |
-| 10-12 Review, PR, test evidence | Verification | Engineering, Delivery & Learning |
-| 13 Deployment | Delivery & Learning | Verification, Engineering |
-| 14-15 Monitoring and retrospective | Delivery & Learning | Product, Verification, Engineering |
-
-An activity may recur for every slice. Skip an activity only when its outcome is
-already proven or genuinely inapplicable, and record the evidence or rationale.
-
-## Long-Running Work and Handoffs
-
-At the end of a working session, update the work item with completed slices, actual
-verification commands/results, decisions, blockers, repository state, and the next
-smallest ready action. On resume, inspect repository status and re-run the cheapest
-relevant smoke check before trusting the handoff. Do not use chat history as the
-only durable state.
+Before ending a session, update the change record with completed slices, decisions,
+commands/results, blockers, repository state, and the next smallest ready action.
+On resume, inspect repository state and rerun the cheapest relevant smoke check
+before trusting the handoff. Conversation history is not durable project state.

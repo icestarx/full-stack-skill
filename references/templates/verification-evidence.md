@@ -3,10 +3,10 @@
 Use per vertical slice or PR. Prefer generated CI artifacts where available; this
 record indexes evidence and gaps rather than reproducing raw logs.
 
-```markdown
+````markdown
 # Verification — [CHG / Slice / PR]
 
-> **Origin and acceptance IDs**: [REQ/AC/BUG/TECH/SEC/OPS]
+> **Origin and acceptance IDs**: [REQ/AC/RULE/NFR/BUG/TECH/SEC/OPS]
 > **TASK / TEST IDs**: [IDs]
 > **Code under review**: [Commit / PR / paths and symbols]
 > **Environment / build**: [Immutable reference]
@@ -43,7 +43,7 @@ record indexes evidence and gaps rather than reproducing raw logs.
 
 ## Decision
 
-- Merge ready: Yes / No
-- Release ready: Yes / No / Not evaluated
+- `merge_ready`: Yes / No
+- `release_ready`: Yes / No / Not evaluated
 - Ledger updates:
-```
+````

@@ -1,51 +1,54 @@
-# Development Plan Document Template
+# Slice Plan Template
 
-```markdown
-# Development Plan — [Project Name]
+Use when the tracker/change record does not already provide equivalent fields. Do
+not invent dates or split work by technical phase when vertical slices are possible.
 
-> **Version line**: [v1 / v2 / ...]
-> **Release target**: [Release or TBD]
-> **Change work item**: [CHG-* path / tracker URL]
-> **Traceability ledger**: [Path or tracker URL]
+````markdown
+# Slice Plan — [Change / Project]
 
-## 1. Milestones
-| Milestone | Date | Contents | Delivery Criteria |
-|-----------|------|----------|-------------------|
-| M1: Infrastructure | D+3 | Project scaffold + CI skeleton + env vars | Local runnable, CI green |
-| M2: Env Setup | D+5 | Database init + staging deploy | Staging available |
-| M3: Auth Module | D+9 | Register/Login/Token refresh API | Integration tests pass |
-| M4: Core API | D+15 | Core business CRUD API | Contract/integration checks and risk-based coverage pass |
-| M5: Frontend Skeleton | D+10 | Routes + layouts + base components + design tokens | Pages accessible |
-| M6: Frontend Pages | D+18 | Core pages + API integration | Component tests pass |
-| M7: Integration | D+21 | Full chain wiring + E2E tests | E2E core flows pass |
-| M8: Test Completion | D+24 | Coverage达标 + perf test + security scan | Test doc complete |
-| M9: Production Launch | D+26 | Prod deploy + monitoring + smoke tests | Prod stable 24h |
+> **Version / release target**: [Version or TBD]
+> **Change work item**: [CHG-* path / tracker]
+> **Traceability ledger**: [Path / tracker]
+> **Planning horizon**: [Current slice / milestone; avoid false precision]
 
-## 2. Task Breakdown
+## Outcomes and Constraints
 
-Every task needs a stable `TASK-*` ID and at least one origin: `REQ/AC`, `BUG`,
-`TECH`, `SEC`, or `OPS`. Replace planned code/test surfaces with actual evidence
-during implementation.
+- Committed origins (`REQ/AC/RULE/NFR/BUG/TECH/SEC/OPS`):
+- Delivery/recovery constraints:
+- Known dependencies and blocked decisions:
 
-### Phase 1: Infrastructure (D1-D3)
-| Task ID | Origin IDs | Task | Planned code / test evidence | Type | Est. | Depends | Owner | Status |
+## Vertical Slices
+
+Each slice should be independently useful or retire a named risk and should be
+mergeable, verifiable, and recoverable without unrelated work.
+
+| Slice | Outcome | Origin IDs | Affected surfaces/contracts | Planned verification | Recovery | Depends on | Owner | State |
 |---|---|---|---|---|---|---|---|---|
-| TASK-INFRA-001 | TECH-* / OPS-* | Create monorepo + build toolchain | [Paths/checks] | Backend | 2h | — | | |
-| TASK-INFRA-002 | TECH-* | Frontend project scaffold | [Paths/checks] | Frontend | 2h | TASK-INFRA-001 | | |
-| TASK-INFRA-003 | OPS-* | Configure CI pipeline | [Pipeline/check] | General | 3h | TASK-INFRA-001 | | |
-| TASK-INFRA-004 | SEC-* | Env var templates + secrets mgmt | [Paths/security check] | Backend | 1h | TASK-INFRA-001 | | |
+| SLICE-[AREA]-01 | | | | | | | | planned |
 
-### Phase 2: Environment Setup (D4-D5)
-| Task ID | Origin IDs | Task | Planned code / test evidence | Type | Est. | Depends | Owner | Status |
+## Tasks
+
+| TASK ID | Slice | Origin IDs | Bounded task | Planned paths/contracts | Planned TEST/evidence | Depends on | Owner | State |
 |---|---|---|---|---|---|---|---|---|
-| TASK-ENV-001 | OPS-* / REQ-* | DB instance creation + initial migration | [Migration/check] | Backend | 2h | TASK-INFRA-001 | | |
-| TASK-ENV-002 | TEST-* / REQ-* | Seed data script + execution | [Seed/check] | Backend | 2h | TASK-ENV-001 | | |
-| TASK-ENV-003 | OPS-* | Staging deploy + CI/CD integration | [Pipeline/smoke test] | DevOps | 3h | TASK-INFRA-003, TASK-ENV-001 | | |
+| TASK-[AREA]-001 | SLICE-[AREA]-01 | REQ/AC/RULE/NFR/BUG/TECH/SEC/OPS-* | | | TEST-* / check | | | planned |
 
-[... subsequent phases ...]
+## Dependency and Parallelism Notes
 
-## 3. Dependency Graph
-## 4. Parallel Strategy
-## 5. Risks & Buffer
-## 6. Daily Checkpoints
-```
+- Critical path:
+- Independently executable read-heavy or write-isolated work:
+- Shared files/owners that prevent parallel writes:
+
+## Risks and Decisions
+
+| Risk/decision | Trigger or deadline | Mitigation/choice | Owner | Status |
+|---|---|---|---|---|
+| | | | | |
+
+## Checkpoints
+
+| Checkpoint | Evidence required | Target/trigger | Owner | Status |
+|---|---|---|---|---|
+| Slice Ready | Origin, impact, verification, recovery | | | |
+| Merge Ready | Actual code/test/docs/trace evidence | | | |
+| Release Ready | Build, deployment, compatibility, and signal evidence | If applicable | | |
+````

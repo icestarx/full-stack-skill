@@ -1,110 +1,49 @@
-# Backend Design Document Template
+# Backend Design Template
 
-```markdown
-# Backend Design — [Project Name]
+Document only consequential choices and affected boundaries. Reuse established
+repository architecture rather than filling every section mechanically.
 
-> **Change work item**: [CHG-* path / tracker URL or N/A]
+````markdown
+# Backend Design — [Change / System]
 
-## Traceability
+> **Change work item**: [CHG-* / tracker]
+> **Current architecture source**: [Path / diagram / ADR]
 
-| REQ / AC IDs | ADR / API / data contract | Backend decision | Planned code surface | Verification |
+## Traceability and Impact
+
+| REQ/AC/RULE/NFR | Current path/contract | Proposed decision/delta | TASK | Verification |
 |---|---|---|---|---|
-| | | | `src/path:Symbol` | TEST-* / planned |
+| | | | | |
 
-## 1. Backend Tech Stack
-| Layer | Choice | Version | Rationale |
-|-------|--------|---------|-----------|
-| Runtime/Language | Node.js / Python / Go / Rust | | |
-| Framework | FastAPI / Hono / Express / Gin / ... | | |
-| Database | PostgreSQL / MongoDB / ... | | |
-| Cache | Redis / ... | | |
-| Message Queue | BullMQ / Celery / ... | | |
-| Object Storage | S3 / MinIO / ... | | |
-| ORM/Query | Prisma / Drizzle / SQLAlchemy / ... | | |
-| Build/Deploy | Docker + ... | | |
+## Context and Boundaries
 
-## 2. System Architecture
-- Architecture diagram (C4 model: Context → Container → Component)
-- System layers:
-  ```
-  Gateway Layer (Gateway/Reverse Proxy)
-    → Application Layer (Routes/Middleware/Controllers)
-      → Service Layer (Business Logic)
-        → Data Layer (ORM/Repository)
-          → Infrastructure Layer (DB/Cache/Queue/Storage)
-  ```
-- Each layer's responsibilities and boundaries
+- Affected services/modules and owners:
+- Call/dependency/data flow:
+- Consumers and version-skew concerns:
+- Trust boundaries and authorization:
 
-## 3. Authentication & Authorization
-- Auth scheme: JWT / Session / OAuth2 / OIDC
-- Token management: access token + refresh token, httpOnly cookie
-- Authorization model: RBAC / ABAC / ReBAC
-- Multi-tenant isolation strategy (if applicable)
+## Decisions
 
-## 4. Data Flow Design
-### Read Path
-```
-Client → Gateway → Controller → Service → Cache(Hit?) → DB → Response
-```
-### Write Path
-```
-Client → Gateway → Controller → Validation → Service → DB → Event Publish → Response
-```
-### Async Path
-```
-Event → Queue → Consumer → External Service / Heavy Compute
-```
+| ADR | Decision | Context/constraints | Alternatives | Consequences | Reversal trigger |
+|---|---|---|---|---|---|
+| | | | | | |
 
-## 5. API Architecture
-- API style: REST / GraphQL / tRPC / gRPC
-- Versioning strategy: URL prefix (/v1/) or Header
-- Unified response envelope format
-- Pagination convention (cursor-based / offset-based)
-- Rate limiting strategy
+## Contracts and Data
 
-## 6. Background Jobs
-- Queue selection
-- Job type inventory
-- Idempotency strategy
-- Retry strategy (exponential backoff)
-- Dead letter queue handling
+- API/event/file contract links:
+- Data ownership, lifecycle, consistency, and migration:
+- Concurrency/idempotency/retry/cancellation semantics:
+- Failure isolation, recovery, and operability:
 
-## 7. Caching Strategy
-| Cache Layer | Tool | TTL | Invalidation Strategy |
-|-------------|------|-----|-----------------------|
+## Quality and Verification
 
-## 8. Security Architecture
-- Secrets management (env vars / Vault / KMS)
-- CORS policy
-- CSRF protection
-- SQL injection prevention (parameterized queries)
-- Input validation (schema-based)
-- Audit logging strategy
-- Sensitive data encryption (PII)
+| NFR/risk | Target/invariant | Design response | TEST/measurement |
+|---|---|---|---|
+| | | | |
 
-## 9. Backend Project Structure
-```
-api/
-├── src/
-│   ├── routes/        # Route definitions
-│   ├── controllers/   # Request handling
-│   ├── services/      # Business logic
-│   ├── repositories/  # Data access
-│   ├── middleware/     # Middleware
-│   ├── jobs/          # Background jobs
-│   ├── utils/         # Utility functions
-│   └── types/         # Type definitions
-├── tests/
-│   ├── unit/
-│   └── integration/
-└── docs/
-```
+## Open Risks
 
-## 10. Architecture Decision Records (ADR)
-| ID | Governs REQ / AC IDs | Decision | Context | Alternatives | Rationale | Date |
-|---|---|---|---|---|---|---|
-
-## 11. Risks & Trade-offs
-| Risk | Impact | Probability | Mitigation |
-|------|--------|-------------|------------|
-```
+| Risk/unknown | Impact | Owner | Decision/evidence needed by |
+|---|---|---|---|
+| | | | |
+````

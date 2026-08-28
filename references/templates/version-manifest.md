@@ -1,13 +1,14 @@
 # Major-Version Manifest Template
 
-```markdown
+````markdown
 # [V2] Documentation Baseline Manifest
 
 > **Baseline mode**: Independent / Derived
 > **Parent baseline**: [None or one immediate parent]
 > **Status**: Draft / Active / Maintenance / Retired
 > **Owner**: [Name or role]
-> **Baseline commit**: [Commit SHA or TBD]
+> **Baseline source revision**: [Commit/tag containing the listed content, or TBD]
+> **Resolved snapshot digest**: [Generated after resolution, or N/A]
 > **Last verified**: YYYY-MM-DD
 
 ## Product-Line Scope
@@ -38,9 +39,9 @@
 Complete only for Derived mode. List every resolved inherited document directly;
 do not require readers to traverse transitive parent manifests.
 
-| Parent document | Reuse / Replace / Remove | Replacement or rationale |
-|---|---|---|
-| | | |
+| Resolved document | Source baseline + pinned revision | Reuse / Replace / Remove | Replacement or rationale |
+|---|---|---|---|
+| | | | |
 
 ## Superseded Semantics
 
@@ -50,7 +51,8 @@ do not require readers to traverse transitive parent manifests.
 
 ## Traceability
 
-- Ledger: `../../traceability/ledger.md`
+- Structured ledger: `../../traceability/ledger.json` or configured tracker
+- Human coverage view: `../../traceability/ledger.md` (optional/generated)
 - Baseline coverage view: `../../traceability/coverage/[version].md`
 - Open blockers/exceptions:
-```
+````
