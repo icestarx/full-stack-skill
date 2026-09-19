@@ -1,6 +1,8 @@
 # Full-Stack Skill — Runtime and Providers
 
-The lifecycle has no mandatory dependency on gstack, Superpowers, OpenSpec, named reviewer agents, or a specific MCP server. Those packages are optional providers. The main agent must use repository-native tools when a specialist is unavailable.
+The lifecycle has no mandatory dependency on a named skill, agent, or MCP server.
+The curated optional profiles are Superpowers, UI UX Pro Max, and Ponytail. The
+main agent must use repository-native tools when a specialist is unavailable.
 
 ## Core Runtime
 
@@ -22,25 +24,21 @@ If the requested outcome requires a browser, design system, private service, dep
 | Host | Skill discovery | Project guidance | Specialist work |
 |---|---|---|---|
 | Codex | `.agents/skills/` or user/admin skill locations | `AGENTS.md` and nested overrides | Native subagents, project agents, skills, MCP |
-| Claude Code | Existing Claude skill locations | Host-specific project instructions | Legacy gstack/Superpowers/OpenSpec and named agents when installed |
+| Claude Code | Existing Claude skill locations | Host-specific project instructions | Installed skills and ordinary project tools |
 | Other agents | Open Agent Skills layout where supported | Host-specific repository guidance | Natural-language roles and ordinary project tools |
 
 Codex is a first-class target. `agents/openai.yaml` supplies Codex-facing metadata; it intentionally declares no required MCP dependency because providers are selected per project.
 
 ## Capability Providers
 
-Provider selection follows `references/platform-adapters.md`. Common optional providers include:
+Provider selection follows `references/platform-adapters.md`; curated profile detail
+lives in `references/provider-registry.md`.
 
-| Provider | Capabilities it may satisfy | Status |
+| Provider | Role | Status |
 |---|---|---|
-| gstack | Product discovery, design, QA, delivery, monitoring, retrospective | Optional legacy accelerator |
-| Superpowers | Brainstorming, planning, TDD, independent review, verification | Optional legacy accelerator |
-| OpenSpec | Versioned proposals, contract deltas, task execution | Optional and cross-workflow |
-| Host-native subagents | Exploration, architecture, testing, code/security review | Optional; use for bounded work |
-| Browser automation | Prototype review, E2E, visual and accessibility evidence | Task-specific |
-| Documentation/search MCP | Current library or platform documentation | Task-specific |
-| Design MCP | Design context, assets, or canvas operations | Task-specific |
-| Observability tools | Logs, metrics, traces, production health | Production tasks only |
+| Superpowers | Design refinement, planning, TDD, independent review, completion verification | Curated optional provider |
+| UI UX Pro Max | UI/UX design-system and stack-specific guidance | Curated optional provider |
+| Ponytail | Minimal safe-solution overlay for coding, planning, and review | Curated optional overlay; does not satisfy a capability alone |
 
 Provider absence is not a blocker when the main agent can produce the same outcome and evidence safely.
 
@@ -62,9 +60,12 @@ codex mcp list
 
 to inspect configured MCP servers. Custom project agents, when useful, belong under `.codex/agents/`; the lifecycle does not require predefined agent files.
 
-## Claude Code Legacy Adapter
+## Claude Code Adapter
 
-Existing installations may continue to use `~/.claude/skills`, `~/.claude/agents`, legacy slash commands, and configured MCP servers. These names and paths must not appear as unconditional requirements in the portable lifecycle. Discover them first, map them to a capability, and otherwise use the fallback.
+Existing installations may use `~/.claude/skills`, `~/.claude/agents`, slash
+commands, and configured MCP servers. These names and paths must not appear as
+unconditional requirements in the portable lifecycle. Discover them first, map
+them to a capability or documented overlay, and otherwise use the fallback.
 
 ## Degraded Operation
 

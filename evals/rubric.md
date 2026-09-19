@@ -26,5 +26,10 @@ artifact quality, and whether the result used repository facts rather than inven
 assumptions. For lifecycle work, also check that applicable A1-A15 steps map to
 capabilities and evidence, skipped steps have existing evidence or an `N/A`
 rationale, and A6-A12 repeat by vertical slice instead of becoming a batch waterfall.
+For provider-aware cases, check that capability selection precedes provider choice,
+only a discovered matching profile is used, Ponytail remains an overlay, and UI UX
+Pro Max guidance is not presented as rendered evidence. A12 completion claims must
+cite fresh commands/results. A11 PR/change review must remain distinct from A13
+deployment and recovery authority.
 Run cases multiple times per model/Skill version and retain pass rate, time, tool
 calls, manual corrections, and escaped defects outside this repository.

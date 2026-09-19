@@ -88,7 +88,8 @@ It can be merged or reverted without waiting for unrelated slices.
 
 Actual code/test evidence replaces plans, deterministic affected checks pass,
 review findings are resolved or approved as exceptions, and affected baselines,
-contracts, change state, and trace edges are synchronized.
+contracts, change state, and trace edges are synchronized. The completion claim is
+backed by a fresh run of the commands that prove the accepted scope and risk surface.
 
 ### Release Ready
 

@@ -18,7 +18,8 @@ default end-to-end route and stable activity identifiers, not a mandatory waterf
 
 Before invoking another skill, agent, MCP tool, or host command, read
 `references/platform-adapters.md`. Resolve work by capability ID and use the
-portable fallback when no specialist exists.
+portable fallback when no specialist exists. Read
+`references/provider-registry.md` only when selecting a curated provider.
 
 - Never assume a named skill, agent, slash command, CLI, or MCP server is installed.
 - Keep provider syntax out of generated project documentation.
@@ -115,6 +116,8 @@ and integrated slices.
 
 Use project-native commands first, then `qa.browser`, `review.code`,
 `review.accessibility`, `review.security`, or `review.performance` when triggered.
+Before claiming a slice or change complete, use `verification.completion` to run
+fresh checks that directly support the claim.
 
 **Track evidence**: stable `TEST-*` references, commands and results, reports,
 review findings, screenshots where material, and exception decisions.
@@ -135,7 +138,8 @@ review findings, screenshots where material, and exception decisions.
 - Feed repeated human-test findings and escaped defects back into requirements,
   deterministic tests, lint, architecture rules, or operational checks.
 
-Use `delivery.release`, `operations.monitor`, and `operations.retro` as available.
+Use `delivery.environment`, `delivery.change-review`, `delivery.deploy`,
+`delivery.recover`, `operations.monitor`, and `operations.retro` as applicable.
 
 **Track evidence**: environment readiness, immutable release manifest, deployment
 and recovery records, production signals, and owned learning actions.
@@ -172,7 +176,7 @@ boundary, or an external dependency that prevents meaningful progress.
 |---|---|
 | Change Ready | Product contract, impact, verification plan, and delivery/operability concerns are sufficient to start a slice |
 | Slice Ready | One bounded slice has origin, dependencies, expected code/contracts, tests, and recovery |
-| Merge Ready | Actual implementation and test evidence is valid; review and documentation/ledger deltas are complete |
+| Merge Ready | Actual implementation and fresh completion evidence are valid; review and documentation/ledger deltas are complete |
 | Release Ready | Committed scope maps to accepted tests and distinct PR, build, deployment, compatibility, approval, and signal evidence |
 | Learning Closed | Observation completed; defects, stale evidence, temporary mechanisms, and follow-ups have owners/dispositions |
 
@@ -218,9 +222,11 @@ Apply these to every mode, at depth proportional to risk:
 6. Accessibility is part of acceptance for affected user interfaces.
 7. Review precedes merge; high-risk work receives independent review and named
    approval where required.
-8. Baselines, contracts, decisions, work state, evidence, and release records change
+8. Completion claims use fresh command/result evidence against the stated
+   acceptance and risk surface.
+9. Baselines, contracts, decisions, work state, evidence, and release records change
    with the implementation rather than as a later cleanup task.
-9. Use Conventional Commits when consistent with repository policy; never override
+10. Use Conventional Commits when consistent with repository policy; never override
    a repository's established contribution rules.
 
 ## Long-Running Work
@@ -250,6 +256,7 @@ Load references only when the current work requires them:
 | `references/four-track-model.md` | Routing a change, selecting gates, or coordinating tracks |
 | `references/operating-modes.md` | After selecting New/Major, Feature Change, Bug Fix, Maintenance, or Incident mode |
 | `references/platform-adapters.md` | Selecting a skill, agent, MCP tool, or host command |
+| `references/provider-registry.md` | Selecting a curated Superpowers, UI UX Pro Max, or Ponytail profile after capability selection |
 | `references/document-organization.md` | Initializing docs, a major-version baseline, change record, or release |
 | `references/requirements-workflow.md` | Creating, reviewing, or changing product requirements |
 | `references/traceability.md` | Creating IDs, links, coverage views, exceptions, or release evidence |

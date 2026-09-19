@@ -160,8 +160,8 @@ consumers and mixed-version behavior are covered, and data recovery is testable.
 define data setup/reset, secrets, permissions, dependencies, build provenance,
 deployment path, smoke checks, signals, and recovery constraints.
 
-**Capabilities**: `delivery.release` plus repository-native environment, build, and
-CI/CD tools.
+**Capabilities**: `delivery.environment` plus repository-native environment, build,
+and CI/CD tools.
 
 **Evidence**: Runnable verification target and commands/configuration, or a recorded
 limitation and risk decision. Use the staging template only when such an environment
@@ -206,8 +206,9 @@ exception has rationale, owner, risk, and review/expiry condition.
 contracts, migrations, tests, compatibility, security, rollout, recovery, decisions,
 and documentation/ledger deltas. Follow repository PR and approval conventions.
 
-**Capabilities**: `review.code` for review continuity and `delivery.release` for PR,
-CI, artifact, and approval evidence when those systems are in scope.
+**Capabilities**: `review.code` for review continuity and
+`delivery.change-review` for PR, CI, artifact, and approval evidence when those
+systems are in scope.
 
 **Evidence**: PR or equivalent review record with distinct code, test, build, and
 approval references. Use `references/templates/verification-evidence.md` when the
@@ -222,11 +223,14 @@ was verified, and how it can be recovered without relying on conversation histor
 component, contract, integration, E2E, migration, compatibility, security,
 accessibility, performance, manual, and operational evidence as applicable.
 
-**Capabilities**: Repository-native deterministic commands; conditionally
-`qa.browser`, `review.security`, `review.accessibility`, and `review.performance`.
+**Capabilities**: `verification.completion` using repository-native deterministic
+commands; conditionally `qa.browser`, `review.security`, `review.accessibility`, and
+`review.performance`.
 
 **Evidence**: Accepted, failed, blocked, stale, excepted, and `N/A` evidence indexed
-by stable `TEST-*` and origin IDs. Use `references/templates/testing.md` when needed.
+by stable `TEST-*` and origin IDs, plus the fresh commands, source/build reference,
+exit status, and results used for the completion claim. Use
+`references/templates/testing.md` when needed.
 
 **Complete when**: The slice passes Merge Ready. If delivery is in scope, build,
 compatibility, approvals, recovery, and signals are sufficient for Release Ready;
@@ -238,7 +242,7 @@ otherwise delivery is explicitly `N/A`.
 digest, target cohort/environment, deployment order, abort thresholds, approvals,
 feature flags, migration sequence, communications, and recovery verification.
 
-**Capabilities**: `delivery.release`.
+**Capabilities**: `delivery.deploy` and `delivery.recover`.
 
 **Evidence**: Immutable release manifest, deployment record, health checks, and
 tested rollback or roll-forward evidence. Use the release and production-deploy

@@ -14,6 +14,7 @@ ROOT = Path(__file__).resolve().parents[1]
 REQUIRED = {
     "SKILL.md", "README.md", "AGENTS.md", "DEPENDENCIES.md", "setup",
     "agents/openai.yaml", "references/platform-adapters.md",
+    "references/provider-registry.md",
     "references/four-track-model.md", "references/operating-modes.md",
     "references/process-steps.md", "references/requirements-workflow.md",
     "references/document-organization.md", "references/traceability.md",
@@ -151,6 +152,39 @@ def validate_workflow_docs(errors: list[str]) -> None:
         errors.append("references/process-steps.md: every A1-A15 step must define completion criteria")
 
 
+def validate_capability_contracts(errors: list[str]) -> None:
+    paths = [
+        ROOT / "SKILL.md",
+        ROOT / "README.md",
+        ROOT / "references/platform-adapters.md",
+        ROOT / "references/skills-mapping.md",
+        ROOT / "references/process-steps.md",
+    ]
+    texts = {path: path.read_text(encoding="utf-8") for path in paths}
+    required = {
+        "verification.completion",
+        "delivery.environment",
+        "delivery.change-review",
+        "delivery.deploy",
+        "delivery.recover",
+    }
+    for capability in sorted(required):
+        for path, text in texts.items():
+            if capability not in text:
+                errors.append(f"{path.relative_to(ROOT)}: missing capability {capability}")
+    for path, text in texts.items():
+        if "delivery.release" in text:
+            errors.append(f"{path.relative_to(ROOT)}: obsolete capability delivery.release")
+
+    registry = (ROOT / "references/provider-registry.md").read_text(encoding="utf-8")
+    for provider in ("Superpowers", "UI UX Pro Max", "Ponytail"):
+        if f"## {provider}" not in registry:
+            errors.append(f"references/provider-registry.md: missing {provider} profile")
+    for uncurated in ("gstack", "OpenSpec"):
+        if uncurated in registry:
+            errors.append(f"references/provider-registry.md: uncurated provider {uncurated}")
+
+
 def run_child(command: list[str], label: str, errors: list[str]) -> None:
     result = subprocess.run(command, cwd=ROOT, text=True, capture_output=True, check=False)
     if result.returncode:
@@ -169,6 +203,7 @@ def main() -> int:
         validate_fences(errors)
         validate_references(errors)
         validate_workflow_docs(errors)
+        validate_capability_contracts(errors)
         try:
             json.loads((ROOT / "references/schemas/traceability.schema.json").read_text(encoding="utf-8"))
         except (OSError, json.JSONDecodeError) as error:

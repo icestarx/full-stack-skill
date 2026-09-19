@@ -43,6 +43,8 @@ record indexes evidence and gaps rather than reproducing raw logs.
 
 ## Decision
 
+- Completion claim and the exact fresh evidence that supports it:
+- Source/build reference, command time, exit status, and failure count:
 - `merge_ready`: Yes / No
 - `release_ready`: Yes / No / Not evaluated
 - Ledger updates:

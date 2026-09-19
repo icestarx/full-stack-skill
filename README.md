@@ -11,6 +11,7 @@ An agent-portable skill that orchestrates the full-stack development lifecycle f
 - **Major-version baselines**: Separates long-lived product/UX/engineering versions from minor/patch release records
 - **End-to-end traceability**: Links requirements to decisions, tasks, code, tests, PRs, releases, and production signals
 - **Capability orchestration**: Selects available skills, agents, MCP tools, or portable fallbacks by outcome
+- **Curated provider registry**: Maps Superpowers, UI UX Pro Max, and Ponytail to suitable steps without making them hard dependencies
 - **Codex adapter**: Supports `$full-stack-skill`, `AGENTS.md`, native subagents, and optional MCP providers
 - **Lifecycle templates**: Activity documents plus change, version, release, verification, and traceability records
 - **Risk-driven gates**: Control depth follows blast radius, reversibility, contracts, data, and operational risk
@@ -82,12 +83,12 @@ in [references/process-steps.md](references/process-steps.md).
 | **A5** | Boundaries and dependency map | Confirm ownership, interfaces, data boundaries, dependency direction, shared foundations, and candidate slices | `architecture.review` |
 | **A6** | Vertical slice plan | Create bounded, traceable, independently verifiable and recoverable slices with stable `TASK-*` IDs | `planning.decompose` |
 | **A7** | Data and interface contracts | Define API/event/data contracts, compatibility, migrations, version skew, contract tests, recovery, and cleanup | `architecture.review`; conditional `database.review`, `spec.change` |
-| **A8** | Environment and delivery readiness | Prepare the minimum reproducible target, data/secrets setup, build provenance, smoke checks, signals, and recovery | `delivery.release`, repository-native environment/CI tools |
+| **A8** | Environment and delivery readiness | Prepare the minimum reproducible target, data/secrets setup, build provenance, smoke checks, signals, and recovery | `delivery.environment`, repository-native environment/CI tools |
 | **A9** | Implementation and integration | Produce fail-before/characterization evidence, implement one slice, integrate early, and record actual code/contract links | `development.tdd`; conditional `qa.browser`; project tools |
 | **A10** | Review | Review diff, contracts, origins, failure modes, tests, and operational impact; resolve findings or approve exceptions | `review.code`; conditional security/accessibility/performance/database review |
-| **A11** | PR and change evidence | Assemble a reconstructable review unit linking intent, tasks, code, tests, CI, approvals, rollout, and recovery | `review.code`, `delivery.release` |
-| **A12** | Verification summary | Reconcile accepted, failed, blocked, stale, excepted, and `N/A` evidence across applicable test layers | Deterministic project commands; conditional `qa.browser` and specialist reviewers |
-| **A13** | Release and recovery | Pin source/build/artifact/cohort, execute the authorized rollout, verify health, and invoke recovery when thresholds fail | `delivery.release` |
+| **A11** | PR and change evidence | Assemble a reconstructable review unit linking intent, tasks, code, tests, CI, approvals, rollout, and recovery | `review.code`, `delivery.change-review` |
+| **A12** | Verification summary | Reconcile accepted, failed, blocked, stale, excepted, and `N/A` evidence, then rerun the checks that prove the completion claim | `verification.completion`, deterministic project commands; conditional reviewers |
+| **A13** | Release and recovery | Pin source/build/artifact/cohort, execute the authorized rollout, verify health, and invoke recovery when thresholds fail | `delivery.deploy`, `delivery.recover` |
 | **A14** | Observation | Compare requirement-linked infrastructure, application, business, security, and UX signals against thresholds | `operations.monitor` |
 | **A15** | Learning and anti-entropy | Convert defects and friction into requirements, tests, rules, runbooks, follow-ups, and temporary-mechanism cleanup | `operations.retro` |
 
@@ -127,13 +128,20 @@ the same evidence requirement.
 | `review.security` | Review affected trust boundaries, authentication, authorization, data, dependencies, secrets, and audit behavior |
 | `review.accessibility` | Verify affected keyboard, semantic, ARIA, focus, content, and contrast behavior |
 | `review.performance` | Measure affected client/server performance or reliability against explicit targets |
-| `delivery.release` | Preserve PR, CI, build, rollout, health-check, approval, and recovery evidence |
+| `verification.completion` | Produce fresh command/result evidence that directly supports every completion claim |
+| `delivery.environment` | Prepare a reproducible verification/delivery target with data, secrets, build, smoke, signal, and cleanup constraints |
+| `delivery.change-review` | Preserve distinct PR/change, review, CI, approval, artifact, and recovery references |
+| `delivery.deploy` | Execute an authorized immutable-artifact rollout with compatibility, migration, cohort, and health evidence |
+| `delivery.recover` | Prove and execute the authorized rollback, roll-forward, containment, or stop path when required |
 | `operations.monitor` | Evaluate infrastructure, application, business, security, and UX signals against thresholds |
 | `operations.retro` | Turn release/incident evidence into owned improvements, documentation updates, and cleanup |
 
 ## Dependencies
 
-This skill is an orchestrator, but it has no mandatory dependency on gstack, Superpowers, OpenSpec, named reviewer agents, or a particular MCP server. Those are optional capability providers. Missing providers fall back to the main agent and repository-native tools.
+This skill is an orchestrator with no mandatory specialist dependency. Its curated
+optional profiles are Superpowers, UI UX Pro Max, and Ponytail. Missing providers
+fall back to the main agent and repository-native tools; no provider replaces
+deterministic project evidence.
 
 Run `bash setup` for a host/provider audit. See [DEPENDENCIES.md](DEPENDENCIES.md) for the complete runtime contract.
 
@@ -158,6 +166,7 @@ full-stack-skill/
 ├── README.md                      # This file
 └── references/
     ├── platform-adapters.md       # Capability contracts and host adapters
+    ├── provider-registry.md       # Curated provider profiles and selection bounds
     ├── four-track-model.md        # Track ownership, routing, gates, and slice loop
     ├── operating-modes.md         # New/change/bugfix/maintenance/incident playbooks
     ├── document-organization.md   # Major-version baselines vs release records
@@ -197,7 +206,8 @@ full-stack-skill/
 5. Review precedes merge; high-risk work receives independent review and approval.
 6. Production changes use a controlled pre-production/cohort check, health signals, and recovery path.
 7. Accessibility is part of acceptance for affected user interfaces.
-8. Baselines, contracts, evidence, and release records change with the implementation.
+8. Completion claims cite fresh command/result evidence for the accepted scope and risk surface.
+9. Baselines, contracts, evidence, and release records change with the implementation.
 
 ## License
 

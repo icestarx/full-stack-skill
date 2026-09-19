@@ -36,6 +36,9 @@ layers. Targets come from committed requirements and repository policy.
 
 ## Decision
 
+- Completion claim:
+- Fresh commands and source/build reference:
+- Run time, exit status, failures, and result reconciliation:
 - Merge Ready: [Yes/No and approver if required]
 - Release Ready: [Yes/No/Not evaluated]
 - Known defects and target disposition:

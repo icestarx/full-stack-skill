@@ -21,8 +21,8 @@ implementations discovered from the active host.
 |---|---|---|
 | Product | `product.discovery`, `product.scope-review`, `product.requirements-review` | `design.system`, `design.prototype`, `design.review` for affected UX |
 | Engineering | `architecture.review`, `planning.decompose`, `development.tdd` | `database.review`, `spec.change`, domain specialist |
-| Verification | Deterministic project commands, `review.code` | `qa.browser`, `review.accessibility`, `review.security`, `review.performance` |
-| Delivery & Learning | `delivery.release`, `operations.monitor`, `operations.retro` | `database.review`, platform/incident specialist |
+| Verification | Deterministic project commands, `review.code`, `verification.completion` | `qa.browser`, `review.accessibility`, `review.security`, `review.performance` |
+| Delivery & Learning | `delivery.environment`, `delivery.change-review`, `delivery.deploy`, `delivery.recover`, `operations.monitor`, `operations.retro` | `database.review`, platform/incident specialist |
 
 ## A1-A15 Workflow Mapping
 
@@ -35,12 +35,12 @@ implementations discovered from the active host.
 | A5 Boundaries | Consumer, module, ownership, and dependency map | `architecture.review` | Main-agent dependency analysis from code/contracts |
 | A6 Slice plan | Bounded dependency-ordered tasks with origins, evidence, and recovery | `planning.decompose` | Main-agent change-work-item/development-plan update |
 | A7 Contracts/data | Authoritative contracts plus compatibility, migration, and recovery | `architecture.review` | `database.review`, `spec.change`; schema/API inspection and native contract tests |
-| A8 Environment | Reproducible, risk-appropriate verification and delivery target | `delivery.release` | Repository-native environment, build, CI/CD, and smoke tooling |
+| A8 Environment | Reproducible, risk-appropriate verification and delivery target | `delivery.environment` | Repository-native environment, build, CI/CD, and smoke tooling |
 | A9 Implementation | Integrated vertical slice with actual code/test/contract links | `development.tdd` | `qa.browser`; native test runner and RED/GREEN/REFACTOR loop |
 | A10 Review | Impact-ranked findings with resolutions or approved exceptions | `review.code` | Security, accessibility, performance, or database review when triggered |
-| A11 PR evidence | Reconstructable review unit with trace, CI, approval, and recovery evidence | `review.code`, `delivery.release` | Repository PR template, CI artifacts, or equivalent local review record |
-| A12 Verification summary | Accepted, failed, blocked, stale, excepted, and `N/A` evidence index | Deterministic project commands | `qa.browser` and risk-triggered reviewers; manual evidence with approval metadata |
-| A13 Release | Immutable artifact, deployment, compatibility, and recovery evidence | `delivery.release` | Repository CLI, CI provider, and deployment scripts |
+| A11 PR evidence | Reconstructable review unit with trace, CI, approval, and recovery evidence | `review.code`, `delivery.change-review` | Repository PR template, CI artifacts, or equivalent local review record |
+| A12 Verification summary | Accepted, failed, blocked, stale, excepted, and `N/A` evidence index backed by fresh completion checks | `verification.completion` plus deterministic project commands | `qa.browser` and risk-triggered reviewers; manual evidence with approval metadata |
+| A13 Release | Immutable artifact, deployment, compatibility, and recovery evidence | `delivery.deploy`, `delivery.recover` | Repository CLI, CI provider, deployment/recovery scripts, and runbooks |
 | A14 Observation | Requirement-linked target/production signals and threshold decision | `operations.monitor` | Project observability stack, logs, metrics, traces, and audit records |
 | A15 Learning | Owned anti-entropy improvements and temporary-mechanism cleanup | `operations.retro` | Git, incident, metric, and support-evidence review by the main agent |
 
@@ -54,6 +54,13 @@ implementations discovered from the active host.
 | `review.accessibility` | An affected user interface changes semantics, keyboard behavior, focus, content, or visual contrast |
 | `review.performance` | A measurable performance/reliability target or credible regression risk exists |
 | Domain specialist | The change enters a specialized platform or application domain whose constraints are not represented by repository evidence |
+
+## Curated Provider Resolution
+
+After selecting capabilities, read `references/provider-registry.md` only when a
+curated specialist or execution overlay would help. The curated set is intentionally
+limited to Superpowers, UI UX Pro Max, and Ponytail. Ponytail shapes the minimum safe
+solution but never satisfies a capability or lowers its evidence requirement.
 
 ## Degraded Operation
 

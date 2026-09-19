@@ -16,6 +16,8 @@ scope and authorization.
 Evidence: commands/configuration and a reachable verification environment, or a
 recorded limitation with risk decision.
 
+Capability: `delivery.environment`.
+
 ## A13 — Release and Recovery
 
 - Pin version baseline/source revision, included changes/origins, PR/commits, build
@@ -27,6 +29,9 @@ recorded limitation with risk decision.
   migration cleanup, communication, and recovery verification.
 
 Evidence: immutable release record and successful risk-appropriate health checks.
+
+Capabilities: `delivery.deploy` for the authorized rollout and `delivery.recover`
+for the tested rollback, roll-forward, containment, or stop path.
 
 ## A14 — Observation
 

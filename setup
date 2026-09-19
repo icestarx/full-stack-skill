@@ -44,6 +44,7 @@ CORE_FILES=(
     'README.md'
     'DEPENDENCIES.md'
     'references/platform-adapters.md'
+    'references/provider-registry.md'
     'references/four-track-model.md'
     'references/operating-modes.md'
     'references/tracks/product.md'
@@ -146,7 +147,7 @@ done
 
 printf '\n%s\n' "$(bold 'Optional capability providers')"
 printf '%s\n' '-------------------------------------'
-for provider in gstack superpowers openspec-propose; do
+for provider in superpowers ui-ux-pro-max ponytail; do
     detected=0
     for discovery_root in "${DISCOVERY_ROOTS[@]}"; do
         if [ -e "$discovery_root/$provider" ]; then

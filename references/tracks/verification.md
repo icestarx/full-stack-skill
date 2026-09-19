@@ -38,6 +38,8 @@ For behavior-changing PRs, record:
 Use repository PR conventions and approval rules. Do not require a PR or external
 mutation when the user's requested workflow stops before that action.
 
+Capability: `delivery.change-review`, with `review.code` for review continuity.
+
 ## A12 — Verification Summary
 
 - Index generated CI/test artifacts rather than copying logs into prose.
@@ -45,8 +47,14 @@ mutation when the user's requested workflow stops before that action.
 - Identify uncovered acceptance, orphan tests/tasks, and validation not performed.
 - A manual assertion requires approver, rationale, risk, and follow-up/expiry when it
   substitutes for expected deterministic evidence.
+- Immediately before a completion claim, identify the commands that prove it, run
+  them against the referenced source/build, inspect exit status and failures, and
+  reconcile the fresh results against acceptance and the changed risk surface.
 
-Evidence: slice/PR verification record or equivalent tracker/CI result.
+Capability: `verification.completion` backed by repository-native commands.
+
+Evidence: slice/PR verification record or equivalent tracker/CI result, including
+the fresh command/result set used for the completion claim.
 
 ## Verification Track Gate Checks
 

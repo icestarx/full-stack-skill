@@ -13,6 +13,8 @@ For each capability:
 5. Report a blocker only when the capability itself cannot be completed, not because a preferred provider is absent.
 
 Do not emit a slash command, `$skill` invocation, agent name, or MCP tool name until that provider has been discovered. Do not install providers without user authorization.
+When a curated provider would help, read `references/provider-registry.md` and apply
+only the matching profile.
 
 ## Capability Catalog
 
@@ -34,7 +36,11 @@ Do not emit a slash command, `$skill` invocation, agent name, or MCP tool name u
 | `review.security` | Threat-aware code and dependency review | Project scanners plus manual trust-boundary review |
 | `review.accessibility` | Keyboard, semantic, ARIA, and contrast evidence | axe-compatible tooling and browser inspection |
 | `review.performance` | Measured client/server performance against targets | Lighthouse-compatible audit or project load tools |
-| `delivery.release` | PR, CI, rollout, health checks, and recovery evidence | Repository CLI, CI provider, and deployment scripts |
+| `verification.completion` | Fresh evidence that directly supports every completion claim | Re-run the relevant full commands, inspect exit status/results, and reconcile them against acceptance and risk |
+| `delivery.environment` | Reproducible verification/delivery target with data, secrets, build, smoke, signal, and cleanup constraints | Repository environment scripts, containers, CI, and documented manual setup |
+| `delivery.change-review` | Reconstructable PR/change unit with distinct review, CI, approval, artifact, and recovery references | Repository PR conventions, CI artifacts, or equivalent local review record |
+| `delivery.deploy` | Authorized immutable artifact rollout with cohort, compatibility, migration, health, and decision evidence | Repository deployment CLI, CD pipeline, and runbook |
+| `delivery.recover` | Tested rollback, roll-forward, containment, or stop path with authority and result evidence | Repository recovery scripts/runbook and deterministic health/data checks |
 | `operations.monitor` | Infrastructure, application, business, and UX signals | Project observability stack and logs |
 | `operations.retro` | Evidence, lessons, owned actions, documentation updates | Git/incident/metric review by the main agent |
 
@@ -48,10 +54,11 @@ Do not emit a slash command, `$skill` invocation, agent name, or MCP tool name u
 - Use native subagents for bounded, independent exploration, testing, or review. Prefer read-heavy parallelism; coordinate write-heavy work to avoid conflicts.
 - Discover MCP configuration with `codex mcp list`. Treat MCP as optional unless a task requires private or live external data.
 
-### Claude Code Legacy Adapter
+### Claude Code
 
-- Existing gstack, Superpowers, OpenSpec, and named reviewer agents may satisfy capabilities when installed.
-- Translate their provider-specific slash commands or names only after discovery.
+- Use installed skills only after discovery and map them to the same capability
+  contracts used by Codex.
+- Translate provider-specific slash commands or names only after discovery.
 - Treat `~/.claude/skills`, `~/.claude/agents`, and Claude MCP configuration as host-specific locations, not portable requirements.
 
 ### Other Agent Hosts
@@ -60,21 +67,10 @@ Do not emit a slash command, `$skill` invocation, agent name, or MCP tool name u
 - Use natural-language capability instructions and repository-native tools when the host lacks skill or subagent primitives.
 - Preserve the same outcomes, gates, permissions, and evidence requirements even when invocation syntax differs.
 
-## Legacy Provider Map
+## Curated Providers
 
-The original provider ecosystem remains optional. Map it by capability instead of calling it unconditionally:
-
-| Legacy providers | Capability IDs |
-|---|---|
-| gstack `office-hours`, `plan-ceo-review` | `product.discovery`, `product.scope-review` |
-| gstack design skills | `design.system`, `design.prototype`, `design.review` |
-| gstack `plan-eng-review` | `architecture.review` |
-| Superpowers brainstorming and planning | `product.discovery`, `planning.decompose` |
-| Superpowers TDD and subagent development | `development.tdd`, `review.code` |
-| OpenSpec proposal/apply/archive | `spec.change`, `planning.decompose` |
-| gstack QA/review/CSO | `qa.browser`, `review.code`, `review.security` |
-| gstack ship/deploy/canary | `delivery.release`, `operations.monitor` |
-| gstack retro/document-release | `operations.retro` |
-| Named architect/database/a11y/E2E/performance agents | Matching architecture, database, QA, accessibility, or performance capability |
-
-Provider-specific references may improve execution, but the core lifecycle must remain usable without this legacy ecosystem.
+The core lifecycle is provider-neutral. The maintained provider profiles are
+Superpowers, UI UX Pro Max, and Ponytail; read
+`references/provider-registry.md` for their capability mappings, scenario bounds,
+verified snapshots, and side effects. Other discovered tools may still satisfy a
+capability by description, but they are not curated or recommended by this repository.
