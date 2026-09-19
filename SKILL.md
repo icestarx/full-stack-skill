@@ -11,8 +11,8 @@ description: >
 # Full-Stack Development
 
 Deliver complete, maintainable product changes through four coordinated tracks:
-Product, Engineering, Verification, and Delivery & Learning. Treat the historical
-A1-A15 as compatibility identifiers in an activity index, not a mandatory waterfall.
+Product, Engineering, Verification, and Delivery & Learning. Use A1-A15 as the
+default end-to-end route and stable activity identifiers, not a mandatory waterfall.
 
 ## Runtime Portability
 
@@ -43,6 +43,9 @@ Read `references/four-track-model.md`, then:
    truth when the repository's tracker already preserves the required fields.
 5. Identify the smallest vertical slice that can produce user value or retire risk
    and can be independently verified, merged, and recovered.
+6. Read `references/process-steps.md`. Mark A1-A15 applicable, already satisfied,
+   or `N/A` with rationale; select capabilities through
+   `references/skills-mapping.md` before resolving concrete providers.
 
 State the selected mode, risk, and execution depth. Ask for confirmation only when
 the classification would materially change scope, cost, external actions, or an
@@ -137,7 +140,17 @@ Use `delivery.release`, `operations.monitor`, and `operations.retro` as availabl
 **Track evidence**: environment readiness, immutable release manifest, deployment
 and recovery records, production signals, and owned learning actions.
 
-## Shared Execution Loop
+## A1-A15 Execution and Slice Loop
+
+The default complete route is A1 Requirements through A15 Learning. Run it in
+order for a new product or major version. In other modes, preserve the identifiers
+while selecting only applicable steps. Existing evidence may satisfy a step; an
+inapplicable step requires a recorded rationale. Never manufacture an artifact
+only to make the sequence appear complete.
+
+A6-A12 form the repeatable delivery loop for each vertical slice. A later step may
+reopen an earlier one when implementation, review, release, or production evidence
+changes the product contract, architecture, verification plan, or recovery design.
 
 For each vertical slice:
 
@@ -240,12 +253,12 @@ Load references only when the current work requires them:
 | `references/document-organization.md` | Initializing docs, a major-version baseline, change record, or release |
 | `references/requirements-workflow.md` | Creating, reviewing, or changing product requirements |
 | `references/traceability.md` | Creating IDs, links, coverage views, exceptions, or release evidence |
-| `references/process-steps.md` | Mapping a legacy activity number to the relevant track/reference |
+| `references/process-steps.md` | Running the default A1-A15 flow, selecting applicable steps, and checking completion criteria |
 | `references/tracks/product.md` | Product requirements, UX contract, and acceptance activities |
 | `references/tracks/engineering.md` | Reconnaissance, architecture, planning, contracts, implementation |
 | `references/tracks/verification.md` | Verification design, review, PR evidence, and summary |
 | `references/tracks/delivery-learning.md` | Environment, release, observation, incident learning, and cleanup |
-| `references/skills-mapping.md` | Capability selection and provider fallback by track/activity |
+| `references/skills-mapping.md` | Capability selection, conditional reviewers, and provider fallback for each A1-A15 step |
 | `references/tech-selection.md` | Making a material technology choice |
 | `references/capability-domains.md` | Entering a specialized application/domain layer |
 | `references/templates/` | Producing an affected lifecycle artifact; use only the needed template |

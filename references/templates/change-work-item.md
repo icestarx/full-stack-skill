@@ -45,6 +45,17 @@ canonical detail instead of copying PRDs, designs, test reports, or release reco
 Track state is one of `not_applicable`, `planned`, `active`, `blocked`,
 `evidence_ready`, or `accepted`.
 
+## A1-A15 Workflow Progress
+
+Add one row for every applicable step. For omitted steps, record the existing
+evidence or `N/A` rationale here or at the governing gate. Record the selected
+capability and concrete provider separately so a missing optional provider can be
+replaced without changing the required outcome.
+
+| Step | Activity / slice | Applicability | Capability | Selected provider / fallback | Evidence | State / next action |
+|---|---|---|---|---|---|---|
+| A1-A15 | | Applicable / Existing evidence / N/A | | | | |
+
 ## Vertical Slices
 
 | Slice / TASK IDs | User or risk-reduction outcome | Dependencies | Code/contracts | Verification | Release strategy | State |

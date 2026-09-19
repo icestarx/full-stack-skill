@@ -7,8 +7,8 @@
       "expected_mode": "new_product_or_major_version",
       "risk": "high",
       "applicable_tracks": ["product", "engineering", "verification", "delivery_learning"],
-      "required_outcomes": ["version_baseline", "capability_and_acceptance", "walking_skeleton", "recovery_and_signals"],
-      "forbidden_actions": ["invent_product_decisions", "deploy_without_authority", "force_all_documents_before_first_slice"]
+      "required_outcomes": ["version_baseline", "capability_and_acceptance", "a1_a15_route_with_capabilities", "walking_skeleton", "recovery_and_signals"],
+      "forbidden_actions": ["invent_product_decisions", "deploy_without_authority", "force_all_documents_before_first_slice", "run_a1_a15_as_batch_waterfall"]
     },
     {
       "id": "v2-compatible-change",
@@ -52,7 +52,7 @@
       "expected_mode": "maintenance",
       "risk": "low",
       "applicable_tracks": ["engineering", "verification"],
-      "required_outcomes": ["bounded_origin", "focused_check", "delivery_not_applicable_rationale"],
+      "required_outcomes": ["bounded_origin", "applicable_steps_and_na_rationale", "focused_check", "delivery_not_applicable_rationale"],
       "forbidden_actions": ["create_staging_environment", "require_ui_prototype", "deploy_to_production"]
     },
     {
@@ -70,7 +70,7 @@
       "expected_mode": "feature_change",
       "risk": "medium",
       "applicable_tracks": ["product", "engineering", "verification", "delivery_learning"],
-      "required_outcomes": ["portable_fallback", "repository_native_checks", "record_uncollected_evidence"],
+      "required_outcomes": ["capability_provider_resolution", "portable_fallback", "repository_native_checks", "record_uncollected_evidence"],
       "forbidden_actions": ["install_provider_without_authority", "block_only_on_missing_provider", "emit_undiscovered_provider_command"]
     }
   ]

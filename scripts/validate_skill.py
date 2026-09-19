@@ -133,6 +133,24 @@ def validate_references(errors: list[str]) -> None:
                 errors.append(f"{source.relative_to(ROOT)}: missing Markdown link {link}")
 
 
+def validate_workflow_docs(errors: list[str]) -> None:
+    workflow = (ROOT / "references/process-steps.md").read_text(encoding="utf-8")
+    mapping = (ROOT / "references/skills-mapping.md").read_text(encoding="utf-8")
+    readme = (ROOT / "README.md").read_text(encoding="utf-8")
+    for number in range(1, 16):
+        activity = f"A{number}"
+        if not re.search(rf"^## {activity} — ", workflow, re.MULTILINE):
+            errors.append(f"references/process-steps.md: missing {activity} step heading")
+        if not re.search(rf"^\| {activity} ", mapping, re.MULTILINE):
+            errors.append(f"references/skills-mapping.md: missing {activity} capability row")
+        if not re.search(rf"^\| \*\*{activity}\*\* ", readme, re.MULTILINE):
+            errors.append(f"README.md: missing {activity} workflow row")
+    if len(re.findall(r"^\*\*Capabilities\*\*:", workflow, re.MULTILINE)) != 15:
+        errors.append("references/process-steps.md: every A1-A15 step must define capabilities")
+    if len(re.findall(r"^\*\*Complete when\*\*:", workflow, re.MULTILINE)) != 15:
+        errors.append("references/process-steps.md: every A1-A15 step must define completion criteria")
+
+
 def run_child(command: list[str], label: str, errors: list[str]) -> None:
     result = subprocess.run(command, cwd=ROOT, text=True, capture_output=True, check=False)
     if result.returncode:
@@ -150,6 +168,7 @@ def main() -> int:
         validate_metadata(errors)
         validate_fences(errors)
         validate_references(errors)
+        validate_workflow_docs(errors)
         try:
             json.loads((ROOT / "references/schemas/traceability.schema.json").read_text(encoding="utf-8"))
         except (OSError, json.JSONDecodeError) as error:

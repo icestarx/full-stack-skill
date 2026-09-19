@@ -9,6 +9,11 @@ not a fixed sequence or permission to perform external actions.
 Use when no reliable product/system baseline exists or a major line changes the
 product model or architecture substantially.
 
+**A1-A15 route**: Run the complete sequence in order. Keep verification design
+active from A1, bring delivery constraints into A4-A8, repeat A6-A12 for each
+vertical slice, then complete A13-A15 for the authorized release. Conditional work
+inside a step may still be `N/A` with rationale.
+
 - Product: establish product brief, capability tree, committed requirements/NFRs,
   UX behavior, and version manifest.
 - Engineering: choose architecture from evidence, identify contracts and vertical
@@ -23,6 +28,11 @@ product model or architecture substantially.
 
 Use for V2/V3 additions, modifications, or removals within an existing product line.
 
+**A1-A15 route**: Start at A1 with a delta against the active baseline. Run A2-A3
+only for affected UX or product decisions, then execute applicable A4-A12 for each
+slice and A13-A15 when delivery is in scope. Mark preserved evidence and skipped
+steps explicitly instead of recreating unaffected documents.
+
 1. Pin current behavior and affected baseline; create the requirement/design delta.
 2. Mark impacted downstream trace edges stale.
 3. Inspect callers, consumers, data, permissions, tests, rollout, and version skew.
@@ -35,6 +45,11 @@ Do not copy the prior PRD or recreate unaffected lifecycle documents.
 ## Bug Fix
 
 Use when observed behavior violates a known or newly clarified contract.
+
+**A1-A15 route**: Use A1 to link the `BUG-*` origin and existing contract. Run A2-A3
+only when UX evidence or expected behavior is unclear. Use A4 to reproduce and map
+the failure, select A5-A8 by blast radius, then run A9-A12. Use A13-A15 in proportion
+to the delivery and escaped-defect risk.
 
 1. Create or link a `BUG-*` origin and record affected `REQ/AC/RULE/NFR` when known.
 2. Reproduce the defect with deterministic evidence where practical.
@@ -51,6 +66,11 @@ Use when observed behavior violates a known or newly clarified contract.
 Use for dependency upgrades, refactors, deprecations, infrastructure work, and
 technical/security/operational debt without intended product behavior change.
 
+**A1-A15 route**: Use A1 to state the `TECH/SEC/OPS` origin and invariant. A2-A3 are
+normally `N/A` unless an interface or product decision changes. Run applicable
+A4-A12 for impact, compatibility, implementation, and proof; run A13-A15 only for
+the actual delivery and operational learning path.
+
 1. Use a `TECH-*`, `SEC-*`, or `OPS-*` origin and state the invariant that must remain true.
 2. Inspect dependents, public contracts, stored formats, generated artifacts, build
    tooling, and rollback/roll-forward constraints.
@@ -63,6 +83,11 @@ If observable semantics change, route the affected part through Feature Change.
 ## Incident
 
 Use for active production degradation or a security/availability event.
+
+**A1-A15 route**: Authorized reversible containment takes priority over the normal
+sequence. Preserve evidence during containment, then create durable origins and
+re-enter at A1 or A4 for permanent remediation. The durable fix follows applicable
+A1-A15 steps and cannot close before A14-A15 observation and learning are complete.
 
 1. Preserve user authorization and incident command. Mitigate only within granted
    authority; prefer reversible containment over speculative permanent repair.
